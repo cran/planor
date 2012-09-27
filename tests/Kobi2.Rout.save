@@ -1,0 +1,223 @@
+
+R version 2.15.0 (2012-03-30)
+Copyright (C) 2012 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-unknown-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library("planor")
+Loading required package: conf.design
+Loading required package: biganalytics
+Loading required package: bigmemory
+
+bigmemory >= 4.0 is a major revision since 3.1.2; please see package
+biganalytics and http://www.bigmemory.org for more information.
+
+Loaded planor 0.1.1
+
+
+Attaching package: 'planor'
+
+The following object(s) are masked from 'package:stats':
+
+    alias
+
+> source("compar.R")
+> #---------------------------------------------------------------------------
+> # EXAMPLES FROM THE PLANOR MANUAL
+> #---------------------------------------------------------------------------
+> # Exemple 2 page 12
+> #---------------------------------------------------------------------------
+> cat("\n")
+
+> cat("***************** EXEMPLE 2 PAGE 12 *****************\n")
+***************** EXEMPLE 2 PAGE 12 *****************
+> cat("\n")
+
+> cat("Four treatment factors at 6, 6, 4, 2 levels and one 6-level block factor\n")
+Four treatment factors at 6, 6, 4, 2 levels and one 6-level block factor
+> cat("Model: bloc+(A+B+C+D)^2\n")
+Model: bloc+(A+B+C+D)^2
+> cat("Estimate: A+B+C+D\n")
+Estimate: A+B+C+D
+> cat("N=144=2^4 x 3^2\n")
+N=144=2^4 x 3^2
+> cat("\n")
+
+> # 
+> cat("*** RUN ***\n")
+*** RUN ***
+> # ptmtotal <- proc.time()
+> cat("\n")
+
+> F2 <- planor.factors( factors=c(LETTERS[1:4], "bloc"),
++                      nlevels=c(6,6,4,2,6),
++                      block=~bloc)
+> M2 <- planor.model( model=~bloc+(A+B+C+D)^2, estimate=~A+B+C+D )
+> # ptm <- proc.time()
+> K2 <- planor.designkey(factors=F2, model=M2, nunits=144,
++                        base=~A+B+D, max.sol=2)
+Preliminary step 1 : processing the model specifications
+Preliminary step 2 : performing prime decompositions on the factors
+Main step for prime p = 2 : key-matrix search
+  => search for columns 4 to 6 
+      first visit to column 4 
+      first visit to column 5 
+      first visit to column 6 
+The search is closed: max.sol =  2 solution(s) found 
+Main step for prime p = 3 : key-matrix search
+  => search for column 3 .
+      first visit to column 3 
+The search is closed: max.sol =  2 solution(s) found 
+> cat("\n")
+
+> # ptm <- proc.time()
+> P2 <- planor.design(key=K2, select=c(1,1))
+> # ptm <- proc.time()
+> resum <- summary(K2[1,1])
+
+********** Prime  2  design **********
+
+DESIGN KEY MATRIX
+    A_1 B_1 D C_1 C_2 bloc_1
+A_1   1   0 0   1   0      1
+B_1   0   1 0   1   0      1
+D     0   0 1   1   0      0
+*U*   0   0 0   0   1      0
+
+TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+1 = A_1 B_1 D C_1
+
+BLOCK-and-TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+1 = A_1 B_1 bloc_1
+1 = D C_1 bloc_1
+
+WEIGHT PROFILES
+Treatment effects confounded with the mean: 4^1 
+Treatment effects confounded with block effects: 2^2 
+Treatment pseudo-effects confounded with the mean: 4^1 
+Treatment pseudo-effects confounded with block effects: 2^2 
+
+
+********** Prime  3  design **********
+
+DESIGN KEY MATRIX
+    A_2 B_2 bloc_2
+A_2   1   0      1
+B_2   0   1      1
+
+TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+nil
+
+BLOCK-and-TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+1 = A_2^2  B_2^2  bloc_2
+
+WEIGHT PROFILES
+Treatment effects confounded with the mean: none 
+Treatment effects confounded with block effects: 2^1 
+Treatment pseudo-effects confounded with the mean: none
+Treatment pseudo-effects confounded with block effects: 2^1 
+
+> #cat("Etude des alias\n")
+> #ptm <- proc.time()
+> #alias.designkey(K2[c(1,1)], model=M2[[1]][[1]])
+> #cat("TEMPS alias.designkey(K2[c(1,1)], model=M2[[1]][[1]])", proc.time()-ptm,"\n")
+> # cat("TEMPS summary(pick)", proc.time()-ptm,"\n")
+> # cat("TEMPS total", proc.time()-ptmtotal,"\n")
+> # Idem que
+> resum.l <- summary(K2)
+
+********** Prime  2  design **********
+
+--- Solution  1  for prime  2  ---
+
+TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+1 = A_1 B_1 D C_1
+
+BLOCK-and-TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+1 = A_1 B_1 bloc_1
+1 = D C_1 bloc_1
+
+WEIGHT PROFILES
+Treatment effects confounded with the mean: 4^1 
+Treatment effects confounded with block effects: 2^2 
+Treatment pseudo-effects confounded with the mean: 4^1 
+Treatment pseudo-effects confounded with block effects: 2^2 
+
+--- Solution  2  for prime  2  ---
+
+TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+1 = A_1 B_1 D C_1
+
+BLOCK-and-TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+1 = A_1 D bloc_1
+1 = B_1 C_1 bloc_1
+
+WEIGHT PROFILES
+Treatment effects confounded with the mean: 4^1 
+Treatment effects confounded with block effects: 2^2 
+Treatment pseudo-effects confounded with the mean: 4^1 
+Treatment pseudo-effects confounded with block effects: 2^2 
+
+
+********** Prime  3  design **********
+
+--- Solution  1  for prime  3  ---
+
+TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+nil
+
+BLOCK-and-TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+1 = A_2^2  B_2^2  bloc_2
+
+WEIGHT PROFILES
+Treatment effects confounded with the mean: none 
+Treatment effects confounded with block effects: 2^1 
+Treatment pseudo-effects confounded with the mean: none
+Treatment pseudo-effects confounded with block effects: 2^1 
+
+--- Solution  2  for prime  3  ---
+
+TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+nil
+
+BLOCK-and-TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+1 = A_2 B_2^2  bloc_2
+
+WEIGHT PROFILES
+Treatment effects confounded with the mean: none 
+Treatment effects confounded with block effects: 2^1 
+Treatment pseudo-effects confounded with the mean: none
+Treatment pseudo-effects confounded with block effects: 2^1 
+
+> cat(" Comparer aux sorties initiales\n")
+ Comparer aux sorties initiales
+> load("hmtestsKobi2")
+> print(compar(P2, OR$P2))
+length of lists differ
+Slots fact.info differ
+Slots factors differ
+[1] FALSE
+>                                         # REMARK: The following lines also work; they illustrate that the basic factors
+> # need not be part of the model but they must have been declared in planor.factors:
+> #
+> # F1 <- planor.factors( factors=c(LETTERS[1:4], "bloc", "BASE"), nlevels=rep(3,6) )
+> # M1 <- planor.model( model=~bloc+(A+B+C+D)^2, estimate=~A+B+C+D )
+> # K1 <- planor.designkey(factors=F1, model=M1, nunits=3^3,
+> #                       base=c("A","B","BASE"), max.sol=2)
+> #
+> 
+> proc.time()
+   user  system elapsed 
+  2.642   0.125   2.769 

@@ -1,0 +1,146 @@
+
+R version 2.15.0 (2012-03-30)
+Copyright (C) 2012 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-unknown-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library("planor")
+Loading required package: conf.design
+Loading required package: biganalytics
+Loading required package: bigmemory
+
+bigmemory >= 4.0 is a major revision since 3.1.2; please see package
+biganalytics and http://www.bigmemory.org for more information.
+
+Loaded planor 0.1.1
+
+
+Attaching package: 'planor'
+
+The following object(s) are masked from 'package:stats':
+
+    alias
+
+> source("compar.R")
+> #---------------------------------------------------------------------------
+> # EXAMPLES FROM THE PLANOR MANUAL
+> #---------------------------------------------------------------------------
+> # Example 1 page 2
+> #---------------------------------------------------------------------------
+> cat("\n")
+
+> cat("***************** EXAMPLE 1 PAGE 2 *****************\n")
+***************** EXAMPLE 1 PAGE 2 *****************
+> cat("\n")
+
+> cat("Four 2-level treatment factors and one 2-level block factor\n")
+Four 2-level treatment factors and one 2-level block factor
+> cat("Model: bloc+A+B+C+D\n")
+Model: bloc+A+B+C+D
+> cat("Estimate: A+B+C+D\n")
+Estimate: A+B+C+D
+> cat("N=2^3\n")
+N=2^3
+> cat("\n")
+
+> # 
+> cat("*** RUN ***\n")
+*** RUN ***
+> # ptmtotal <- proc.time()
+> cat("\n")
+
+> 
+> #Rprof("Kobi0.designkey.Rprof.out")
+> # ptm <- proc.time()
+> K0 <- planor.designkey(factors=c(LETTERS[1:4], "bloc"),
++                        block=~bloc,
++                        nlevels=rep(2,5),
++                        model=~bloc+(A+B+C+D)^2, estimate=~A+B+C+D,
++                        nunits=2^3,
++                        base=~A+B+C, max.sol=2, verbose=T)
+Preliminary step 1 : processing the model specifications
+Preliminary step 2 : performing prime decompositions on the factors
+Main step for prime p = 2 : key-matrix search
+  => search for columns 4 to 5 
+      first visit to column 4 
+      first visit to column 5 
+The search is closed: max.sol =  2 solution(s) found 
+> # cat("TEMPS planor.designkey", proc.time()-ptm,"\n")
+> cat("\n")
+
+> #Rprof(NULL);Rprof("Kobi0.design.Rprof.out")
+> # ptm <- proc.time()
+> P0 <- planor.design(key=K0, select=2)
+> # cat("TEMPS design", proc.time()-ptm,"\n")
+> #Rprof(NULL);Rprof("Kobi0.summary.Rprof.out")
+> # ptm <- proc.time()
+> resum <- summary(K0[1])
+
+********** Prime  2  design **********
+
+DESIGN KEY MATRIX
+  A B C D bloc
+A 1 0 0 1    1
+B 0 1 0 1    1
+C 0 0 1 1    0
+
+TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+1 = A B C D
+
+BLOCK-and-TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+1 = A B bloc
+1 = C D bloc
+
+WEIGHT PROFILES
+Treatment effects confounded with the mean: 4^1 
+Treatment effects confounded with block effects: 2^2 
+Treatment pseudo-effects confounded with the mean: 4^1 
+Treatment pseudo-effects confounded with block effects: 2^2 
+
+> # cat("TEMPS summary", proc.time()-ptm,"\n")
+> # cat("TEMPS total", proc.time()-ptmtotal,"\n")
+> 
+> cat(" Comparer aux sorties initiales\n")
+ Comparer aux sorties initiales
+> load("hmtestsKobi0")
+> print(compar(P0, OR$P0))
+length of lists differ
+Slots fact.info differ
+Slots factors differ
+[1] FALSE
+> 
+> 
+> 
+> # REMARK: The following lines also work; they illustrate that the basic factors
+> # need not be part of the model but they must have been declared in planor.factors:
+> #
+> F0 <- planor.factors( factors=c(LETTERS[1:4], "bloc", "BASE"), nlevels=rep(3,6),
++                      block=~bloc )
+> K0 <- planor.designkey(factors=F0,
++                         model=~bloc+(A+B+C+D)^2, estimate=~A+B+C+D,
++                        nunits=3^3,   base=~A+B+BASE, max.sol=2)
+Preliminary step 1 : processing the model specifications
+Preliminary step 2 : performing prime decompositions on the factors
+Main step for prime p = 3 : key-matrix search
+  => search for columns 4 to 6 
+      first visit to column 4 
+      first visit to column 5 
+      first visit to column 6 
+The search is closed: max.sol =  2 solution(s) found 
+> 
+> 
+> proc.time()
+   user  system elapsed 
+  2.216   0.158   2.372 

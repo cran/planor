@@ -1,0 +1,40 @@
+#cat("'planor' is a R library for generating polyvalent regular fractional factorial designs.\n")
+#cat('Please read the license using license.planor()\n')
+
+citHeader("'planor' is a R library for the generation of factorial designs.\n If you are using 'planor' for research, please acknowledge it in publications with the following citation :")
+
+desc <- packageDescription("planor")
+year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", desc$Date)
+vers <- paste("R package version", desc$Version)
+url <- desc$URL
+     
+
+citEntry(entry="Misc",
+         author = personList(as.person("André Kobilinsky"), as.person("Annie Bouvier"), as.person("Hervé Monod")),
+         title = "PLANOR: program for automatic generation of regular experimental designs. The R library version",
+#         howpublished=  "http://andre.kobilinsky.free.fr/logiciel/planorA.pdf",
+         year =   2011,
+#         url = "http://andre.kobilinsky.free.fr/logiciel/planorA.pdf",
+         textVersion =
+ paste("André Kobilinsky, Annie Bouvier, Hervé Monod (",
+year,
+"). PLANOR: program for automatic generation of regular experimental
+         designs. ",
+vers, ".", sep=""))
+
+
+
+citEntry(entry="Manual",
+         title = "PLANOR: an R library for the automatic generation of regular fractional factorial designs",
+         author = personList(as.person("Hervé Monod"), as.person("Annie Bouvier"), as.person("André Kobilinsky")),
+         year         = 2011,
+         address      = "INRA, Jouy en Josas, France",
+         url          = url,
+	 textVersion =
+ paste("Hervé Monod, Annie Bouvier, André Kobilinsky (",
+year,
+"). PLANOR: an R library for the automatic generation of regular",
+         " fractional factorial designs. ",
+vers, ".",  sep=""))
+
+

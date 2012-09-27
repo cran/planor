@@ -1,0 +1,56 @@
+
+R version 2.15.0 (2012-03-30)
+Copyright (C) 2012 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-unknown-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library("planor")
+Loading required package: conf.design
+Loading required package: biganalytics
+Loading required package: bigmemory
+
+bigmemory >= 4.0 is a major revision since 3.1.2; please see package
+biganalytics and http://www.bigmemory.org for more information.
+
+Loaded planor 0.1.1
+
+
+Attaching package: 'planor'
+
+The following object(s) are masked from 'package:stats':
+
+    alias
+
+> source("compar.R")
+> #---------------------------------------------------------------------------
+> # Aucun terme ineligible
+> #---------------------------------------------------------------------------
+> F0 <- planor.factors( factors=c(LETTERS[1:5], "bloc"), nlevels=rep(2,6) )
+> K0 <- planor.designkey(factors=c(LETTERS[1:5], "bloc"), nlevels=rep(2,6),
++                        model=~bloc+(A+B+C+D+E)^2, estimate=~A+B+C ,
++                        nunits=2^3,
++                        base=~A+B+C, max.sol=2, verbose=T)
+Preliminary step 1 : processing the model specifications
+Preliminary step 2 : performing prime decompositions on the factors
+Main step for prime p = 2 : key-matrix search
+  => search for columns 4 to 6 
+      first visit to column 4 
+      first visit to column 5 
+      first visit to column 6 
+The search is closed: max.sol =  2 solution(s) found 
+> 
+> proc.time()
+   user  system elapsed 
+  1.374   0.086   1.456 

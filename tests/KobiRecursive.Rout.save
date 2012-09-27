@@ -1,0 +1,166 @@
+
+R version 2.15.0 (2012-03-30)
+Copyright (C) 2012 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-unknown-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library("planor")
+Loading required package: conf.design
+Loading required package: biganalytics
+Loading required package: bigmemory
+
+bigmemory >= 4.0 is a major revision since 3.1.2; please see package
+biganalytics and http://www.bigmemory.org for more information.
+
+Loaded planor 0.1.1
+
+
+Attaching package: 'planor'
+
+The following object(s) are masked from 'package:stats':
+
+    alias
+
+> #---------------------------------------------------------------------------
+> # EXAMPLE FROM "Automatic generation of asymmetrical regular designs"
+> #---------------------------------------------------------------------------
+> # Exemple 3 page 13
+> #---------------------------------------------------------------------------
+> cat("\n")
+
+> cat("***************** EXEMPLE 3 PAGE 13 of algo report *****************\n")
+***************** EXEMPLE 3 PAGE 13 of algo report *****************
+> cat("\n")
+
+> cat("Row-Column (3x2) design with 2 units per row-column combination\n")
+Row-Column (3x2) design with 2 units per row-column combination
+> cat("3 treatment factors A(3) row-constant, B1 (2), B2 (2)\n")
+3 treatment factors A(3) row-constant, B1 (2), B2 (2)
+> cat("Model: R*C + (A+B1+B2)^2\n")
+Model: R*C + (A+B1+B2)^2
+> cat("Estimate: A:B1+A:B2\n")
+Estimate: A:B1+A:B2
+> cat("N=3x2x2\n")
+N=3x2x2
+> cat("\n")
+
+> #
+> cat("*** RUN ***\n")
+*** RUN ***
+> # ptmtotal <- proc.time()
+> cat("\n")
+
+> F2 <- planor.factors( factors=c("R","C","U","A","B1","B2"), nlevels=c(3,2,2,3,2,2) )
+> M2 <- planor.model( model=~R*C + (A+B1+B2)^2, estimate=~A:B1+A:B2 )
+> # ptm <- proc.time()
+> K2 <- planor.designkey(factors=F2, model=M2, nunits=12,
++                        base=~R+C+U, max.sol=2)
+Preliminary step 1 : processing the model specifications
+Preliminary step 2 : performing prime decompositions on the factors
+Solution for p = 2 
+Solution for p = 2 
+Solution for p = 2 
+Solution for p = 2 
+Solution for p = 3 
+Solution for p = 3 
+The search is closed: max.sol =  2 solutions found 
+Warning message:
+In planor.modelterms(model) :
+  The estimate formula 2 contains at least one interaction without all its marginal terms.
+ Such marginal terms may be unestimable in the final design.
+
+> # cat("TEMPS planor.designkey", proc.time()-ptm,"\n")
+> cat("\n")
+
+> # ptm <- proc.time()
+> P2 <- planor.design(K2)
+> # cat("TEMPS design", proc.time()-ptm,"\n")
+> resum <- summary(K2)
+
+********** Solution 1 **********
+--- Solution 1 for prime 2  ---
+
+TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+1 = U B1
+1 = C U B2
+1 = C B1 B2
+
+BLOCK-and-TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+nil
+
+WEIGHT PROFILES
+Treatment effects confounded with the mean: 2^1 3^2 
+Treatment effects confounded with block effects: none 
+Treatment pseudo-effects confounded with the mean: 2^1 3^2 
+Treatment pseudo-effects confounded with block effects: none
+
+--- Solution 1 for prime 3  ---
+
+TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+1 = R^2  A
+
+BLOCK-and-TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+nil
+
+WEIGHT PROFILES
+Treatment effects confounded with the mean: 2^1 
+Treatment effects confounded with block effects: none 
+Treatment pseudo-effects confounded with the mean: 2^1 
+Treatment pseudo-effects confounded with block effects: none
+
+
+********** Solution 2 **********
+--- Solution 2 for prime 2  ---
+
+TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+1 = U B1
+1 = C U B2
+1 = C B1 B2
+
+BLOCK-and-TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+nil
+
+WEIGHT PROFILES
+Treatment effects confounded with the mean: 2^1 3^2 
+Treatment effects confounded with block effects: none 
+Treatment pseudo-effects confounded with the mean: 2^1 3^2 
+Treatment pseudo-effects confounded with block effects: none
+
+--- Solution 2 for prime 3  ---
+
+TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+1 = R A
+
+BLOCK-and-TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+nil
+
+WEIGHT PROFILES
+Treatment effects confounded with the mean: 2^1 
+Treatment effects confounded with block effects: none 
+Treatment pseudo-effects confounded with the mean: 2^1 
+Treatment pseudo-effects confounded with block effects: none
+
+> 
+> # cat("TEMPS total", proc.time()-ptmtotal,"\n")
+> 
+> 
+> ### cat(" Comparer aux sorties initiales\n")
+> ### load("hmtestsKobiRecursive")
+> ### print(compar(P2, OR$P2))
+> 
+> 
+> proc.time()
+   user  system elapsed 
+  2.614   0.157   2.771 

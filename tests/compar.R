@@ -1,0 +1,52 @@
+compar <- function(o1, o2) {
+  # comparaison quand pas objects d'une classe
+ if (!isS4(o1) || !isS4(o2)) {
+    if (is.list(o1) && is.list(o2)) {
+      if (length(o1) != length(o2)) {
+        cat("length of lists differ\n")
+        return(FALSE)
+      }
+      for (a in 1:length(o1)) {
+        z <-compar(o1[[a]], o2[[a]])
+      }
+      return(z)
+    } # fin list
+        
+    if (!is.big.matrix(o1) && !is.big.matrix(o2)) {
+     z<- all.equal(o1, o2)
+  } # fin isbig
+    else {
+ z<- all.equal(o1[,], o2[,])
+}
+
+      if (is.logical(z))
+      return(z)
+    else {
+      print(z)
+      return(FALSE)
+  }
+      
+  } #fin (!isS4(o1) || !isS4(o2))
+  # compare 2 objets d'une classe S4
+  if (class(o1) != class(o2)) {
+    cat("classes differ:", class(o1), class(o2),"\n")
+    return(FALSE)
+  }
+  if (!all.equal(slotNames(o1), slotNames(o2))) {
+    cat("slot names differ:\n")
+    print(slotNames(o1))
+    print(slotNames(o2))
+    return(FALSE)
+  }
+  
+  for (sl in slotNames(o1)) {
+    sl1 <- slot(o1, sl)
+    sl2 <- slot(o2,sl)
+    z <- compar(sl1, sl2)
+    if (!z) {
+      cat("Slots", sl,"differ\n")
+      return(z)
+    }
+  } # fin sl
+  return(TRUE)
+} # fin compar

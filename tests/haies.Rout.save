@@ -1,0 +1,61 @@
+
+R version 2.15.0 (2012-03-30)
+Copyright (C) 2012 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-unknown-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library("planor")
+Loading required package: conf.design
+Loading required package: biganalytics
+Loading required package: bigmemory
+
+bigmemory >= 4.0 is a major revision since 3.1.2; please see package
+biganalytics and http://www.bigmemory.org for more information.
+
+Loaded planor 0.1.1
+
+
+Attaching package: 'planor'
+
+The following object(s) are masked from 'package:stats':
+
+    alias
+
+>  haies.fnames <- c("A1","A2","B1","B2","C1","C2","P1","P2","Q1","Q2")
+>  haies.key1 <- planor.designkey(factors=haies.fnames,
++  nlevels=rep(2,10), nunits=2^5, model=~A1*A2+B1*B2+C1*C2+P1*P2+Q1*Q2,
++  base=~A1+B1+C1+P1+Q1,max.sol=1) 
+Preliminary step 1 : processing the model specifications
+Preliminary step 2 : performing prime decompositions on the factors
+Main step for prime p = 2 : key-matrix search
+  => search for columns 6 to 10 
+      first visit to column 6 
+      first visit to column 7 
+      first visit to column 8 
+      first visit to column 9 
+      first visit to column 10 
+The search is closed: max.sol =  1 solution(s) found 
+> planor.designkey(factors=haies.fnames, nlevels=rep(2,10), nunits=2^5, model=~A1*A2+B1*B2+C1*C2+P1*P2+Q1*Q2+A1*B1*C1*P1*Q1, base=~A1+B1+C1+P1+Q1,max.sol=1) 
+Preliminary step 1 : processing the model specifications
+Preliminary step 2 : performing prime decompositions on the factors
+Main step for prime p = 2 : key-matrix search
+  => search for columns 6 to 10 
+      first visit to column 6 
+No solution for column  6  of the design key
+named list()
+> 
+> proc.time()
+   user  system elapsed 
+  2.437   0.098   2.535 

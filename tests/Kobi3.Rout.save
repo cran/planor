@@ -1,0 +1,364 @@
+
+R version 2.15.0 (2012-03-30)
+Copyright (C) 2012 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-unknown-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library("planor")
+Loading required package: conf.design
+Loading required package: biganalytics
+Loading required package: bigmemory
+
+bigmemory >= 4.0 is a major revision since 3.1.2; please see package
+biganalytics and http://www.bigmemory.org for more information.
+
+Loaded planor 0.1.1
+
+
+Attaching package: 'planor'
+
+The following object(s) are masked from 'package:stats':
+
+    alias
+
+> source("compar.R")
+> 
+> #---------------------------------------------------------------------------
+> # EXAMPLES FROM THE PLANOR MANUAL
+> #---------------------------------------------------------------------------
+> # Exemple 3 page 16
+> #---------------------------------------------------------------------------
+> cat("\n")
+
+> cat("***************** EXEMPLE 3 PAGE 16 *****************\n")
+***************** EXEMPLE 3 PAGE 16 *****************
+> cat("\n")
+
+> cat("Five treatment factors at 2 levels \n")
+Five treatment factors at 2 levels 
+> cat("robotFac \n")
+robotFac 
+> cat("Block structure: 4 plates / (2 rows x 4 columns) \n")
+Block structure: 4 plates / (2 rows x 4 columns) 
+> cat("Model: nsoil + qsoil + Rug + conc + Tact \n")
+Model: nsoil + qsoil + Rug + conc + Tact 
+> cat("Estimate: idem \n")
+Estimate: idem 
+> cat("Hierarchy 1: conc constant in plate \n")
+Hierarchy 1: conc constant in plate 
+> cat("Hierarchy 2: Tact constant in plate \n")
+Hierarchy 2: Tact constant in plate 
+> cat("Hierarchy 3: nsoil constant in plate x column \n")
+Hierarchy 3: nsoil constant in plate x column 
+> cat("Hierarchy 4: qsoil constant in plate x column \n")
+Hierarchy 4: qsoil constant in plate x column 
+> cat("N=32 units\n")
+N=32 units
+> cat("\n")
+
+> #
+> 
+> cat("*** RUN ***\n")
+*** RUN ***
+> # ptmtotal <- proc.time()
+> cat("\n")
+
+> robotFac <- planor.factors( factors=list(
++                         conc=c(1,3),
++                         Tact=c(15,30),
++                         nsoil=c("curd","Saint-Paulin"),
++                         qsoil=c("0.01g","0.10g"),
++                         Rug=c(0.25,0.73),
++                         plate=1:4,
++                         row=1:2,
++                         col=1:4),
++                      block=~plate+row+col,
++                      hierarchy=list(~conc/plate,
++                                     ~Tact/plate,
++                                     ~nsoil/(plate*col),
++                                     ~qsoil/(plate*col)))
+> # Obligation for the moment of a complicated model formulation:
+> # - all factors in the design must appear in the model-estimate formulae
+> #   (it is not sufficient to declare them as basic factors)
+> robotMod <- planor.model( model=~nsoil * qsoil * Rug * conc * Tact,
++                     listofmodels=list(c(~plate+row+col+Rug,~Rug)) )
+> # ptm <- proc.time()
+> robotKey <- planor.designkey(factors=robotFac, model=robotMod,
++                              nunits=32,
++                        base=~plate+row+col, max.sol=1)
+Preliminary step 1 : processing the model specifications
+Preliminary step 2 : performing prime decompositions on the factors
+Main step for prime p = 2 : key-matrix search
+  => search for columns 6 to 10 
+      first visit to column 6 
+      first visit to column 7 
+      first visit to column 8 
+      first visit to column 9 
+      first visit to column 10 
+The search is closed: max.sol =  1 solution(s) found 
+> # cat("TEMPS planor.designkey", proc.time()-ptm,"\n")
+> cat("\n")
+
+> # ptm <- proc.time()
+> robotDes <- planor.design(robotKey)
+> # cat("TEMPS planor.design", proc.time()-ptm,"\n")
+> print(robotDes@design)
+   plate row col conc Tact        nsoil qsoil  Rug
+1      1   1   1    1   15         curd 0.01g 0.25
+2      1   1   2    1   15         curd 0.10g 0.25
+3      1   1   3    1   15 Saint-Paulin 0.01g 0.25
+4      1   1   4    1   15 Saint-Paulin 0.10g 0.25
+5      1   2   1    1   15         curd 0.01g 0.73
+6      1   2   2    1   15         curd 0.10g 0.73
+7      1   2   3    1   15 Saint-Paulin 0.01g 0.73
+8      1   2   4    1   15 Saint-Paulin 0.10g 0.73
+9      2   1   1    1   30         curd 0.01g 0.25
+10     2   1   2    1   30         curd 0.10g 0.25
+11     2   1   3    1   30 Saint-Paulin 0.01g 0.25
+12     2   1   4    1   30 Saint-Paulin 0.10g 0.25
+13     2   2   1    1   30         curd 0.01g 0.73
+14     2   2   2    1   30         curd 0.10g 0.73
+15     2   2   3    1   30 Saint-Paulin 0.01g 0.73
+16     2   2   4    1   30 Saint-Paulin 0.10g 0.73
+17     3   1   1    3   15         curd 0.01g 0.73
+18     3   1   2    3   15         curd 0.10g 0.73
+19     3   1   3    3   15 Saint-Paulin 0.01g 0.73
+20     3   1   4    3   15 Saint-Paulin 0.10g 0.73
+21     3   2   1    3   15         curd 0.01g 0.25
+22     3   2   2    3   15         curd 0.10g 0.25
+23     3   2   3    3   15 Saint-Paulin 0.01g 0.25
+24     3   2   4    3   15 Saint-Paulin 0.10g 0.25
+25     4   1   1    3   30         curd 0.01g 0.73
+26     4   1   2    3   30         curd 0.10g 0.73
+27     4   1   3    3   30 Saint-Paulin 0.01g 0.73
+28     4   1   4    3   30 Saint-Paulin 0.10g 0.73
+29     4   2   1    3   30         curd 0.01g 0.25
+30     4   2   2    3   30         curd 0.10g 0.25
+31     4   2   3    3   30 Saint-Paulin 0.01g 0.25
+32     4   2   4    3   30 Saint-Paulin 0.10g 0.25
+> cat("\n")
+
+> # Increase print amount:
+> options(planor.max.print=100)
+> # ptm <- proc.time()
+> summary(robotKey, show="dtbw")
+
+********** Prime  2  design **********
+
+--- Solution  1  for prime  2  ---
+
+DESIGN KEY MATRIX
+        plate_1 plate_2 row col_1 col_2 conc Tact nsoil qsoil Rug
+plate_1       1       0   0     0     0    1    0     0     0   1
+plate_2       0       1   0     0     0    0    1     0     0   0
+row           0       0   1     0     0    0    0     0     0   1
+col_1         0       0   0     1     0    0    0     1     0   0
+col_2         0       0   0     0     1    0    0     0     1   0
+
+TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+nil
+
+BLOCK-and-TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+1 = plate_1 conc
+1 = plate_2 Tact
+1 = col_1 nsoil
+1 = col_2 qsoil
+1 = plate_1 row Rug
+1 = plate_1 plate_2 conc Tact
+1 = col_1 col_2 nsoil qsoil
+1 = row conc Rug
+1 = plate_1 col_1 conc nsoil
+1 = plate_2 col_1 Tact nsoil
+1 = plate_1 col_2 conc qsoil
+1 = plate_2 col_2 Tact qsoil
+1 = plate_1 plate_2 row Tact Rug
+1 = plate_1 row col_1 nsoil Rug
+1 = plate_1 row col_2 qsoil Rug
+1 = plate_1 plate_2 col_1 conc Tact nsoil
+1 = plate_1 plate_2 col_2 conc Tact qsoil
+1 = plate_1 col_1 col_2 conc nsoil qsoil
+1 = plate_2 col_1 col_2 Tact nsoil qsoil
+1 = plate_2 row conc Tact Rug
+1 = row col_1 conc nsoil Rug
+1 = row col_2 conc qsoil Rug
+1 = plate_1 plate_2 row col_1 Tact nsoil Rug
+1 = plate_1 plate_2 row col_2 Tact qsoil Rug
+1 = plate_1 row col_1 col_2 nsoil qsoil Rug
+1 = plate_1 plate_2 col_1 col_2 conc Tact nsoil qsoil
+1 = row col_1 col_2 conc nsoil qsoil Rug
+1 = plate_2 row col_1 conc Tact nsoil Rug
+1 = plate_2 row col_2 conc Tact qsoil Rug
+1 = plate_1 plate_2 row col_1 col_2 Tact nsoil qsoil Rug
+1 = plate_2 row col_1 col_2 conc Tact nsoil qsoil Rug
+
+WEIGHT PROFILES
+Treatment effects confounded with the mean: none 
+Treatment effects confounded with block effects: 1^5 2^10 3^10 4^5 5^1 
+Treatment pseudo-effects confounded with the mean: none
+Treatment pseudo-effects confounded with block effects: 1^5 2^10 3^10 4^5 5^1 
+
+> # cat("TEMPS summary(pick)", proc.time()-ptm,"\n")
+> # cat("TEMPS total3A", proc.time()-ptmtotal,"\n")
+> cat("\n")
+
+> cat(" Comparer aux sorties initiales\n")
+ Comparer aux sorties initiales
+> load("hmtestsKobi3")
+> print(compar(robotDes, OR$P3A))
+length of lists differ
+Slots fact.info differ
+Slots factors differ
+[1] FALSE
+> # --------------------------------------------------
+> 
+> 
+> cat("\n ROBOT1B \n")
+
+ ROBOT1B 
+> cat("Block structure: 2 plates / (2 rows x 4 columns) \n")
+Block structure: 2 plates / (2 rows x 4 columns) 
+> cat("Model: nsoil + qsoil + Rug + conc \n")
+Model: nsoil + qsoil + Rug + conc 
+> cat("Estimate: idem \n")
+Estimate: idem 
+> cat("Hierarchy 1: conc constant in plate \n")
+Hierarchy 1: conc constant in plate 
+> cat("Hierarchy 2: Tact constant in plate \n")
+Hierarchy 2: Tact constant in plate 
+> cat("Hierarchy 3: nsoil constant in plate x column \n")
+Hierarchy 3: nsoil constant in plate x column 
+> cat("Hierarchy 4: qsoil constant in plate x column \n")
+Hierarchy 4: qsoil constant in plate x column 
+> cat("N=16 units\n")
+N=16 units
+> cat("\n")
+
+> # 
+> cat("*** RUN ***\n")
+*** RUN ***
+> # ptmtotal <- proc.time()
+> cat("\n")
+
+> F3B <- planor.factors( factors=list(
++                         conc=c(1,3),
++                         Tact=c(15,30),
++                         nsoil=c("curd","Saint-Paulin"),
++                         qsoil=c("0.01g","0.10g"),
++                         Rug=c(0.25,0.73),
++                         plate=1:4,
++                         row=1:2,
++                         col=1:4),
++                      block=~plate+row+col,
++                      hierarchy=list(~conc/plate,
++                                     ~Tact/plate,
++                                     ~nsoil/(plate*col),
++                                     ~qsoil/(plate*col)))
+> # Obligation for the moment of a complicated model formulation:
+> # - all factors in the design must appear in the model-estimate formulae
+> #   (it is not sufficient to declare them as basic factors)
+> M3B <- planor.model( model=~nsoil * qsoil * Rug * conc * Tact,
++                     listofmodels=list(c(~plate+row+col,~Rug)) )
+> # ptm <- proc.time()
+> K3B <- planor.designkey(factors=F3B, model=M3B, nunits=32,
++                        base=~plate+row+col, max.sol=1)
+Preliminary step 1 : processing the model specifications
+Preliminary step 2 : performing prime decompositions on the factors
+Main step for prime p = 2 : key-matrix search
+  => search for columns 6 to 10 
+      first visit to column 6 
+      first visit to column 7 
+      first visit to column 8 
+      first visit to column 9 
+      first visit to column 10 
+The search is closed: max.sol =  1 solution(s) found 
+> # cat("TEMPS planor.designkey", proc.time()-ptm,"\n")
+> cat("\n")
+
+> # ptm <- proc.time()
+> P3B <- planor.design(key=K3B, select=1)
+> # cat("TEMPS planor.design", proc.time()-ptm,"\n")
+> # ptm <- proc.time()
+> resum3B <-summary(K3B[1], show="dtbw")
+
+********** Prime  2  design **********
+
+DESIGN KEY MATRIX
+        plate_1 plate_2 row col_1 col_2 conc Tact nsoil qsoil Rug
+plate_1       1       0   0     0     0    1    0     0     0   1
+plate_2       0       1   0     0     0    0    1     0     0   0
+row           0       0   1     0     0    0    0     0     0   1
+col_1         0       0   0     1     0    0    0     1     0   0
+col_2         0       0   0     0     1    0    0     0     1   0
+
+TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+nil
+
+BLOCK-and-TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+1 = plate_1 conc
+1 = plate_2 Tact
+1 = col_1 nsoil
+1 = col_2 qsoil
+1 = plate_1 row Rug
+1 = plate_1 plate_2 conc Tact
+1 = col_1 col_2 nsoil qsoil
+1 = row conc Rug
+1 = plate_1 col_1 conc nsoil
+1 = plate_2 col_1 Tact nsoil
+1 = plate_1 col_2 conc qsoil
+1 = plate_2 col_2 Tact qsoil
+1 = plate_1 plate_2 row Tact Rug
+1 = plate_1 row col_1 nsoil Rug
+1 = plate_1 row col_2 qsoil Rug
+1 = plate_1 plate_2 col_1 conc Tact nsoil
+1 = plate_1 plate_2 col_2 conc Tact qsoil
+1 = plate_1 col_1 col_2 conc nsoil qsoil
+1 = plate_2 col_1 col_2 Tact nsoil qsoil
+1 = plate_2 row conc Tact Rug
+1 = row col_1 conc nsoil Rug
+1 = row col_2 conc qsoil Rug
+1 = plate_1 plate_2 row col_1 Tact nsoil Rug
+1 = plate_1 plate_2 row col_2 Tact qsoil Rug
+1 = plate_1 row col_1 col_2 nsoil qsoil Rug
+1 = plate_1 plate_2 col_1 col_2 conc Tact nsoil qsoil
+1 = row col_1 col_2 conc nsoil qsoil Rug
+1 = plate_2 row col_1 conc Tact nsoil Rug
+1 = plate_2 row col_2 conc Tact qsoil Rug
+1 = plate_1 plate_2 row col_1 col_2 Tact nsoil qsoil Rug
+1 = plate_2 row col_1 col_2 conc Tact nsoil qsoil Rug
+
+WEIGHT PROFILES
+Treatment effects confounded with the mean: none 
+Treatment effects confounded with block effects: 1^5 2^10 3^10 4^5 5^1 
+Treatment pseudo-effects confounded with the mean: none
+Treatment pseudo-effects confounded with block effects: 1^5 2^10 3^10 4^5 5^1 
+
+> # cat("TEMPS summary(pick)", proc.time()-ptm,"\n")
+> # cat("TEMPS total", proc.time()-ptmtotal,"\n")
+> cat(" Comparer aux sorties initiales\n")
+ Comparer aux sorties initiales
+> print(compar(robotDes, OR$P3A))
+length of lists differ
+Slots fact.info differ
+Slots factors differ
+[1] FALSE
+> print(compar(P3B, OR$P3B))
+length of lists differ
+Slots fact.info differ
+Slots factors differ
+[1] FALSE
+> 
+> proc.time()
+   user  system elapsed 
+  3.562   0.203   3.768 

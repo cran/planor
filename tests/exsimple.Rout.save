@@ -1,0 +1,113 @@
+
+R version 2.15.0 (2012-03-30)
+Copyright (C) 2012 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-unknown-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> # Fichier pour tester l'enchainement des fonctions sur des exemples simples
+> library("planor")
+Loading required package: conf.design
+Loading required package: biganalytics
+Loading required package: bigmemory
+
+bigmemory >= 4.0 is a major revision since 3.1.2; please see package
+biganalytics and http://www.bigmemory.org for more information.
+
+Loaded planor 0.1.1
+
+
+Attaching package: 'planor'
+
+The following object(s) are masked from 'package:stats':
+
+    alias
+
+> toto <- planor.factors(LETTERS[1:5],c(2,6,12,3,2))
+> tata <- planor.model(y~A+B+C+D+E)
+> titi <- planor.designkey(factors=toto, model=tata, nunits=8*9, base=~A+B)
+Preliminary step 1 : processing the model specifications
+Preliminary step 2 : performing prime decompositions on the factors
+Main step for prime p = 2 : key-matrix search
+  => search for columns 3 to 5 
+      first visit to column 3 
+      first visit to column 4 
+      first visit to column 5 
+The search is closed: max.sol =  1 solution(s) found 
+Main step for prime p = 3 : key-matrix search
+  => search for columns 2 to 3 
+      first visit to column 2 
+      first visit to column 3 
+The search is closed: max.sol =  1 solution(s) found 
+> tyty <- planor.design(pick(titi,c(1,1)))
+> titi <- planor.designkey(factors=toto, model=tata, nunits=8*9, base=~A+B+E)
+Preliminary step 1 : processing the model specifications
+Preliminary step 2 : performing prime decompositions on the factors
+Main step for prime p = 2 : key-matrix search
+  => search for columns 4 to 5 
+      first visit to column 4 
+      first visit to column 5 
+The search is closed: max.sol =  1 solution(s) found 
+Main step for prime p = 3 : key-matrix search
+  => search for columns 2 to 3 
+      first visit to column 2 
+      first visit to column 3 
+The search is closed: max.sol =  1 solution(s) found 
+> 
+>  F2 <- planor.factors( factors=c(LETTERS[1:4], "bloc"), nlevels=c(6,6,4,2,6) )
+>  planor.harmonize(factors=F2[,1:5],
++                   model=~bloc+(A+B+C+D)^2, estimate=~A+B+C+D,
++                   base=~A+B+D)
+An object of class "designfactors"
+Slot "fact.info":
+     nlev block ordered model basic dummy
+A       6 FALSE   FALSE  TRUE  TRUE FALSE
+B       6 FALSE   FALSE  TRUE  TRUE FALSE
+D       2 FALSE   FALSE  TRUE  TRUE FALSE
+C       4 FALSE   FALSE  TRUE FALSE FALSE
+bloc    6 FALSE   FALSE  TRUE FALSE FALSE
+
+Slot "pseudo.info":
+       parent nlev block ordered model basic dummy
+A_1         1    2 FALSE   FALSE  TRUE  TRUE FALSE
+A_2         1    3 FALSE   FALSE  TRUE  TRUE FALSE
+B_1         2    2 FALSE   FALSE  TRUE  TRUE FALSE
+B_2         2    3 FALSE   FALSE  TRUE  TRUE FALSE
+D           3    2 FALSE   FALSE  TRUE  TRUE FALSE
+C_1         4    2 FALSE   FALSE  TRUE FALSE FALSE
+C_2         4    2 FALSE   FALSE  TRUE FALSE FALSE
+bloc_1      5    2 FALSE   FALSE  TRUE FALSE FALSE
+bloc_2      5    3 FALSE   FALSE  TRUE FALSE FALSE
+
+Slot "levels":
+$A
+[1] 1 2 3 4 5 6
+
+$B
+[1] 1 2 3 4 5 6
+
+$D
+[1] 1 2
+
+$C
+[1] 1 2 3 4
+
+$bloc
+[1] 1 2 3 4 5 6
+
+
+> 
+> proc.time()
+   user  system elapsed 
+  2.337   0.155   2.493 

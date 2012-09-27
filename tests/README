@@ -1,0 +1,32 @@
+Répertoire des tests
+---------------------
+. compar permet de comparer 2 objets, y compris quand ce sont
+des objets de classes S4
+
+. batch.sh: script pour faire exécuter un test en batch sur le 
+cluster par qsub
+(cf
+http://w3.jouy.inra.fr/unites/miaj/intranet/article.php3?id_article=788)
+Exec par: qsub batch.sh
+
+. execution:
+commande R pour faire exécuter un test avec les options valgrind
+ou memcheck
+
+. graphedesappels.R
+commandes R pour voir les appels de 1ien niveau entre fonctions
+(via mvbutils)
+
+. init et initOR: charge les fonctions et programmes, de la version
+courante et de la version originale de HM, respectivement.
+
+. les fichiers "hmtests*": les résultats de l'exécution de la
+version originale de HM, créés par "save"
+
+. AB.R, exsimple.R, Kobi*.R, Touzeau*.R:
+les tests
+
+. les *Rout.save: résultats validés d'exécution sur des versions 
+précédentes. R CMD CHECK vérifie les résultats courants par rapport
+à ces fichiers.
+

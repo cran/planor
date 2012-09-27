@@ -1,0 +1,46 @@
+#---------------------------------------------------------------------------
+# CLASS "planordesign"
+#---------------------------------------------------------------------------
+# planordesign : an S4 class, typically an output from planor.design.designkey
+#         design: a dataframe containing the final design
+#         factors: the 'designfactors' object that defines the factors
+#         model: the modlist containing the model and estimate specifications
+# Methods of "planordesign": none
+#---------------------------------------------------------------------------
+setClass("planordesign",
+         representation(design="data.frame",
+                        factors="designfactors",
+                        model="list"))
+##------------------------------------------------------------------------
+## Extraction methods for "planordesign"
+##------------------------------------------------------------------------
+getDesign.planordesign <- function(object){return(object@design)}
+setMethod("getDesign", signature(object="planordesign"),
+          definition=getDesign.planordesign)
+##--------------------------------------------------------------------------
+
+setMethod("[", 
+          signature(x = "planordesign", i = "ANY", j = "ANY", drop = "ANY"),
+          definition=function(x,i,j,...,drop){
+            if(missing(i)){ i <- seq(nrow(x@design)) }
+            if(missing(j)){ j <- names(x@factors) }
+            if(is.character(j)){
+              jnames <- names(x@factors) %in% j
+              j <- seq(jnames)[jnames]
+            }
+            if(is.logical(j)){
+              j <- seq(j)[j]
+            }
+            x@design <- x@design[ i, j, drop=FALSE ]
+            x@factors <- x@factors[ j ]
+            keepmodel <- rep(NA, length(x@model))
+            for(m in seq_along(x@model)){
+              model.names <- unique(
+                         all.vars( rev(as.list(x@model[[m]][[1]]))[[1]] ), # model part
+                         all.vars( rev(as.list(x@model[[m]][[2]]))[[1]] )) # estimate part
+              keepmodel[m] <- all( model.names %in% j )
+            }
+            x@model <- x@model[keepmodel]
+            x
+          })
+##

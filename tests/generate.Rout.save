@@ -1,0 +1,320 @@
+
+R version 2.15.0 (2012-03-30)
+Copyright (C) 2012 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-unknown-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library("planor")
+Loading required package: conf.design
+Loading required package: biganalytics
+Loading required package: bigmemory
+
+bigmemory >= 4.0 is a major revision since 3.1.2; please see package
+biganalytics and http://www.bigmemory.org for more information.
+
+Loaded planor 0.1.1
+
+
+Attaching package: 'planor'
+
+The following object(s) are masked from 'package:stats':
+
+    alias
+
+> #---------------------------------------------------------------------------
+> # EXAMPLES OF AUTOMATIC MODEL GENERATION FROM RESOLUTION
+> #---------------------------------------------------------------------------
+> M <- planor.model(resolution=4, factors=planor.factors(c(LETTERS[1:4]),  nlevels=rep(2,4)))
+> 
+> # ----------------------------------------------------------
+> # 4 factors, resolution 4
+> K <- planor.designkey(factors=c(LETTERS[1:4]),  nlevels=rep(2,4),  nunits=2^3, resolution=4, max.sol=2)
+Preliminary step 1 : processing the model specifications
+Preliminary step 2 : performing prime decompositions on the factors
+Main step for prime p = 2 : key-matrix search
+  => search for columns 2 to 4 
+      first visit to column 2 
+      first visit to column 3 
+      first visit to column 4 
+The search is closed: max.sol =  2 solution(s) found 
+> P <- planor.design(key=K, select=1)
+> print(P)
+An object of class "planordesign"
+Slot "design":
+  A B C D
+1 1 1 1 1
+2 1 1 2 2
+3 1 2 1 2
+4 1 2 2 1
+5 2 1 1 2
+6 2 1 2 1
+7 2 2 1 1
+8 2 2 2 2
+
+Slot "factors":
+An object of class "designfactors"
+Slot "fact.info":
+  nlev block ordered model basic dummy
+A    2 FALSE   FALSE  TRUE FALSE FALSE
+B    2 FALSE   FALSE  TRUE FALSE FALSE
+C    2 FALSE   FALSE  TRUE FALSE FALSE
+D    2 FALSE   FALSE  TRUE FALSE FALSE
+
+Slot "pseudo.info":
+  parent nlev block ordered model basic dummy
+A      1    2 FALSE   FALSE  TRUE FALSE FALSE
+B      2    2 FALSE   FALSE  TRUE FALSE FALSE
+C      3    2 FALSE   FALSE  TRUE FALSE FALSE
+D      4    2 FALSE   FALSE  TRUE FALSE FALSE
+
+Slot "levels":
+$A
+[1] 1 2
+
+$B
+[1] 1 2
+
+$C
+[1] 1 2
+
+$D
+[1] 1 2
+
+
+
+Slot "model":
+[[1]]
+[[1]]$Model
+~(A + B + C + D)^2
+<environment: 0x351f210>
+
+[[1]]$Estimate
+~(A + B + C + D)
+<environment: 0x351f210>
+
+
+
+> resum <- summary(K[1])
+
+********** Prime  2  design **********
+
+DESIGN KEY MATRIX
+    A B C D
+*U* 1 0 0 1
+*U* 0 1 0 1
+*U* 0 0 1 1
+
+TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+1 = A B C D
+
+BLOCK-and-TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+nil
+
+WEIGHT PROFILES
+Treatment effects confounded with the mean: 4^1 
+Treatment effects confounded with block effects: none 
+Treatment pseudo-effects confounded with the mean: 4^1 
+Treatment pseudo-effects confounded with block effects: none
+
+> # ----------------------------------------------------------
+> # 5 factors, resolution 3
+> Km <- planor.designkey(factors=c(LETTERS[1:4], "block"),nlevels=rep(2,5),resolution=3,  nunits=2^4)
+Preliminary step 1 : processing the model specifications
+Preliminary step 2 : performing prime decompositions on the factors
+Main step for prime p = 2 : key-matrix search
+  => search for columns 2 to 5 
+      first visit to column 2 
+      first visit to column 3 
+      first visit to column 4 
+      first visit to column 5 
+The search is closed: max.sol =  1 solution(s) found 
+> 
+> # ----------------------------------------------------------
+> # 6 factors, resolution 5
+> K <- planor.designkey(factors=planor.factors( factors=c(LETTERS[1:6]), nlevels=rep(2,6)),  nunits=2^5, resolution=5, max.sol=2)
+Preliminary step 1 : processing the model specifications
+Preliminary step 2 : performing prime decompositions on the factors
+Main step for prime p = 2 : key-matrix search
+  => search for columns 2 to 6 
+      first visit to column 2 
+      first visit to column 3 
+      first visit to column 4 
+      first visit to column 5 
+      first visit to column 6 
+The search is closed: max.sol =  2 solution(s) found 
+> P <- planor.design(key=K, select=1)
+> print(P)
+An object of class "planordesign"
+Slot "design":
+   A B C D E F
+1  1 1 1 1 1 1
+2  1 1 1 1 1 2
+3  1 1 1 2 2 1
+4  1 1 1 2 2 2
+5  1 1 2 1 2 1
+6  1 1 2 1 2 2
+7  1 1 2 2 1 1
+8  1 1 2 2 1 2
+9  1 2 1 1 2 1
+10 1 2 1 1 2 2
+11 1 2 1 2 1 1
+12 1 2 1 2 1 2
+13 1 2 2 1 1 1
+14 1 2 2 1 1 2
+15 1 2 2 2 2 1
+16 1 2 2 2 2 2
+17 2 1 1 1 2 1
+18 2 1 1 1 2 2
+19 2 1 1 2 1 1
+20 2 1 1 2 1 2
+21 2 1 2 1 1 1
+22 2 1 2 1 1 2
+23 2 1 2 2 2 1
+24 2 1 2 2 2 2
+25 2 2 1 1 1 1
+26 2 2 1 1 1 2
+27 2 2 1 2 2 1
+28 2 2 1 2 2 2
+29 2 2 2 1 2 1
+30 2 2 2 1 2 2
+31 2 2 2 2 1 1
+32 2 2 2 2 1 2
+
+Slot "factors":
+An object of class "designfactors"
+Slot "fact.info":
+  nlev block ordered model basic dummy
+A    2 FALSE   FALSE  TRUE FALSE FALSE
+B    2 FALSE   FALSE  TRUE FALSE FALSE
+C    2 FALSE   FALSE  TRUE FALSE FALSE
+D    2 FALSE   FALSE  TRUE FALSE FALSE
+E    2 FALSE   FALSE  TRUE FALSE FALSE
+F    2 FALSE   FALSE  TRUE FALSE FALSE
+
+Slot "pseudo.info":
+  parent nlev block ordered model basic dummy
+A      1    2 FALSE   FALSE  TRUE FALSE FALSE
+B      2    2 FALSE   FALSE  TRUE FALSE FALSE
+C      3    2 FALSE   FALSE  TRUE FALSE FALSE
+D      4    2 FALSE   FALSE  TRUE FALSE FALSE
+E      5    2 FALSE   FALSE  TRUE FALSE FALSE
+F      6    2 FALSE   FALSE  TRUE FALSE FALSE
+
+Slot "levels":
+$A
+[1] 1 2
+
+$B
+[1] 1 2
+
+$C
+[1] 1 2
+
+$D
+[1] 1 2
+
+$E
+[1] 1 2
+
+$F
+[1] 1 2
+
+
+
+Slot "model":
+[[1]]
+[[1]]$Model
+~(A + B + C + D + E + F)^2
+<environment: 0x356f028>
+
+[[1]]$Estimate
+~(A + B + C + D + E + F)^2
+<environment: 0x356f028>
+
+
+
+> print(summary(K))
+
+********** Prime  2  design **********
+
+--- Solution  1  for prime  2  ---
+
+TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+1 = A B C D E
+
+BLOCK-and-TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+nil
+
+WEIGHT PROFILES
+Treatment effects confounded with the mean: 5^1 
+Treatment effects confounded with block effects: none 
+Treatment pseudo-effects confounded with the mean: 5^1 
+Treatment pseudo-effects confounded with block effects: none
+
+--- Solution  2  for prime  2  ---
+
+TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+1 = A B C D E
+
+BLOCK-and-TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+nil
+
+WEIGHT PROFILES
+Treatment effects confounded with the mean: 5^1 
+Treatment effects confounded with block effects: none 
+Treatment pseudo-effects confounded with the mean: 5^1 
+Treatment pseudo-effects confounded with block effects: none
+
+$`Solution 1`
+$`Solution 1`$`Solution 1 for prime 2`
+$`Solution 1`$`Solution 1 for prime 2`$k
+  [,1]
+A    1
+B    1
+C    1
+D    1
+E    1
+F    0
+
+$`Solution 1`$`Solution 1 for prime 2`$w
+     Treatment effects confounded with the mean 
+                                          "5^1" 
+Treatment effects confounded with block effects 
+                                         "none" 
+
+
+$`Solution 1`$`Solution 2 for prime 2`
+$`Solution 1`$`Solution 2 for prime 2`$k
+  [,1]
+A    1
+B    1
+C    1
+D    1
+E    1
+F    0
+
+$`Solution 1`$`Solution 2 for prime 2`$w
+     Treatment effects confounded with the mean 
+                                          "5^1" 
+Treatment effects confounded with block effects 
+                                         "none" 
+
+
+
+> 
+> 
+> proc.time()
+   user  system elapsed 
+  3.517   0.199   3.718 

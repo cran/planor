@@ -1,0 +1,24 @@
+# Les points d'entree C ou Fortran appelés par les fonctions R;
+# Le 1ier nom est le nom de la librairie qui doit être le même
+# que le nom du  package
+useDynLib(planor, PLANORsubgroup, 
+          PLANORcbindBig, PLANORrbindBig,
+          PLANORmultBigmod, PLANORmultBigSmod, PLANORmultBig,
+          PLANORcol0Big, PLANORloopkernelcheck,
+          PLANORweightorder, PLANORlibsk,
+          PLANORinv)
+# Les fonctions R a disposition de l'utilisateur
+export(
+  planor.designkey,
+  planor.factors, planor.harmonize, planor.model,
+  planor.randomize,
+  regular.design  )
+exportClasses(designfactors)
+exportClasses(designkey)
+exportClasses(planordesign )
+exportClasses(keymatrix)
+exportClasses(keyring)
+exportClasses(listofkeyrings)
+exportClasses(listofdesignkeys)
+exportMethods(bind, pick, planor.design, alias, getDesign)
+
