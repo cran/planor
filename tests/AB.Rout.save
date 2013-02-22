@@ -1,5 +1,5 @@
 
-R version 2.15.0 (2012-03-30)
+R version 2.15.1 (2012-06-22) -- "Roasted Marshmallows"
 Copyright (C) 2012 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 Platform: x86_64-unknown-linux-gnu (64-bit)
@@ -20,11 +20,12 @@ Type 'q()' to quit R.
 Loading required package: conf.design
 Loading required package: biganalytics
 Loading required package: bigmemory
+Loading required package: bigmemory.sri
 
 bigmemory >= 4.0 is a major revision since 3.1.2; please see package
 biganalytics and http://www.bigmemory.org for more information.
 
-Loaded planor 0.1.1
+Loaded planor 0.1.3
 
 
 Attaching package: 'planor'
@@ -103,4 +104,4 @@ The search is closed: max.sol =  1 solution(s) found
 > 
 > proc.time()
    user  system elapsed 
- 19.084   0.929  20.069 
+ 19.187   0.942  20.181 
