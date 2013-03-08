@@ -884,9 +884,6 @@ regular.design <- function(
   if(output=="data.frame"){
     final <- getDesign(final)
   }
-  else if(output=="planordesign"){
-    final <- final
-  }
   
   return(final)
 }

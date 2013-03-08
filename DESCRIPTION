@@ -1,7 +1,7 @@
 Package: planor
 Title: Generation of regular factorial designs
-Date: 2013-02-22
-Version: 0.1-3
+Date: 2013-03-08
+Version: 0.1-5
 Author: Hervé Monod, Annie Bouvier, André Kobilinsky
 Description: planor is a package dedicated to the automatic generation
         of regular factorial designs, including fractional designs,
@@ -18,7 +18,7 @@ Collate: zzz.R debug.R generic.R designfactors.R keymatrix.R keyring.R
         listofdesignkeys.R planordesign.R bigm.R
 LazyLoad: yes
 BuildVignettes: no
-Packaged: 2013-02-22 09:13:20 UTC; abouvier
+Packaged: 2013-03-08 13:58:37 UTC; abouvier
 NeedsCompilation: yes
 Repository: CRAN
-Date/Publication: 2013-02-22 10:50:04
+Date/Publication: 2013-03-08 16:51:31

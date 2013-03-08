@@ -1,16 +1,17 @@
+2013-03-08   Annie Bouvier
+        * DESCRIPTION: version is 1.0-5
+	* generic.R: remove the definition of the generic function "alias"
+	to avoid confusion with the function of same name in package "stats"
+	
 2013-02-22   Annie Bouvier
-
 	* DESCRIPTION: version is 1.0-3
 	* R/zzz.R: .onAttach instead of .onLoad
 
 2012-10-05  Annie Bouvier
-
 	* DESCRIPTION: version is 1.0-2
-
 	* CITATION: titles have changed
 	
 2012-09-27  Annie Bouvier, Hervé Monod 
-
 	* DESCRIPTION: version is 1.0-1. First release submitted on the CRAN
 
 

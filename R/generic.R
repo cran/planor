@@ -75,25 +75,4 @@ setGeneric("getDesign",
            function(object, ...){
                value <- standardGeneric("getDesign")
            })
-##---------------------------------------------------------------------------
-#' Generic function to summarise the design properties
-#'
-#' @title Summarise the design properties from key matrices
-#'
-#' @name alias
-#' @aliases alias
-#' @param object an object from which the design  properties will be extracted
-#' @param ... other arguments depending on the methods
-#' @return depends  on the methods
-#' @keywords design
-#' @author H. Monod, and al.
-#' @seealso Methods \code{\link{alias.keymatrix}},
-#' \code{\link{alias.listofkeyrings}},
-#' \code{\link{alias.designkey}}
-#' @exportMethod alias
-# --------------------------------------
-setGeneric("alias",
-           function(object, ...){
-               value <- standardGeneric("alias")
-           })
 

@@ -25,14 +25,7 @@ Loading required package: bigmemory.sri
 bigmemory >= 4.0 is a major revision since 3.1.2; please see package
 biganalytics and http://www.bigmemory.org for more information.
 
-Loaded planor 0.1.3
-
-
-Attaching package: 'planor'
-
-The following object(s) are masked from 'package:stats':
-
-    alias
+Loaded planor 0.1.5
 
 > #---------------------------------------------------------------------------
 > # EXAMPLE FROM "Automatic generation of asymmetrical regular designs"
@@ -164,4 +157,4 @@ Treatment pseudo-effects confounded with block effects: none
 > 
 > proc.time()
    user  system elapsed 
-  2.645   0.170   2.815 
+  2.791   0.231   3.023 

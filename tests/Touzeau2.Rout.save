@@ -25,14 +25,7 @@ Loading required package: bigmemory.sri
 bigmemory >= 4.0 is a major revision since 3.1.2; please see package
 biganalytics and http://www.bigmemory.org for more information.
 
-Loaded planor 0.1.3
-
-
-Attaching package: 'planor'
-
-The following object(s) are masked from 'package:stats':
-
-    alias
+Loaded planor 0.1.5
 
 > source("compar.R")
 > 
@@ -219,4 +212,4 @@ Slots factors differ
 > 
 > proc.time()
    user  system elapsed 
-  8.241   0.148   8.404 
+  8.397   0.231   8.645 

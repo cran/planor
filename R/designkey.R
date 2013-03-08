@@ -270,7 +270,7 @@ show.designkey <- function(object){
 ##--------------------------------------------------------------------------
 #' Method show for "designkey"
 #'
-#' @title  Method alias for "designkey"
+#' @title  Method show for "designkey"
 #'
 #' @name show-method.designkey
 #' @aliases show-method.designkey

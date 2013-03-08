@@ -25,14 +25,7 @@ Loading required package: bigmemory.sri
 bigmemory >= 4.0 is a major revision since 3.1.2; please see package
 biganalytics and http://www.bigmemory.org for more information.
 
-Loaded planor 0.1.3
-
-
-Attaching package: 'planor'
-
-The following object(s) are masked from 'package:stats':
-
-    alias
+Loaded planor 0.1.5
 
 > cat("\n")
 
@@ -104,4 +97,4 @@ The search is closed: max.sol =  1 solution(s) found
 > 
 > proc.time()
    user  system elapsed 
- 19.187   0.942  20.181 
+ 19.559   1.117  20.733 
