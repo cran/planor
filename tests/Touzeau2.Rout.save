@@ -21,13 +21,13 @@ Loading required package: conf.design
 Loading required package: biganalytics
 Loading required package: bigmemory
 Loading required package: bigmemory.sri
+Loading required package: BH
 
-bigmemory >= 4.0 is a major revision since 3.1.2; please see package
-biganalytics and http://www.bigmemory.org for more information.
+bigmemory >= 4.0 is a major revision since 3.1.2; please see packages
+biganalytics and and bigtabulate and http://www.bigmemory.org for more information.
 
-Loaded planor 0.1.5
+Loaded planor 0.1.8
 
-> source("compar.R")
 > 
 > cat("\n")
 
@@ -176,40 +176,7 @@ Treatment pseudo-effects confounded with block effects: none
 > # cat("*** TEMPS total", proc.time()-ptmtotal,"\n")
 > #Rprof(NULL)
 > 
-> cat(" Comparer aux sorties initiales\n")
- Comparer aux sorties initiales
-> load("hmtestsSTouzeau2")
-> # Pbe pour appeler compar sur des big.matrix?
-> ###  
-> ###  slots <- slotNames(OR$ST.K)
-> ###  for (s in slots) {
-> ###      leslot = slot(ST.K,s)
-> ###      ORleslot = slot(OR$ST.K,s)
-> ###    if (s ==".Data") {
-> ###      for (l in 1:length(leslot)) {
-> ###        ll=leslot[[l]]
-> ###        ORll=ORleslot[[l]]
-> ###        for (k in 1:length(ll))
-> ###        print(all.equal(ll[[k]][,], ORll[[k]][,]))
-> ###      }
-> ###    }
-> ###    else {
-> ###      print(all.equal(slotNames(leslot), slotNames(ORleslot)))
-> ###      for (ss in slotNames(leslot)) {
-> ###        s1 <- slot(leslot, ss)
-> ###        s2 <- slot(ORleslot, ss)
-> ###        print(all.equal(s1,s2))
-> ###      }
-> ###    }
-> ###  }
-> 
-> print(compar(ST.P, OR$ST.P))
-length of lists differ
-Slots fact.info differ
-Slots factors differ
-[1] FALSE
-> 
 > 
 > proc.time()
    user  system elapsed 
-  8.397   0.231   8.645 
+  9.521   0.147   9.688 

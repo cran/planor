@@ -14,7 +14,7 @@
   %    \alias{summary,listofdesignkeys-method}
 %\alias{summary.listofdesignkeys}
 
-\title{Class \code{'listofdesignkeys'} and methods of the class}
+\title{Class \code{listofdesignkeys} and methods of the class}
 
 \description{An S4 class to represent a list of design key solutions}
 
@@ -52,17 +52,17 @@ Class \code{"\linkS4class{vector}"}, by class "list", distance 2.
     \item{[}{extract one design key in the list.}
     
     \item{pick}{extract one design key in the list. See
-      \code{\link[=pick-method]{pick-method}}.}
+      \code{\link[=pick]{pick}}.}
     
     \item{planor.design}{ build a design from one design key in the
       list.  See
-      \code{\link[=planor.design-method]{planor.design-method}}.  }
+      \code{\link{planor.design}}.  }
     
     \item{show}{ display the object. See
-      \code{\link[=show-method]{show-method}}.}
+      \code{\link[=show-method]{show}}.}
         
     \item{summary}{summarize the design properties.
-      See \code{\link[=summary-method]{summary-method}}
+      See \code{\link[=summary.listofdesignkeys]{summary}}
     }
   }
 }

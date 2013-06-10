@@ -1,5 +1,5 @@
 library("planor")
-source("compar.R")
+
 #---------------------------------------------------------------------------
 # EXAMPLES FROM THE PLANOR MANUAL
 #---------------------------------------------------------------------------
@@ -34,14 +34,9 @@ P0 <- planor.design(key=K0, select=2)
 # cat("TEMPS design", proc.time()-ptm,"\n")
 #Rprof(NULL);Rprof("Kobi0.summary.Rprof.out")
 # ptm <- proc.time()
-resum <- summary(K0[1])
+resum <- summary.designkey(K0[1])
 # cat("TEMPS summary", proc.time()-ptm,"\n")
 # cat("TEMPS total", proc.time()-ptmtotal,"\n")
-
-cat(" Comparer aux sorties initiales\n")
-load("hmtestsKobi0")
-print(compar(P0, OR$P0))
-
 
 
 # REMARK: The following lines also work; they illustrate that the basic factors

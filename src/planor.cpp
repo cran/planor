@@ -3,6 +3,8 @@
 // NOTE: these includes should be before the others
 #include "bigmemory/BigMatrix.h"
 #include "bigmemory/MatrixAccessor.hpp"
+/* TYPE OF THE big matrices */
+#define  TYPEOFBIG short int 
 /* +++  includes from R +++ */
 #include <R.h>
 #include <Rmath.h>// pour pow
@@ -12,8 +14,6 @@
 /* +++ system includes +++ */
 #include <float.h>
 #include <math.h> // pour pow
-/* TYPE OF THE big matrices */
-#define  TYPEOFBIG short int 
 extern "C" {
 /* ++++++++++++++++++++++++++++++++++++++++++++++++
 MACRO
@@ -36,8 +36,10 @@ MACRO
   exact arithmetic
  ++++++++++++++++++++++++++++++++++++++++++++++++ */
 #define ISUN(a) ( (imax2(a, 1) == 1)? 1 : 0 )
-/* ++++++++++++++++++++++++++++++++++++++++++++++++
-FUNCTION
+/* ++++++++++++++++++++++++++++++++++++++++++++++++ */
+SEXP getListElement(SEXP list, const char *str)
+{
+  /* FUNCTION
  Access to a component by name from a R-list
 INPUT
  list: a R-list
@@ -45,8 +47,6 @@ INPUT
 RETURN VALUE
  the component "str" of list
  ++++++++++++++++++++++++++++++++++++++++++++++++ */
-SEXP getListElement(SEXP list, const char *str)
-{
   SEXP elmt = R_NilValue, names=getAttrib(list, R_NamesSymbol);
   int i;
   for (i=0; i< length(list); i++)
@@ -57,37 +57,7 @@ SEXP getListElement(SEXP list, const char *str)
   return(elmt);
 }
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++
-FUNCTION
- Multiplication of a given column, nc, of the big matrix A
- by the column nc of a matrix b. This column is stored in B.
- If iz[i]==pp1, B[i] is ignored.
- iz[i]=pp1, if the first nonzero value of the row i of t(b)
- is not 1
-INPUT
- addressofA: address of big matrix A (nrow, nbg)
- B: vector (N1)
- iz: vector (N1)
- all: see subgroup.base
- nc: current row of A
- nrow, N1: dimensions
- pp1: marker of values to ignored 
-OUTPUT
- addressofres:  address of resulting big matrix (nrow,N1)
-CALLED BY
- PLANORsubgroup
-NOTE
- The dimensions are not checked
-NOTE AB:
- En fait, on doit faire mat %*% t(coeffs)
- Mais, comme on calcule coeffs, colonne par colonne,
- on ne connait qu'une ligne de t(coeffs)
- Les elements de cette ligne, la ligne nc, doivent etre multipliés
- par la colonne correspondante de mat, soit la colonne nc
- Tous les elements de res sont modifiés. Au prochain appel,
- B correspondra à la ligne suivante de  t(coeffs): tous les
-  elements de res seront à nouveau modifiés.
- ++++++++++++++++++++++++++++++++++++++++++++++++ */
+/* ++++++++++++++++++++++++++++++++++++++++++++++++ */
 
   void multpp1col (SEXP addressofa, short int *B,
 		   short int *iz,
@@ -95,8 +65,29 @@ NOTE AB:
 		   short int pp1,
 		   SEXP addressofres)
 {
+/* FUNCTION
+ Multiplication of a given column, nc, of the Big matrix A
+ by the column nc of a matrix b. This column is stored in B.
+ If iz[i]==pp1, B[i] is ignored.
+ iz[i]=pp1, if the first nonzero value of the row i of t(b)
+ is not 1
+INPUT
+ addressofA: address of Big matrix A (nrow, N1)
+ B: vector (N1)
+ iz: vector (N1)
+ all: see subgroup.base
+ nc: current row of A
+ nrow, N1: dimensions
+ pp1: marker of values to ignored 
+OUTPUT
+ addressofres:  address of resulting Big matrix (nrow,N1)
+CALLED BY
+ PLANORsubgroup
+NOTE
+ The dimensions are not checked
+ ++++++++++++++++++++++++++++++++++++++++++++++++ */
   int l, r;
-  /* Access to the values of the big matrices */
+  /* Access to the values of the matrices */
   BigMatrix *ptrin = (BigMatrix *) (R_ExternalPtrAddr(addressofa));
   MatrixAccessor<TYPEOFBIG> bigA(*ptrin);
   BigMatrix *ptrout = (BigMatrix *) (R_ExternalPtrAddr(addressofres));
@@ -132,6 +123,7 @@ et alors, il faut considérerla ligne */
       //      res[l,r]+= A[l,nc]*B[r]
        //NOTE: big matrix indexes: first the column index
        bigres[r][l] += (bigA[nc][l] * B[r]);
+
      } // fin l
    } // fin if iz
      else {
@@ -144,8 +136,11 @@ et alors, il faut considérerla ligne */
 } // fin multcolpp1col
 
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++
-FUNCTION
+/* ++++++++++++++++++++++++++++++++++++++++++++++++ */
+void     repetcol( int motif, int prod1, int l, 
+	        short int *crosses)
+{
+  /* FUNCTION
  Repeat the value motif, prod1 times in crosses, 
  from the position l included.
  Indexes begin from zero.
@@ -158,9 +153,6 @@ INPUT-OUTPUT
 CALLED BY
  gcrossingcol
  ++++++++++++++++++++++++++++++++++++++++++++++++ */
-void     repetcol( int motif, int prod1, int l, 
-	        short int *crosses)
-{
   int i;
 R_CheckUserInterrupt(); // permettre a l'utilisateur d'interrompre
 
@@ -173,8 +165,13 @@ R_CheckUserInterrupt(); // permettre a l'utilisateur d'interrompre
 
 
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++
-FUNCTION
+/* ++++++++++++++++++++++++++++++++++++++++++++++++ */
+
+void gcrossingcol( int nrow, int p,  int prod1,
+		      short int start,
+		     short int *crosses) 
+{
+   /* FUNCTION
  Generates all n1 x n2 x ... x ns combinations of size s 
  with n1,...,ns integers
  Here, the values n1,...,ns are all identical and equal to p
@@ -194,11 +191,6 @@ CALLED BY
  PLANORsubgroup
 
  ++++++++++++++++++++++++++++++++++++++++++++++++ */
-
-void gcrossingcol( int nrow, int p,  int prod1,
-		      short int start,
-		     short int *crosses) 
-{
   int  k, l, motif;
 R_CheckUserInterrupt(); // permettre a l'utilisateur d'interrompre
 
@@ -217,10 +209,13 @@ R_CheckUserInterrupt(); // permettre a l'utilisateur d'interrompre
 } // fin gcrossingcol
 
 
+/* ++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-
-/* ++++++++++++++++++++++++++++++++++++++++++++++++
-FUNCTION
+SEXP PLANORsubgroup( SEXP gnrow, SEXP gnbg, SEXP gN,
+		     SEXP addressofmat, SEXP gp, SEXP gall,
+		     SEXP addressofres)
+ {
+  /* FUNCTION
   Calculate the non null elements of the subgroup H generated 
   by the columns of mat, considered as vectors in (Zp)^s
 INPUT
@@ -233,7 +228,7 @@ INPUT
   all: if TRUE all elements in H are given, if FALSE only elements up
        to multiplication by an integer modulo p are given
 OUTPUT:
- addressofres:  resulting big matrix:
+ addressofres:  resulting Big matrix:
    a matrix of integers modulo p whose columns are the subgroup 
    elements
    dimension (nrow, N-1)
@@ -243,14 +238,9 @@ DETAILS:
 CALLED BY
  subgroup.basep
  ++++++++++++++++++++++++++++++++++++++++++++++++ */
-
-
-SEXP PLANORsubgroup( SEXP gnrow, SEXP gnbg, SEXP gN,
-		     SEXP addressofmat, SEXP gp, SEXP gall,
-		     SEXP addressofres)
- {
    short int  *coeffs, start, pp1, *iz;
    int prod1, nc,i, j;
+
   int *nrow = INTEGER_POINTER(gnrow);
   int *nbg = INTEGER_POINTER(gnbg);
   int  *N  = INTEGER_POINTER(gN);
@@ -292,12 +282,14 @@ que N-1 elts */
   // NOTE AB: on ne le fait pas dans la foulée lorsqu'on calcule
   // res car celui-ci est une accumulation progressive de valeurs
   // dont le résultat final n'est déterminé qu'en fin de boucle 
-  //Access to the resulting big matrix
+  //Access to the resulting Big matrix
    BigMatrix *ptrout = (BigMatrix *) (R_ExternalPtrAddr(addressofres));
   MatrixAccessor<TYPEOFBIG> bigres(*ptrout);
 
-  for (i=0; i< ptrout->nrow(); i++) {
-    for (j=0; j<  ptrout->ncol() ;j++) {
+
+
+  for (i=0; i< (*nrow); i++) {
+    for (j=0; j< (*N)-1 ;j++) {
        //NOTE: big matrix indexes: first the column index
        //      a= ( (int) bigres[i,j]% (*p));
       if (bigres[j][i] >0) {
@@ -314,8 +306,13 @@ que N-1 elts */
 
 
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++
-FUNCTION
+  /* ++++++++++++++++++++++++++++++++++++++++++++++++ */
+
+SEXP PLANORlibsk(SEXP gnrow, SEXP gncol,
+		 SEXP addressofH, SEXP gLIBtpf,
+		 SEXP gMAXPRINT)
+{
+/* FUNCTION
  Ouput function.
  Replace the time consuming R commands:
     for(j in 1:ncol(H)){
@@ -328,7 +325,7 @@ FUNCTION
 
 INPUT
   nrow, ncol: dimension of H
-  addressofH: address of H: a big matrix
+  addressofH: address of H: a Big matrix
   LIBtpf.k: character vector
   MAXPRINT: maximum number of rows and columns to print
 OUTPUT
@@ -336,11 +333,6 @@ OUTPUT
 CALLED BY
   The R function:  summary.designkey
  ++++++++++++++++++++++++++++++++++++++++++++++++ */
-
-SEXP PLANORlibsk(SEXP gnrow, SEXP gncol,
-		 SEXP addressofH, SEXP gLIBtpf,
-		 SEXP gMAXPRINT)
-{
   int i,j;
   int *nrow = INTEGER_POINTER(gnrow);
   int *ncol = INTEGER_POINTER(gncol);
@@ -351,7 +343,7 @@ SEXP PLANORlibsk(SEXP gnrow, SEXP gncol,
   int bc = imin2(*ncol, *maxprint);
 
 R_CheckUserInterrupt(); // permettre a l'utilisateur d'interrompre
-// Access to the big matrix H
+// Access to the Big matrix H
   BigMatrix *ptrin = (BigMatrix *) (R_ExternalPtrAddr(addressofH));
   MatrixAccessor<TYPEOFBIG> bigH(*ptrin);
 
@@ -366,12 +358,13 @@ R_CheckUserInterrupt(); // permettre a l'utilisateur d'interrompre
        //NOTE: big matrix indexes: first the column index
       //      if (ISZERO(bigH[i,j])) continue;
       if (ISZERO(bigH[j][i])) continue;
+
    Rprintf(" %s", CHAR(STRING_ELT(gLIBtpf,i)));
 
       //      if (H[i,j] !=1) 
       if (!ISUN(bigH[j][i])) {
 	Rprintf("^%d ", bigH[j][i]);
-      } 
+      }
 
     } //fin i
     Rprintf("\n");
@@ -381,8 +374,10 @@ R_CheckUserInterrupt(); // permettre a l'utilisateur d'interrompre
 } // fin PLANORlibsk
 
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++
-FUNCTION
+/* ++++++++++++++++++++++++++++++++++++++++++++++++ */
+int prodk(int p, int k)
+{
+/* FUNCTION
  Return the index of the multiple of k
  such as the remainder by p is 1
 INPUT
@@ -397,8 +392,6 @@ p=11
 The values successively returned when k=1...10 are:
  1  6  4  3  9  2  8  7  5 10
  ++++++++++++++++++++++++++++++++++++++++++++++++ */
-int prodk(int p, int k)
-{
 int l, a, prodkv;
 div_t d;
   a=k;
@@ -415,8 +408,11 @@ error("Internal error: prodk\n");
 }
 
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++
-FUNCTION
+/* ++++++++++++++++++++++++++++++++++++++++++++++++ */
+void PLANORinv (int *p, int *J,
+		int *inv)
+{
+  /* FUNCTION
  Raw calculation of the inverses of the value J modulo p
 NOTE AB: remplace inverses.basep
    PLANORinv(p,J) = inverses.basep(p)[J]
@@ -428,9 +424,6 @@ OUTPUT
 CALLED BY
   kernelmatrix.basep, PLANORweightorder
  ++++++++++++++++++++++++++++++++++++++++++++++++ */
-void PLANORinv (int *p, int *J,
-		int *inv)
-{
   //  if ( (*J==1) || (*J==(*p-1))) {
   if ( EQUAL(*J, 1) || EQUAL(*J, (*p-1))) {
     *inv = *J;
@@ -439,8 +432,10 @@ void PLANORinv (int *p, int *J,
   }
 }
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++
-FUNCTION
+/* ++++++++++++++++++++++++++++++++++++++++++++++++ */
+int pasvu(int X, int *ifv, int *factvu)
+{
+/* FUNCTION
   Return 1 if a value X is present in the vector factvu
   and 0 otherwise. In the case it is not present,
   insert X into factvu at the last position.
@@ -453,8 +448,6 @@ INPUT-OUTPUT
 CALLED BY
   Called by PLANORcalcweight  
  ++++++++++++++++++++++++++++++++++++++++++++++++ */
-int pasvu(int X, int *ifv, int *factvu)
-{
   int i;
   for (i=0; i <= *ifv; i++) {
 // egalité stricte assurée car factvu est rempli par des valeurs X
@@ -465,8 +458,14 @@ int pasvu(int X, int *ifv, int *factvu)
   return 1;
 } // fin pasvu
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++
-FUNCTION
+/* ++++++++++++++++++++++++++++++++++++++++++++++++ */
+SEXP PLANORweightorder(SEXP gnrow, SEXP gncol, SEXP gp,
+		  SEXP gfactnum,
+		       SEXP addressofmat, SEXP retour)
+
+{
+
+/* FUNCTION
   Replace the R following commands:
 # fnz <- apply(mat, 2, function(x){min(seq(along=x)[x!=0])})
 # for(j in seq(nc)){
@@ -486,12 +485,6 @@ OUTPUT
 CALLED BY
   Called by the R function  weightorder.basep 
  ++++++++++++++++++++++++++++++++++++++++++++++++ */
-SEXP PLANORweightorder(SEXP gnrow, SEXP gncol, SEXP gp,
-		  SEXP gfactnum,
-		       SEXP addressofmat, SEXP retour)
-
-{
-
   int i, j, inv,a, fnz=0, ifv, *factvu;
   div_t d;
   /* Acceder aux arguments */
@@ -508,10 +501,9 @@ SEXP PLANORweightorder(SEXP gnrow, SEXP gncol, SEXP gp,
   double *pseudoweight = NUMERIC_POINTER(gpseudoweight);
   double *binrank  = NUMERIC_POINTER(gbinrank);
   double *modrank = NUMERIC_POINTER(gmodrank);
-  //Access to the big matrix mat
+  //Access to the Big matrix mat
   BigMatrix *ptrin = (BigMatrix *) (R_ExternalPtrAddr(addressofmat));
   MatrixAccessor<TYPEOFBIG> bigmat(*ptrin);
-
 
 R_CheckUserInterrupt(); // permettre a l'utilisateur d'interrompre
 
@@ -532,8 +524,6 @@ R_CheckUserInterrupt(); // permettre a l'utilisateur d'interrompre
 	break; // sortir de la boucle i
       }
     } //fin i
-       //NOTE: big matrix indexes: first is the column index
-    //    a=(int)bigmat[ fnz-1, j];
     // AB, 8/6/11 Ajout du test sur fnz:
     // la matrice restreinte aux facteurs traitements ou
     // blocs  peut  contenir  zéro valeurs non nulles
@@ -543,7 +533,6 @@ R_CheckUserInterrupt(); // permettre a l'utilisateur d'interrompre
 	bigmat[j][i] = 0;
       } 
     } else {
-	
     a=(int)bigmat[j][ fnz-1];
     PLANORinv(p, &a, &inv);
 
@@ -581,8 +570,12 @@ R_CheckUserInterrupt(); // permettre a l'utilisateur d'interrompre
 } // fin PLANORweightorder
 
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++
-FUNCTION
+/* ++++++++++++++++++++++++++++++++++++++++++++++++ */
+SEXP PLANORloopkernelcheck( SEXP gr, SEXP gnbadmissible,
+			    SEXP gnbineligible, SEXP addressofImagesIS,
+			    SEXP addressofadmissible, SEXP gtest)
+{
+/* FUNCTION
  Replace the time consuming R commands:
    for(k in seq(nb.admissible)){
     test.mat <- ImagesIS == matrix(admissible[,k,drop=F], nrow=r, ncol=nb.ineligible)
@@ -593,25 +586,21 @@ INPUT
   r: integer
   nbadmissible: integer
   nbineligible: integer
-  addressofImagesIS: (r x  nbineligible) matrix of integers
-     (address of a short big.matrix)
-  addressofadmissible: (r x nbadmissible) matrix of integers 
-     (address of short big.matrix)
+  addressofImagesIS: (r x  nbineligible) Big matrix of integers
+  addressofadmissible: (r x nbadmissible) Big matrix of integers 
 OUTPUT
   test:  a logical vector of length nbadmissible
 CALLED BY
   planor.kernelcheck.basep
  ++++++++++++++++++++++++++++++++++++++++++++++++ */
-SEXP PLANORloopkernelcheck( SEXP gr, SEXP gnbadmissible,
-			    SEXP gnbineligible, SEXP addressofImagesIS,
-			    SEXP addressofadmissible, SEXP gtest)
-{
   int k,j,l, trouve;
   int *r = INTEGER_POINTER(gr);
   int *nbadmissible = INTEGER_POINTER(gnbadmissible);
   int *nbineligible = INTEGER_POINTER(gnbineligible);
   int *test = INTEGER_POINTER(gtest);
-  // Access to the big matrices
+
+
+  // Access to the short big matrices
   BigMatrix *ptrImagesIS = (BigMatrix *) (R_ExternalPtrAddr(addressofImagesIS));
   MatrixAccessor<TYPEOFBIG> bigImagesIS(*ptrImagesIS);
 

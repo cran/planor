@@ -1,5 +1,4 @@
 library("planor")
-source("compar.R")
 #---------------------------------------------------------------------------
 # EXAMPLES FROM THE PLANOR MANUAL
 #---------------------------------------------------------------------------
@@ -36,10 +35,6 @@ resum <- summary(K1[1])
 #alias.designkey(K1[1], model=M1[[1]][[1]])
 #cat("TEMPS alias.designkey(K1[1], model=M1[[1]][[1]])", proc.time()-ptm,"\n")
 # cat("TEMPS total", proc.time()-ptmtotal,"\n")
-
-cat(" Comparer aux sorties initiales\n")
-load("hmtestsKobi1")
-print(compar(P1, OR$P1))
 
 
                                         # REMARK: The following lines also work; they illustrate that the basic factors

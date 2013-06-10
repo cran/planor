@@ -20,7 +20,7 @@
   the steps can be decomposed by using successively the functions
   \code{\link{planor.factors}}, \code{\link{planor.model}},
   \code{\link{planor.designkey}} and
-  \code{\link[=planor.design-method]{planor.design}}. For the expert
+  \code{\link{planor.design}}. For the expert
   user, the function \code{\link{planor.designkey}} can give several key
   matrix solutions. Alias and summary methods allow to study and compare
   these solutions, in order to select the most appropriate one for the
@@ -61,8 +61,9 @@ print(mydesign)
 # Here we omit two-factor interactions from the model, so they are 
 # confounded with the residuals (but not with ABCD main effects)
 set.seed(123)
-mydesign$Y <- runif(27)
-mydesign.aov <- aov(Y ~ block + A + B + C + D, data=mydesign)
+mydesigndata=mydesign@design
+mydesigndata$Y <- runif(27)
+mydesign.aov <- aov(Y ~ block + A + B + C + D, data=mydesigndata)
 summary(mydesign.aov)
 # 2. STEP-BY-STEP GENERATION, USING 'planor.designkey'
 F0 <- planor.factors(factors=c( "block", LETTERS[1:4]), nlevels=rep(3,5),

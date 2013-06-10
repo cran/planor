@@ -1,12 +1,11 @@
 \name{getDesign-methods}
 \alias{getDesign-method}
-\alias{getDesign}
 \docType{methods}
-%\alias{getDesign}
+\alias{getDesign}
 \alias{getDesign,planordesign-method}
 %\alias{getDesign.planordesign}
 
-\title{ Methods for function  \code{getDesign}: extract a design}
+\title{ Methods for function  \code{getDesign} in package \pkg{planor}: extract a design}
 \description{
  Extract a design data frame from an object
 }

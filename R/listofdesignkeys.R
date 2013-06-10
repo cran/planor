@@ -1,10 +1,11 @@
+ 
 #---------------------------------------------------------------------------
 # CLASS "listofdesignkeys" and its METHODS
 #---------------------------------------------------------------------------
 # No roxygen documentation, see directly the .Rd file
 #---------------------------------------------------------------------------
 # listofdesignkeys : an S4 class, typically an output from planor.designkey when the research is recursive
-#         main: a list of design-key solutions; each component 
+#         main: a list of design-key solutions; each component
 #                  of main is a whole solution list across the different primes. It is an object of class \code{\linkS4class{designkey}}
 #         factors: the 'designfactors' object that defines the factors
 #         model: the list of components of type c(model,estimate)
@@ -76,7 +77,7 @@ setMethod("pick", signature(keys="listofdesignkeys"),
 ##  Method to return the \code{\linkS4class{designkey}} object
 ##  of  the \code{index} solution
 ##   from a \code{\linkS4class{listofdesignkeys}} object.
-## 
+##
 ##  @name [,listofdesignkeys,ANY,ANY,ANY-method
 ##  @title Method "[" for listofdesignkeys
 # --------------------------------------
@@ -171,8 +172,8 @@ summary.listofdesignkeys <- function(object, show= "tbw", save="kw", ...){
     grepl("[d,t,b,w]", show, ignore.case=TRUE))
   ## Is some output required?
   issave <-  (length(save) >0 && save != "" &&
-    grepl("[k,w]", save, ignore.case=TRUE)) 
-  
+    grepl("[k,w]", save, ignore.case=TRUE))
+
   ## Treatment factors
   object@factors <- object@factors[object@factors@fact.info$model]
   fact.info <- object@factors@fact.info
@@ -216,7 +217,7 @@ summary.listofdesignkeys <- function(object, show= "tbw", save="kw", ...){
     names(sortie) <- paste("Solution", seq_len(nsol))
     return(invisible(sortie))
   }  else    return(invisible())
-  
+
 } ## fin summary.listofdesignkeys
 
 
@@ -268,7 +269,7 @@ show.listofdesignkeys <- function(object){
   PVuqf <- unique(pseudo.info$nlev)
   PVuqf <- PVuqf[order(PVuqf)]
   Nuqf <- length(PVuqf)
-  
+
 ## Loop on the solutions
   nsol <- length(object)
   for(l in seq_len(nsol)){
@@ -280,7 +281,7 @@ show.listofdesignkeys <- function(object){
       printgmat(object[[l]][[k]])
     }
   }
-  
+
   invisible()
 } ## fin show.listofdesignkeys
 # --------------------------------------

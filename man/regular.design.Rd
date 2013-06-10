@@ -5,7 +5,7 @@ regular.design(factors = NULL, nlevels = NULL, block = NULL,
 ordered = NULL, hierarchy = NULL, model = NULL, estimate = NULL,
 listofmodels = NULL, resolution = NULL, nunits = NULL,
 base = NULL, randomize = NULL, randomsearch = FALSE,
-output = "data.frame", verbose = FALSE, ...)
+output = "planordesign", verbose = FALSE, ...)
 }
 \description{Construct and randomize a regular factorial design}
 \alias{regular.design}
@@ -54,10 +54,10 @@ output = "data.frame", verbose = FALSE, ...)
     \code{data.frame} or a \code{planordesign} object}
 
   \item{verbose}{a \code{logical} to set to \code{TRUE} for verbose
-  display}.
+  display}
 
   \item{...}{additional arguments, in particular those related to
-    randomization}.
+    randomization}
 }
 
 \value{An object of class \code{data.frame} or

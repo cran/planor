@@ -12,7 +12,7 @@
 #'
 #' @name bind
 #' @aliases bind
-#' @param x first object 
+#' @param x first object
 #' @param y second object
 #' @param ... other arguments
 #' @return An object where the input are binded.

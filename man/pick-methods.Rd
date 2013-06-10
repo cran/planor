@@ -2,18 +2,20 @@
 \docType{methods}
 \alias{pick-method}
 \alias{pick}
-%\alias{pick.listofkeyrings}
+\alias{[,listofkeyrings-method}
+\alias{[,designfactors-method}
+\alias{[,planordesign-method}
 \alias{pick,listofkeyrings-method}
-%\alias{pick.listofdesignkeys}
+\alias{[,listofdesignkeys-method}
 \alias{pick,listofdesignkeys-method}
-\title{ Methods for function  \code{pick}: extract a single  \code{designkey} from a list }
+\title{ Methods for function  \code{pick} (or \code{[}) in package
+  \pkg{planor}: extract a single result from an object of class list }
 \description{
 Extract a single \code{\linkS4class{designkey}}
 object (with one key matrix per prime) from a complex object
 }
 \usage{
 \S4method{pick}{listofdesignkeys}(keys, selection)
-
 \S4method{pick}{listofkeyrings}(keys, selection)
 }
 \arguments{

@@ -31,8 +31,3 @@ resum <- summary(K2)
 
 # cat("TEMPS total", proc.time()-ptmtotal,"\n")
 
-
-### cat(" Comparer aux sorties initiales\n")
-### load("hmtestsKobiRecursive")
-### print(compar(P2, OR$P2))
-

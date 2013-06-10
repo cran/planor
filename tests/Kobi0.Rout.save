@@ -21,13 +21,14 @@ Loading required package: conf.design
 Loading required package: biganalytics
 Loading required package: bigmemory
 Loading required package: bigmemory.sri
+Loading required package: BH
 
-bigmemory >= 4.0 is a major revision since 3.1.2; please see package
-biganalytics and http://www.bigmemory.org for more information.
+bigmemory >= 4.0 is a major revision since 3.1.2; please see packages
+biganalytics and and bigtabulate and http://www.bigmemory.org for more information.
 
-Loaded planor 0.1.5
+Loaded planor 0.1.8
 
-> source("compar.R")
+> 
 > #---------------------------------------------------------------------------
 > # EXAMPLES FROM THE PLANOR MANUAL
 > #---------------------------------------------------------------------------
@@ -80,7 +81,7 @@ The search is closed: max.sol =  2 solution(s) found
 > # cat("TEMPS design", proc.time()-ptm,"\n")
 > #Rprof(NULL);Rprof("Kobi0.summary.Rprof.out")
 > # ptm <- proc.time()
-> resum <- summary(K0[1])
+> resum <- summary.designkey(K0[1])
 
 ********** Prime  2  design **********
 
@@ -106,16 +107,6 @@ Treatment pseudo-effects confounded with block effects: 2^2
 > # cat("TEMPS summary", proc.time()-ptm,"\n")
 > # cat("TEMPS total", proc.time()-ptmtotal,"\n")
 > 
-> cat(" Comparer aux sorties initiales\n")
- Comparer aux sorties initiales
-> load("hmtestsKobi0")
-> print(compar(P0, OR$P0))
-length of lists differ
-Slots fact.info differ
-Slots factors differ
-[1] FALSE
-> 
-> 
 > 
 > # REMARK: The following lines also work; they illustrate that the basic factors
 > # need not be part of the model but they must have been declared in planor.factors:
@@ -137,4 +128,4 @@ The search is closed: max.sol =  2 solution(s) found
 > 
 > proc.time()
    user  system elapsed 
-  2.290   0.140   2.428 
+  2.481   0.139   2.620 

@@ -11,23 +11,23 @@ setClass("designfactors",
                         levels="list"))
 
 # --------------------------------------
-# "names" method 
+# "names" method
 # --------------------------------------
 setMethod("names", signature(x="designfactors"),
           definition=function(x){rownames(x@fact.info)})
 
 # --------------------------------------
-# "length" method 
+# "length" method
 # --------------------------------------
 setMethod("length", signature(x="designfactors"),
           definition=function(x){nrow(x@fact.info)})
 
 # --------------------------------------
-# "[" method 
+# "[" method
 # --------------------------------------
 
 # --------------------------------------
-setMethod("[", 
+setMethod("[",
 signature(x = "designfactors", i = "ANY", j = "ANY", drop = "ANY"),
           definition=function(x,i,j,...,drop){
             x@fact.info <- x@fact.info[i,]
@@ -37,7 +37,7 @@ signature(x = "designfactors", i = "ANY", j = "ANY", drop = "ANY"),
           })
 
 #-------------------------------------------------------
-# "bind.designfactors" 
+# "bind.designfactors"
 # --------------------------------------
 #' @param x an object of class \code{\linkS4class{designfactors}}
 #' @param y  an object of class \code{\linkS4class{designfactors}}
@@ -59,7 +59,7 @@ bind.designfactors <- function(x,y){
   # pseudofactors information
   z <- planor.pseudofactors(z)
   z
-} 
+}
 
 # --------------------------------------
 # "bind" method help description in roxygen syntax

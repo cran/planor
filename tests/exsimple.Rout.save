@@ -22,11 +22,12 @@ Loading required package: conf.design
 Loading required package: biganalytics
 Loading required package: bigmemory
 Loading required package: bigmemory.sri
+Loading required package: BH
 
-bigmemory >= 4.0 is a major revision since 3.1.2; please see package
-biganalytics and http://www.bigmemory.org for more information.
+bigmemory >= 4.0 is a major revision since 3.1.2; please see packages
+biganalytics and and bigtabulate and http://www.bigmemory.org for more information.
 
-Loaded planor 0.1.5
+Loaded planor 0.1.8
 
 > toto <- planor.factors(LETTERS[1:5],c(2,6,12,3,2))
 > tata <- planor.model(y~A+B+C+D+E)
@@ -104,4 +105,4 @@ $bloc
 > 
 > proc.time()
    user  system elapsed 
-  2.414   0.173   2.587 
+  2.371   0.137   2.509 

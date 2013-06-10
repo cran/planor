@@ -57,7 +57,7 @@ calls the core algorithms implemented in \pkg{planor}.}
   display.}}
 
 \value{an object of class \code{\linkS4class{listofkeyrings}} in most
-  cases. Otherwise, an object of class
+  cases. Otherwise, i.e in recursive cases, an object of class
   \code{\linkS4class{listofdesignkeys}}.}
 
 \note{The \code{base} formula must be an additive formula involving a

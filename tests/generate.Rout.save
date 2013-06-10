@@ -21,11 +21,12 @@ Loading required package: conf.design
 Loading required package: biganalytics
 Loading required package: bigmemory
 Loading required package: bigmemory.sri
+Loading required package: BH
 
-bigmemory >= 4.0 is a major revision since 3.1.2; please see package
-biganalytics and http://www.bigmemory.org for more information.
+bigmemory >= 4.0 is a major revision since 3.1.2; please see packages
+biganalytics and and bigtabulate and http://www.bigmemory.org for more information.
 
-Loaded planor 0.1.5
+Loaded planor 0.1.8
 
 > #---------------------------------------------------------------------------
 > # EXAMPLES OF AUTOMATIC MODEL GENERATION FROM RESOLUTION
@@ -92,13 +93,32 @@ Slot "model":
 [[1]]
 [[1]]$Model
 ~(A + B + C + D)^2
-<environment: 0x27b84a8>
+<environment: 0x2b0d9e8>
 
 [[1]]$Estimate
 ~(A + B + C + D)
-<environment: 0x27b84a8>
+<environment: 0x2b0d9e8>
 
 
+
+Slot "designkey":
+[[1]]
+An object of class keymatrix
+
+********** Prime  2  design **********
+
+    A B C D
+*U* 1 0 0 1
+*U* 0 1 0 1
+*U* 0 0 1 1
+
+
+
+Slot "nunits":
+[1] 8
+
+Slot "recursive":
+[1] FALSE
 
 > resum <- summary(K[1])
 
@@ -231,13 +251,34 @@ Slot "model":
 [[1]]
 [[1]]$Model
 ~(A + B + C + D + E + F)^2
-<environment: 0x2bf8c30>
+<environment: 0x30035a8>
 
 [[1]]$Estimate
 ~(A + B + C + D + E + F)^2
-<environment: 0x2bf8c30>
+<environment: 0x30035a8>
 
 
+
+Slot "designkey":
+[[1]]
+An object of class keymatrix
+
+********** Prime  2  design **********
+
+    A B C D E F
+*U* 1 0 0 0 1 0
+*U* 0 1 0 0 1 0
+*U* 0 0 1 0 1 0
+*U* 0 0 0 1 1 0
+*U* 0 0 0 0 0 1
+
+
+
+Slot "nunits":
+[1] 32
+
+Slot "recursive":
+[1] FALSE
 
 > print(summary(K))
 
@@ -311,4 +352,4 @@ Treatment effects confounded with block effects
 > 
 > proc.time()
    user  system elapsed 
-  3.598   0.223   3.832 
+  4.126   0.203   4.335 

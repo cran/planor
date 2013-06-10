@@ -1,5 +1,4 @@
 library("planor")
-source("compar.R")
 
 #---------------------------------------------------------------------------
 # EXAMPLES FROM THE PLANOR MANUAL
@@ -62,9 +61,6 @@ summary(robotKey, show="dtbw")
 # cat("TEMPS summary(pick)", proc.time()-ptm,"\n")
 # cat("TEMPS total3A", proc.time()-ptmtotal,"\n")
 cat("\n")
-cat(" Comparer aux sorties initiales\n")
-load("hmtestsKobi3")
-print(compar(robotDes, OR$P3A))
 # --------------------------------------------------
 
 
@@ -113,6 +109,3 @@ P3B <- planor.design(key=K3B, select=1)
 resum3B <-summary(K3B[1], show="dtbw")
 # cat("TEMPS summary(pick)", proc.time()-ptm,"\n")
 # cat("TEMPS total", proc.time()-ptmtotal,"\n")
-cat(" Comparer aux sorties initiales\n")
-print(compar(robotDes, OR$P3A))
-print(compar(P3B, OR$P3B))

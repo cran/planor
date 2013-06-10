@@ -1,3 +1,4 @@
+ 
 #---------------------------------------------------------------------------
 # CLASS designkey and its METHODS
 #---------------------------------------------------------------------------
@@ -69,8 +70,9 @@ planor.design.designkey <- function(key, randomize=NULL, ...){
     for(k in seq_len(Nuqf)){
         p.k <- PVuqf[k]
         r.k <- nrow(key[[k]])
-        b.aux <- crossingBig(rep(p.k,r.k),start=0)
-        b.pseudodesign.k[[k]] <- multBigmod(b.aux, key[[k]], p.k)
+      b.aux <- crossingBig(rep(p.k,r.k),start=0)
+      b.pseudodesign.k[[k]] <- multBigmod(b.aux, key[[k]], p.k)
+
     }
 
     ## B. Crossing of the subdesigns
@@ -78,22 +80,22 @@ planor.design.designkey <- function(key, randomize=NULL, ...){
 
     ## C. Reordering of the columns by treatment factor
     pseudosorder <- order(NIVtpf, FACTtpf, seq_along(NIVtpf))
-    ##  fullpseudodesign[,pseudosorder] <- fullpseudodesign
     b.fullpseudodesign <- exchangeColBig(b.fullpseudodesign,
                                          pseudosorder,
                                          seq.int(ncol(b.fullpseudodesign)))
 
     ## D. Calculation of the design with the original treatment factors
     b.back <- big.matrix( Ntpf, Ntf, init=0, type="short")
+
     for(i in seq_len(Ntpf)){
         select <- (FACTtpf == FACTtpf[i]) & (seq_len(Ntpf) > i)
         b.back[i,FACTtpf[i]] <- prod( NIVtpf[select] )
     }
-    ##  finaldesign <- b.fullpseudodesign %*% back
     b.finaldesign <- multBig(b.fullpseudodesign, b.back)
     ## Transformation de b.finaldesign en non big matrix
     ## car il est factor
     b.finaldesign <- as.data.frame(b.finaldesign[,])
+
     names(b.finaldesign) <- LIBtf ## noms des colonnes
     for(i in seq_len(Ntf)){
         zz <- factor(b.finaldesign[,i])
@@ -111,13 +113,16 @@ planor.design.designkey <- function(key, randomize=NULL, ...){
                             key@factors)
       }
     }
-    
+
     OUT <- new("planordesign",
                design=b.finaldesign,
                factors=key@factors,
-               model=key@model)
+               model=key@model,
+               designkey=key@.Data,
+               nunits= key@nunits,
+               recursive=key@recursive )
+    
 
-  
     return(OUT)
 } ## fin planor.design.designkey
 ##------------------------------------------------------------------------
@@ -135,7 +140,7 @@ setMethod("planor.design", signature(key="designkey"),
 # "summary.designkey" help description in roxygen syntax
 #' Summarises the design properties of a \code{\linkS4class{designkey}} object, by
 #' printing the summary of each of its key matrices (design key matrix, confounding
-#' and aliasing relationships) 
+#' and aliasing relationships)
 #'
 #' @aliases summary,designkey-method
 #' @name summary.designkey
@@ -162,12 +167,13 @@ summary.designkey <- function(object,show="dtbw", save="k", ...){
   ## required to be compatible with the generic function
   ## "summary" in R;
   ## Is some display required?
+
   isshow <-  (length(show) >0 && show != "" &&
     grepl("[d,t,b,w]", show, ignore.case=TRUE))
   ## Is some output required?
   issave <-  (length(save) >0 && save != "" &&
-    grepl("[k,w]", save, ignore.case=TRUE)) 
-  
+    grepl("[k,w]", save, ignore.case=TRUE))
+
   ## Treatment factors
   object@factors <- object@factors[object@factors@fact.info$model]
   fact.info <- object@factors@fact.info
@@ -199,6 +205,7 @@ summary.designkey <- function(object,show="dtbw", save="k", ...){
                                   fact=FACTtpf[ NIVtpf == p.k ],
                                   block=BLOCKtpf[ NIVtpf == p.k ],
                                    show, save)
+
     if (issave) {
       Hgen[[k]] <- retour
     }
@@ -236,7 +243,7 @@ setMethod("summary", signature(object="designkey"),
 #' - The number of rows and columns of the matrices that are printed
 #' are limited by the option \code{planor.max.print}
 #'
-#' -  Objects of class \code{\linkS4class{designkey}} are displayed automatically is if by a call to 'show'. 
+#' -  Objects of class \code{\linkS4class{designkey}} are displayed automatically is if by a call to 'show'.
 #' @examples
 #' K0 <- planor.designkey(factors=c(LETTERS[1:4], "block"), nlevels=rep(3,5),
 #'    model=~block+(A+B+C+D)^2, estimate=~A+B+C+D ,
@@ -347,6 +354,7 @@ alias.designkey <- function(object, model, ...){
   ModelFine <- ModelFine[,apply(ModelFine,2,function(x){sum(x)>0})]
   b.modterms <- as.big.matrix(ModelFine,type="short")
 
+
   ## Decomposition into pseudofactors
   ## the function "planor.ineligibleset" can do that, assuming that
   ## we are in an "independent search" case
@@ -360,13 +368,14 @@ alias.designkey <- function(object, model, ...){
     modset <- matrix(b.modset[rows.k, ], ncol=ncol(b.modset))
     model.cols.k <-
       0 < apply(modset, 2, sum)
-    model.k <- modset[rows.k, model.cols.k, drop=FALSE]
+# BUG fixed 30/4/2013    model.k <- modset[rows.k, model.cols.k, drop=FALSE]
+    model.k <- modset[, model.cols.k, drop=FALSE]
     ## alias calculations for prime p
-    alias.keymatrix(object=object[[k]], model=model.k, 
+    alias.keymatrix(object=object[[k]], model=model.k,
                     fact=FACTtpf[rows.k],
                     block=BLOCKtpf[rows.k])
   } ## fin k
-  
+
   return(invisible())
 } ## fin alias.designkey
 
@@ -379,3 +388,4 @@ alias.designkey <- function(object, model, ...){
 #' @aliases alias-method.designkey
 setMethod("alias", signature(object="designkey"),
           definition=alias.designkey)
+##--------------------------------------------------------------------------

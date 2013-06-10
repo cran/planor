@@ -1,5 +1,4 @@
 library("planor")
-source("compar.R")
 #---------------------------------------------------------------------------
 # EXAMPLES FROM THE PLANOR MANUAL
 #---------------------------------------------------------------------------
@@ -37,9 +36,6 @@ resum <- summary(K2[1,1])
 # cat("TEMPS total", proc.time()-ptmtotal,"\n")
 # Idem que
 resum.l <- summary(K2)
-cat(" Comparer aux sorties initiales\n")
-load("hmtestsKobi2")
-print(compar(P2, OR$P2))
                                         # REMARK: The following lines also work; they illustrate that the basic factors
 # need not be part of the model but they must have been declared in planor.factors:
 #

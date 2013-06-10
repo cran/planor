@@ -6,7 +6,7 @@
 %\alias{show.keyring}
 %\alias{summary,keyring-method}
 %\alias{summary.keyring}
-\title{Class \code{'keyring'} and methods of the class}
+\title{Class \code{keyring} and methods of the class}
 
 \description{ An S4 class to represent a list of design-key matrices
 which are associated with the same prime and which represent alternative
@@ -42,7 +42,7 @@ solutions to the same design specifications.  }
     \item{show}{ display the object. See \link[=show-method]{show-method}.}
 
     \item{summary}{ summarize the design properties. See
-      \code{\link[=summary-method]{summary-method}}}
+      \code{\link[=summary.keyring]{summary}}}
 
   }
 }

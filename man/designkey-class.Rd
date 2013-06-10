@@ -11,7 +11,7 @@
 %\alias{summary,designkey-method}
 %\alias{summary.designkey}
 
-\title{Class \code{'designkey'} and methods of the class}
+\title{Class \code{designkey} and methods of the class}
 
 \description{An S4 class to represent a design-key solution in package
 \pkg{planor}. }
@@ -42,18 +42,18 @@ Class \code{"\linkS4class{vector}"}, by class "list", distance 2.
 \section{Methods}{
   \describe{
     \item{alias}{ summarize the design properties.
-            See \code{\link{alias-method}}.
+            See \code{\link[=alias.designkey]{alias}}.
        }
     \item{planor.design}{ 
       build the
       design from the design key matrix.
-See \code{\link[=planor.design-method]{planor.design-method}}.
+See \code{\link{planor.design}}.
   }
   \item{show}{display the object.
-    see \link[=show-method]{show-method}
+    see \link[=show-methods]{show}
 	 }
 	 \item{summary}{summarize  the design properties.
-	   See \code{\link[=summary-method]{summary-method}}
+	   See \code{\link[=summary.designkey]{summary}}
 }
 }}
 \author{

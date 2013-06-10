@@ -1,0 +1,286 @@
+
+R version 2.15.1 (2012-06-22) -- "Roasted Marshmallows"
+Copyright (C) 2012 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-unknown-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> ## Asymmetrical (mixed) factorial design
+> ## cf Planor Manual, Example 2 page 12
+> library("planor")
+Loading required package: conf.design
+Loading required package: biganalytics
+Loading required package: bigmemory
+Loading required package: bigmemory.sri
+Loading required package: BH
+
+bigmemory >= 4.0 is a major revision since 3.1.2; please see packages
+biganalytics and and bigtabulate and http://www.bigmemory.org for more information.
+
+Loaded planor 0.1.8
+
+> # Four treatment factors at 6, 6, 4, 2 levels and one 6-level block factor
+> # Model: block+(A+B+C+D)^2 ; Estimate: A+B+C+D\n")
+> # N = 144 = 2^4 x 3^2 experimental units
+> 
+> mixKey <- planor.designkey(factors=c( LETTERS[1:4], "block"), 
++                            nlevels=c(6,6,4,2,6), 
++                            block=~block,
++                            model=~block+(A+B+C+D)^2, 
++                            estimate=~A+B+C+D, 
++                            nunits=144,
++                        base=~A+B+D, max.sol=2)
+Preliminary step 1 : processing the model specifications
+Preliminary step 2 : performing prime decompositions on the factors
+Main step for prime p = 2 : key-matrix search
+  => search for columns 4 to 6 
+      first visit to column 4 
+      first visit to column 5 
+      first visit to column 6 
+The search is closed: max.sol =  2 solution(s) found 
+Main step for prime p = 3 : key-matrix search
+  => search for column 3 .
+      first visit to column 3 
+The search is closed: max.sol =  2 solution(s) found 
+> 
+> ## Tests on the listofkeyrings class
+> summary(mixKey)
+
+********** Prime  2  design **********
+
+--- Solution  1  for prime  2  ---
+
+TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+1 = A_1 B_1 D C_1
+
+BLOCK-and-TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+1 = A_1 B_1 block_1
+1 = D C_1 block_1
+
+WEIGHT PROFILES
+Treatment effects confounded with the mean: 4^1 
+Treatment effects confounded with block effects: 2^2 
+Treatment pseudo-effects confounded with the mean: 4^1 
+Treatment pseudo-effects confounded with block effects: 2^2 
+
+--- Solution  2  for prime  2  ---
+
+TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+1 = A_1 B_1 D C_1
+
+BLOCK-and-TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+1 = A_1 D block_1
+1 = B_1 C_1 block_1
+
+WEIGHT PROFILES
+Treatment effects confounded with the mean: 4^1 
+Treatment effects confounded with block effects: 2^2 
+Treatment pseudo-effects confounded with the mean: 4^1 
+Treatment pseudo-effects confounded with block effects: 2^2 
+
+
+********** Prime  3  design **********
+
+--- Solution  1  for prime  3  ---
+
+TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+nil
+
+BLOCK-and-TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+1 = A_2^2  B_2^2  block_2
+
+WEIGHT PROFILES
+Treatment effects confounded with the mean: none 
+Treatment effects confounded with block effects: 2^1 
+Treatment pseudo-effects confounded with the mean: none
+Treatment pseudo-effects confounded with block effects: 2^1 
+
+--- Solution  2  for prime  3  ---
+
+TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+nil
+
+BLOCK-and-TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+1 = A_2 B_2^2  block_2
+
+WEIGHT PROFILES
+Treatment effects confounded with the mean: none 
+Treatment effects confounded with block effects: 2^1 
+Treatment pseudo-effects confounded with the mean: none
+Treatment pseudo-effects confounded with block effects: 2^1 
+
+> alias(mixKey)
+
+********** Prime  2  design **********
+
+--- Solution  1  for prime  2  ---
+
+UNALIASED TREATMENT EFFECTS
+A_1 ; B_1 ; D
+
+ALIASED TREATMENT EFFECTS
+nil
+
+TREATMENT AND BLOCK EFFECTS CONFOUNDED WITH BLOCK EFFECTS
+nil
+
+UNALIASED BLOCK EFFECTS
+nil
+
+
+--- Solution  2  for prime  2  ---
+
+UNALIASED TREATMENT EFFECTS
+A_1 ; B_1 ; D
+
+ALIASED TREATMENT EFFECTS
+nil
+
+TREATMENT AND BLOCK EFFECTS CONFOUNDED WITH BLOCK EFFECTS
+nil
+
+UNALIASED BLOCK EFFECTS
+nil
+
+
+--- Synthesis on the aliased treatment effects for prime  2  ---
+
+     unaliased trt.aliased blc.aliased
+[1,]         3           0           0
+[2,]         3           0           0
+
+********** Prime  3  design **********
+
+--- Solution  1  for prime  3  ---
+
+UNALIASED TREATMENT EFFECTS
+A_2 ; B_2
+
+ALIASED TREATMENT EFFECTS
+nil
+
+TREATMENT AND BLOCK EFFECTS CONFOUNDED WITH BLOCK EFFECTS
+nil
+
+UNALIASED BLOCK EFFECTS
+nil
+
+
+--- Solution  2  for prime  3  ---
+
+UNALIASED TREATMENT EFFECTS
+A_2 ; B_2
+
+ALIASED TREATMENT EFFECTS
+nil
+
+TREATMENT AND BLOCK EFFECTS CONFOUNDED WITH BLOCK EFFECTS
+nil
+
+UNALIASED BLOCK EFFECTS
+nil
+
+
+--- Synthesis on the aliased treatment effects for prime  3  ---
+
+     unaliased trt.aliased blc.aliased
+[1,]         2           0           0
+[2,]         2           0           0
+> mixPlan <- planor.design(key=mixKey, select=c(1,1), randomize=~block/UNITS)
+> # resultats aleatoires: print(getDesign(mixPlan)[1:25,])
+> 
+> ## Tests on the designkey class
+> summary(mixKey[c(1, 1)])
+
+********** Prime  2  design **********
+
+DESIGN KEY MATRIX
+    A_1 B_1 D C_1 C_2 block_1
+A_1   1   0 0   1   0       1
+B_1   0   1 0   1   0       1
+D     0   0 1   1   0       0
+*U*   0   0 0   0   1       0
+
+TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+1 = A_1 B_1 D C_1
+
+BLOCK-and-TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+1 = A_1 B_1 block_1
+1 = D C_1 block_1
+
+WEIGHT PROFILES
+Treatment effects confounded with the mean: 4^1 
+Treatment effects confounded with block effects: 2^2 
+Treatment pseudo-effects confounded with the mean: 4^1 
+Treatment pseudo-effects confounded with block effects: 2^2 
+
+
+********** Prime  3  design **********
+
+DESIGN KEY MATRIX
+    A_2 B_2 block_2
+A_2   1   0       1
+B_2   0   1       1
+
+TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+nil
+
+BLOCK-and-TREATMENT EFFECTS CONFOUNDED WITH THE MEAN
+1 = A_2^2  B_2^2  block_2
+
+WEIGHT PROFILES
+Treatment effects confounded with the mean: none 
+Treatment effects confounded with block effects: 2^1 
+Treatment pseudo-effects confounded with the mean: none
+Treatment pseudo-effects confounded with block effects: 2^1 
+
+> alias(mixKey[c(1, 1)])
+
+********** Prime  2  design **********
+
+UNALIASED TREATMENT EFFECTS
+A_1 ; B_1 ; D
+
+ALIASED TREATMENT EFFECTS
+nil
+
+TREATMENT AND BLOCK EFFECTS CONFOUNDED WITH BLOCK EFFECTS
+nil
+
+UNALIASED BLOCK EFFECTS
+nil
+
+
+
+********** Prime  3  design **********
+
+UNALIASED TREATMENT EFFECTS
+A_2 ; B_2
+
+ALIASED TREATMENT EFFECTS
+nil
+
+TREATMENT AND BLOCK EFFECTS CONFOUNDED WITH BLOCK EFFECTS
+nil
+
+UNALIASED BLOCK EFFECTS
+nil
+
+
+> mixPlan <- planor.design(key=mixKey, select=c(1,1), randomize=~block/UNITS)
+> # resultats aleatoires: print(getDesign(mixPlan)[1:25,])
+> 
+> proc.time()
+   user  system elapsed 
+  4.209   0.174   4.387 

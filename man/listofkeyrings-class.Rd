@@ -14,7 +14,7 @@
 %\alias{summary,listofkeyrings-method}
 %\alias{summary.listofkeyrings}
 
-\title{Class \code{'listofkeyrings'} and  methods of the class}
+\title{Class \code{listofkeyrings} and  methods of the class}
 
 \description{ An S4 class to store design key solutions when there is
 only one prime involved or when the solutions are independent between
@@ -48,21 +48,21 @@ Class \code{"\linkS4class{vector}"}, by class "list", distance 2.
   \describe{
     
     \item{alias}{give the aliasing for each key-matrix. See
-      \code{\link{alias-method}}.  }
+      \code{\link[=alias.listofkeyrings]{alias}}.  }
     
     \item{[}{extract one design key by taking one key matrix per prime.}
     
     \item{pick}{extract one design key by taking one key matrix per
-      prime.  See \code{\link[=pick-method]{pick-method}}.  }
+      prime.  See \code{\link{pick}}.  }
     
     \item{planor.design}{build a design using one key matrix per prime.
-      See \code{\link[=planor.design-method]{planor.design-method}}.  }
+      See \code{\link{planor.design}}.  }
     
     \item{show}{display the object. See
-    \link[=show-method]{show-method}.  }
+    \link[=show-method]{show}.  }
     
     \item{summary}{ summarize the design properties from \code{object}.
-      See \code{\link[=summary-method]{summary-method}}.
+      See \code{\link[=summary.listofkeyrings]{summary}}.
 
     }
   }

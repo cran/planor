@@ -1,5 +1,4 @@
 library("planor")
-source("compar.R")
 
 cat("\n")
 cat("***************** PLAN DE L'ARTICLE JTB09 *****************\n")
@@ -33,32 +32,4 @@ summary(st2)
 # cat("*** TEMPS summary(pick)", proc.time()-ptm,"\n")
 # cat("*** TEMPS total", proc.time()-ptmtotal,"\n")
 #Rprof(NULL)
-
-cat(" Comparer aux sorties initiales\n")
-load("hmtestsSTouzeau2")
-# Pbe pour appeler compar sur des big.matrix?
-###  
-###  slots <- slotNames(OR$ST.K)
-###  for (s in slots) {
-###      leslot = slot(ST.K,s)
-###      ORleslot = slot(OR$ST.K,s)
-###    if (s ==".Data") {
-###      for (l in 1:length(leslot)) {
-###        ll=leslot[[l]]
-###        ORll=ORleslot[[l]]
-###        for (k in 1:length(ll))
-###        print(all.equal(ll[[k]][,], ORll[[k]][,]))
-###      }
-###    }
-###    else {
-###      print(all.equal(slotNames(leslot), slotNames(ORleslot)))
-###      for (ss in slotNames(leslot)) {
-###        s1 <- slot(leslot, ss)
-###        s2 <- slot(ORleslot, ss)
-###        print(all.equal(s1,s2))
-###      }
-###    }
-###  }
-
-print(compar(ST.P, OR$ST.P))
 

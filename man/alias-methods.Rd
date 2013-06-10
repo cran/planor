@@ -1,16 +1,14 @@
 \name{alias-methods}
 \docType{methods}
-\alias{alias-method}
-\alias{alias}
 \alias{alias,designkey-method}
-%\alias{alias.designkey}
+\alias{alias.designkey}
 \alias{alias,keymatrix-method}
-%\alias{alias.keymatrix}
+\alias{alias.keymatrix}
 \alias{alias,listofdesignkeys-method}
-%\alias{alias.listofdesignkeys}
+\alias{alias.listofdesignkeys}
 \alias{alias,listofkeyrings-method}
-%\alias{alias.listofkeyrings}
-\title{ Methods for Function  \code{alias}:  summarize the design
+\alias{alias.listofkeyrings}
+\title{ Methods for function  \code{alias} in package \pkg{planor}:  summarize the design
  properties  }
 \description{
   Summarize the design properties of an object containing key matrices.

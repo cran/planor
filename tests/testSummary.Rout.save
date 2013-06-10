@@ -22,11 +22,12 @@ Loading required package: conf.design
 Loading required package: biganalytics
 Loading required package: bigmemory
 Loading required package: bigmemory.sri
+Loading required package: BH
 
-bigmemory >= 4.0 is a major revision since 3.1.2; please see package
-biganalytics and http://www.bigmemory.org for more information.
+bigmemory >= 4.0 is a major revision since 3.1.2; please see packages
+biganalytics and and bigtabulate and http://www.bigmemory.org for more information.
 
-Loaded planor 0.1.5
+Loaded planor 0.1.8
 
 > ### Creation of a "listofdesignkeys" object
 > K0 <- planor.designkey(factors=c("R","C","U","A","B1","B2"),
@@ -413,4 +414,4 @@ block 0     1
 > 
 > proc.time()
    user  system elapsed 
-  4.354   0.256   4.617 
+  5.004   0.248   5.259 

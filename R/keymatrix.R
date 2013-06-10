@@ -1,3 +1,4 @@
+ 
 
 #---------------------------------------------------------------------------
 # CLASS "keymatrix" and its METHODS
@@ -73,12 +74,12 @@ summary.keymatrix <- function(object, fact, block,
     ## no character recognized
     warning("No character recognized in argument save. Valid characters are 'k', 'w', or NULL")
     save <- ""
-  } 
+  }
   } else save <- ""
-      
+
   sortie <- list()
   ## A. Design key matrices
-  if (grepl('d', show, ignore.case=TRUE)) {  
+  if (grepl('d', show, ignore.case=TRUE)) {
     cat("DESIGN KEY MATRIX\n")
     printgmat(object )
   }
@@ -95,12 +96,12 @@ summary.keymatrix <- function(object, fact, block,
     ## b.H est une big.matrix
     b.H <- weightorder.basep(b.H, p, fact, block)
     ## printing
-    ## no printing of b.H for the moment 
+    ## no printing of b.H for the moment
     
     ## selection of the columns free from block effects
     selectCol <- apply( b.H[block, , drop=FALSE], 2, sum ) == 0
     ## PLANORlibsk ne modifie rien, ne fait qu'écrire
-    if (grepl('t', show, ignore.case=TRUE)) {  
+    if (grepl('t', show, ignore.case=TRUE)) {
       cat("TREATMENT EFFECTS CONFOUNDED WITH THE MEAN\n")
       if(sum(selectCol) > 0){
         H.show <- matrix(b.H[,selectCol], nrow=nrow(b.H))
@@ -115,7 +116,7 @@ summary.keymatrix <- function(object, fact, block,
       else cat("nil\n\n")
     } # fin grepl
     ## remaining info if there are block factors
-    if (grepl('b', show, ignore.case=TRUE)) {  
+    if (grepl('b', show, ignore.case=TRUE)) {
     cat("BLOCK-and-TREATMENT EFFECTS CONFOUNDED WITH THE MEAN\n")
     if(sum(block) > 0){
       H.show <- matrix(b.H[,!selectCol], nrow=nrow(b.H))
@@ -131,17 +132,17 @@ summary.keymatrix <- function(object, fact, block,
   } # fin grepl
     ## C. Design key kernels
     if (grepl('w', show, ignore.case=TRUE) ||
-        grepl('w', save, ignore.case=TRUE)) { 
+        grepl('w', save, ignore.case=TRUE)) {
 
 
     Wprint <- rbind(attributes(b.H)$trt.weight,
                     attributes(b.H)$trt.pseudoweight,
                     attributes(b.H)$blc.weight,
                     attributes(b.H)$blc.pseudoweight)
-    
+
     sortiew<-vector("character")
 
-    
+
     if (any(selectCol)) {
       sortiew[1] <- paste(wprofile(Wprint[1,selectCol]), collapse=" ")
     } else {
@@ -152,7 +153,7 @@ summary.keymatrix <- function(object, fact, block,
     cat("Treatment effects confounded with the mean: ")
     cat(sortiew[1],"\n")
   }
-      
+
     if (any(!selectCol)) {
       sortiew[2] <- paste(wprofile(Wprint[1,!selectCol]), collapse=" ")
       } else {
@@ -174,7 +175,7 @@ summary.keymatrix <- function(object, fact, block,
     } else {
       cat("none\n")
       }
-} # fin (grepl('w', show, ignore.case=TRUE) 
+} # fin (grepl('w', show, ignore.case=TRUE)
   } # fin grepl sur show et save
     cat("\n")
   } ## fin else Hgen a 0 colonne
@@ -193,7 +194,7 @@ summary.keymatrix <- function(object, fact, block,
     return(invisible(sortie))
   else
     return(invisible())
-  
+
 } ## fin summary.keymatrix
 
 
@@ -315,7 +316,7 @@ alias.keymatrix <- function(object, model,  fact, block, ...){
   ## initialisation of the output
   alias.stats <- vector(length=3)
   names(alias.stats) <- c("unaliased","trt.aliased","blc.aliased")
-  
+
   cat("UNALIASED TREATMENT EFFECTS\n")
   select.alias <- (nb.blc == 0) & (nb.terms == 1)
   alias.terms.selected <- alias.mat[select.alias, , drop=FALSE]

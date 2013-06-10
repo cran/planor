@@ -1,11 +1,16 @@
 \name{summary-methods}
 \docType{methods}
-\alias{summary-method}
+%\alias{summary-method}
 \alias{summary,designkey-method}
+\alias{summary.designkey}
 \alias{summary,keymatrix-method}
+\alias{summary.keymatrix}
 \alias{summary,keyring-method}
+\alias{summary.keyring}
 \alias{summary,listofdesignkeys-method}
+\alias{summary.listofdesignkeys}
 \alias{summary,listofkeyrings-method}
+\alias{summary.listofkeyrings}
 \title{  Methods for function \code{summary} in package \pkg{planor} }
 \description{
   Summarize the design properties of an object, by

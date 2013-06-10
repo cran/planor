@@ -21,13 +21,13 @@ Loading required package: conf.design
 Loading required package: biganalytics
 Loading required package: bigmemory
 Loading required package: bigmemory.sri
+Loading required package: BH
 
-bigmemory >= 4.0 is a major revision since 3.1.2; please see package
-biganalytics and http://www.bigmemory.org for more information.
+bigmemory >= 4.0 is a major revision since 3.1.2; please see packages
+biganalytics and and bigtabulate and http://www.bigmemory.org for more information.
 
-Loaded planor 0.1.5
+Loaded planor 0.1.8
 
-> source("compar.R")
 > #---------------------------------------------------------------------------
 > # EXAMPLES FROM THE PLANOR MANUAL
 > #---------------------------------------------------------------------------
@@ -195,14 +195,6 @@ Treatment effects confounded with block effects: 2^1
 Treatment pseudo-effects confounded with the mean: none
 Treatment pseudo-effects confounded with block effects: 2^1 
 
-> cat(" Comparer aux sorties initiales\n")
- Comparer aux sorties initiales
-> load("hmtestsKobi2")
-> print(compar(P2, OR$P2))
-length of lists differ
-Slots fact.info differ
-Slots factors differ
-[1] FALSE
 >                                         # REMARK: The following lines also work; they illustrate that the basic factors
 > # need not be part of the model but they must have been declared in planor.factors:
 > #
@@ -214,4 +206,4 @@ Slots factors differ
 > 
 > proc.time()
    user  system elapsed 
-  2.844   0.127   2.980 
+  2.687   0.126   2.813 

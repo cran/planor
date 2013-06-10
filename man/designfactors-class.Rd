@@ -8,7 +8,7 @@
 %\alias{bind,designfactors,designfactors-method}
 %\alias{bind.designfactors}
 
-\title{Class \code{"designfactors"} and methods of the class}
+\title{Class \code{designfactors} and methods of the class}
 
 \description{An S4 class to represent the design factors in the
   \pkg{planor} package and to store their characteristics.}
@@ -36,7 +36,7 @@
     \item{[}{ extract a subset of factors and update all the
   slots.}
     \item{bind}{ bind two objects of the class and update all the
-  slots. See \code{\link[=bind-method]{bind-method}}.}
+  slots. See \code{\link{bind}}.}
     \item{length}{return the  number of factors. }
     \item{names}{return the names of the factors. }
 	 }

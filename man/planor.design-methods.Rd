@@ -1,13 +1,12 @@
 \name{planor.design-methods}
 \docType{methods}
-\alias{planor.design-method}
 \alias{planor.design}
 \alias{planor.design,designkey-method}
 \alias{planor.design,listofdesignkeys-method}
 \alias{planor.design,listofkeyrings-method}
 \alias{planor.design,numeric-method}
 
-\title{ Methods for function \code{planor.design}: build a design from
+\title{ Methods for function \code{planor.design} in package  \pkg{planor}: build a design from
 a design-key solution}
 
 \description{Construction of a factorial design from an object

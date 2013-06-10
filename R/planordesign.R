@@ -5,12 +5,17 @@
 #         design: a dataframe containing the final design
 #         factors: the 'designfactors' object that defines the factors
 #         model: the modlist containing the model and estimate specifications
-# Methods of "planordesign": none
+# designkey, nunits, recursive: data extracted from the  designkey
+# from which the object has been built
+# Objects of this class are created by calls to planor.design.designkey
 #---------------------------------------------------------------------------
 setClass("planordesign",
          representation(design="data.frame",
                         factors="designfactors",
-                        model="list"))
+                        model="list",
+                        designkey="list",
+                        nunits="numeric",
+                        recursive="logical"))
 ##------------------------------------------------------------------------
 ## Extraction methods for "planordesign"
 ##------------------------------------------------------------------------
@@ -19,7 +24,7 @@ setMethod("getDesign", signature(object="planordesign"),
           definition=getDesign.planordesign)
 ##--------------------------------------------------------------------------
 
-setMethod("[", 
+setMethod("[",
           signature(x = "planordesign", i = "ANY", j = "ANY", drop = "ANY"),
           definition=function(x,i,j,...,drop){
             if(missing(i)){ i <- seq(nrow(x@design)) }
@@ -44,3 +49,15 @@ setMethod("[",
             x
           })
 ##
+##--------------------------------------------------------------------------
+#' Method as.data.frame for "planordesign"
+# The data.frame is the slot 'design' of the "planordesign" object.
+# All the other slots are stored in attributes
+
+as.data.frame.planordesign <- function(x, ...) {
+  ret <- x@design
+  for (unslot in slotNames(x)) {
+    attr(ret, unslot) <- slot(x, unslot)
+  }
+  return(ret)
+} # end as.data.frame.planordesign

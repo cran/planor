@@ -1,7 +1,7 @@
 \name{keymatrix-class}
 \Rdversion{1.1}
 \docType{class}
-\title{Class \code{'keymatrix'} and  methods of the class}
+\title{Class \code{keymatrix} and  methods of the class}
 \alias{keymatrix-class}
 %\alias{alias,keymatrix-method}
 %\alias{alias.keymatrix}
@@ -36,12 +36,12 @@ Class \code{\linkS4class{vector}}, by class "matrix", distance 4, with explicit 
   \describe{
     
     \item{alias}{ gives the aliasing relationships of the key matrix.
-      See \code{\link{alias-method}}.  }
+      See \code{\link[=alias.keymatrix]{alias}}.  }
     
     \item{show}{ display the object. See \link[=show-method]{show-method}}
     
     \item{summary}{ summarize the design properties.  See
-      \code{\link[=summary-method]{summary-method}} }
+      \code{\link[=summary.keymatrix]{summary}} }
     
   }
 }

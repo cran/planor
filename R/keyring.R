@@ -7,7 +7,7 @@
 # @slot main a list of \code{\linkS4class{keymatrix}} objects associated with the same prime \code{p} and with the same factors
 # @slot p a prime number
 # @slot LIB common row and column names of the key matrices
-# @slot pseudo.info a dataframe with one row per pseudofactor and with columns containing information on the factors (or pseudofactors) associated with the columns of the key matrices (e.g. 'parent', 'nlev', 'block' 'ordered', 'model', 'basic'; see the description of the class \code{\linkS4class{designfactors}} 
+# @slot pseudo.info a dataframe with one row per pseudofactor and with columns containing information on the factors (or pseudofactors) associated with the columns of the key matrices (e.g. 'parent', 'nlev', 'block' 'ordered', 'model', 'basic'; see the description of the class \code{\linkS4class{designfactors}}
 #---------------------------------------------------------------------------
 #  Methods of "keyring": show, summary
 #---------------------------------------------------------------------------
@@ -51,9 +51,9 @@ show.keyring <- function(object){
   cat("An object of class keyring\n")
   cat(" Number of solutions:", length(object),
       "for prime", object@p, "\n\n")
-  
+
   lapply(object, printgmat)
-  
+
   invisible()
 } ## fin show.keyring
 
@@ -105,8 +105,8 @@ summary.keyring <- function(object, show="tbw", save ="kw", ...){
 
   ## Is some display required?
   isshow <-  (length(show) >0 && show != "" &&
-    grepl("[d,t,b,w]", show, ignore.case=TRUE)) 
- 
+    grepl("[d,t,b,w]", show, ignore.case=TRUE))
+
   ## Pseudofactors
   pseudo.info <- object@pseudo.info
   FACTtpf <- pseudo.info$parent
@@ -123,7 +123,7 @@ summary.keyring <- function(object, show="tbw", save ="kw", ...){
     printpower(p.k)
     ## Loop on the key matrices
     nsol <- length(object)
-    sortie <- list()   
+    sortie <- list()
 
 
       for(l in seq_len(nsol)){

@@ -55,24 +55,25 @@ pick.listofkeyrings <- function(keys,selection){
                lgsel,
                ", is different from the number of primes,", Nuqf))
   }
-  
+
   pickdesign <- vector("list",length=Nuqf)
   names(pickdesign) <- names(keys)
-  
+
   for(k in seq_len(Nuqf)){
     pickdesign[[k]] <- keys[[k]]@.Data[[selection[k]]]
   }
   pickdesign <- new("designkey", .Data=pickdesign,
                     factors=keys@factors,
                     nunits=keys@nunits,
-                    model=keys@model)
+                    model=keys@model,
+                    recursive=FALSE)
   return(pickdesign)
 }
 # ------------------------------------------------
 ##  Method to return the \code{\linkS4class{designkey}} object
 ##  of  index \code{i} for the  of prime, and index \code{j} for the second value, etc, \ldots,
 ##   from a \code{\linkS4class{listofkeyrings}} object.
-## 
+##
 ##  @name [,listofkeyrings,ANY,ANY,ANY-method
 ##  @title Method "[" for listofkeyrings
 # End "[" method help description in roxygen syntax
@@ -183,13 +184,13 @@ summary.listofkeyrings <- function(object, show="tbw", save="kw", ...){
   ## NOTE: the formal argument list "(object, ...)" is
   ## required to be compatible with the generic function
   ## "summary" in R;
-   
+
   ## Is some display required?
   isshow <-  (length(show) >0 && show != "" &&
     grepl("[d,t,b,w]", show, ignore.case=TRUE))
   ## Is some output required?
   issave <-  (length(save) >0 && save != "" &&
-    grepl("[k,w]", save, ignore.case=TRUE)) 
+    grepl("[k,w]", save, ignore.case=TRUE))
 
   ## Treatment factors
   object@factors <- object@factors[object@factors@fact.info$model]
@@ -293,7 +294,7 @@ show.listofkeyrings <- function(object){
 
   PVuqf <- PVuqf[order(PVuqf)]
   Nuqf <- length(PVuqf)
-  
+
   ## A. Design key matrices
   for(k in seq_len(Nuqf)){
     p.k <- PVuqf[k]
@@ -304,7 +305,7 @@ show.listofkeyrings <- function(object){
       printgmat(object[[k]][[l]])
     }
   }
-  
+
   invisible()
 } ## fin show.listofkeyrings
 # --------------------------------------
@@ -360,7 +361,7 @@ alias.listofkeyrings <- function(object, model, ...){
   ## NOTE: the formal argument list "(object, ...)" is
   ## required to be compatible with the generic function
   ## "alias" in R;
-  
+
   ## Treatment factors
   object@factors <- object@factors[object@factors@fact.info$model]
   fact.info <- object@factors@fact.info
@@ -424,16 +425,16 @@ alias.listofkeyrings <- function(object, model, ...){
     for(l in seq_len(nsol)){
       cat(paste("--- Solution ", l, " for prime ", p, " ---\n\n"))
       alias.stats.p[l,] <- alias.keymatrix(object=object[[k]][[l]],
-                                         model=model.k, 
+                                         model=model.k,
                                          fact=FACTtpf[rows.k],
                                          block=BLOCKtpf[rows.k])
     } ## fin
     cat("--- Synthesis on the aliased treatment effects for prime ",
         p, " ---\n\n")
     print(alias.stats.p)
-    alias.stats[[k]] <- alias.stats.p 
+    alias.stats[[k]] <- alias.stats.p
   } ## fin k
-  
+
   return(invisible(alias.stats))
 } ## fin alias.listofkeyrings
 #' Method alias for "listofkeyrings"

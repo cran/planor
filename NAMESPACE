@@ -12,7 +12,12 @@ export(
   planor.designkey,
   planor.factors, planor.harmonize, planor.model,
   planor.randomize,
-  regular.design  )
+  regular.design,
+  as.data.frame.planordesign,
+  summary.listofkeyrings, summary.designkey , summary.keymatrix,
+       summary.keyring,  summary.listofdesignkeys,
+  alias.designkey, alias.keymatrix, alias.listofdesignkeys,
+       alias.listofkeyrings,  makedesignkey )    
 exportClasses(designfactors)
 exportClasses(designkey)
 exportClasses(planordesign )
@@ -20,5 +25,5 @@ exportClasses(keymatrix)
 exportClasses(keyring)
 exportClasses(listofkeyrings)
 exportClasses(listofdesignkeys)
-exportMethods(bind, pick, planor.design, alias, getDesign)
+exportMethods(bind, pick, planor.design,  getDesign)
 

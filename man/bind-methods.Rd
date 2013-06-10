@@ -3,8 +3,7 @@
 \alias{bind-method}
 \alias{bind}
 \alias{bind,designfactors,designfactors-method}
-%\alias{bind.designfactors}
-\title{ Methods for function  \code{bind}: bind two objects }
+\title{ Methods for function  \code{bind} in package \pkg{planor}: bind two objects }
 \description{
 Bind two objects of the same class.
 }
