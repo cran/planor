@@ -1,3 +1,8 @@
+2013-09-20  Annie Bouvier
+	* DESCRIPTION:  planor version is 1.0-10
+	* Move the source vignettes from the directory
+	inst/doc to  the directory vignettes for R.3 compatibility
+
 2013-06-10  Annie Bouvier
 	* DESCRIPTION:  planor version is 1.0-8
 	* Update the bigmemory package before saving tests results

@@ -1931,7 +1931,6 @@ planor.kernelcheck.basep <- function(b.PhiStar, b.admissible, b.IneligibleSet, p
     ## +++++++++++++++++++++++++++++++++++++++++++++++++++
     b.ImagesIS <- multBigmod(b.PhiStar, b.IneligibleSet, p, signe=-1)
     test <- rep(2, nb.admissible) ## init par n'importe quelle valeur non NA
-
     test <- as.logical(.Call("PLANORloopkernelcheck",
                              as.integer(r),
                              as.integer(nb.admissible),

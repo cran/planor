@@ -600,6 +600,7 @@ CALLED BY
   int *test = INTEGER_POINTER(gtest);
 
 
+
   // Access to the short big matrices
   BigMatrix *ptrImagesIS = (BigMatrix *) (R_ExternalPtrAddr(addressofImagesIS));
   MatrixAccessor<TYPEOFBIG> bigImagesIS(*ptrImagesIS);

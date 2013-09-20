@@ -121,7 +121,7 @@ planor.design.designkey <- function(key, randomize=NULL, ...){
                designkey=key@.Data,
                nunits= key@nunits,
                recursive=key@recursive )
-    
+
 
     return(OUT)
 } ## fin planor.design.designkey

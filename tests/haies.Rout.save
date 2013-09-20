@@ -1,7 +1,6 @@
 
-R version 2.15.1 (2012-06-22) -- "Roasted Marshmallows"
-Copyright (C) 2012 The R Foundation for Statistical Computing
-ISBN 3-900051-07-0
+R version 3.0.1 (2013-05-16) -- "Good Sport"
+Copyright (C) 2013 The R Foundation for Statistical Computing
 Platform: x86_64-unknown-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -26,7 +25,7 @@ Loading required package: BH
 bigmemory >= 4.0 is a major revision since 3.1.2; please see packages
 biganalytics and and bigtabulate and http://www.bigmemory.org for more information.
 
-Loaded planor 0.1.8
+Loaded planor 0.1.10
 
 >  haies.fnames <- c("A1","A2","B1","B2","C1","C2","P1","P2","Q1","Q2")
 >  haies.key1 <- planor.designkey(factors=haies.fnames,
@@ -53,4 +52,4 @@ named list()
 > 
 > proc.time()
    user  system elapsed 
-  2.831   0.121   2.954 
+  2.713   0.108   2.827 

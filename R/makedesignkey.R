@@ -20,7 +20,7 @@ makedesignkey <- function(keys, primes){
   ## summary(mat.dk)
   ## alias(mat.dk)
   ## mat.plan <- planor.design(mat.dk)
-  
+
   ## information extraction
   fact.names <- unlist( lapply(keys, colnames) )
   fact.levels <- rep( primes, unlist(lapply(keys, ncol)) )
@@ -45,6 +45,6 @@ makedesignkey <- function(keys, primes){
                 factors=tp.fact,
                 nunits=nunits,
                 model=tp.mod)
-    
+
   return(newkey)
 }

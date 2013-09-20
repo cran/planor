@@ -116,8 +116,9 @@ level. The result is a dataframe. Based here on simulated data, the
 analysis gives:
 <<full2, keep.source=TRUE>>=
 set.seed(123)
-ABCfull$Y <- runif(2*2*3)
-ABCfull.aov <- aov(Y~A*B*C, data=ABCfull)
+dataABCfull= as.data.frame(ABCfull)
+dataABCfull$Y <- runif(2*2*3)
+ABCfull.aov <- aov(Y~A*B*C, data=dataABCfull)
 summary(ABCfull.aov)
 @ 
 
@@ -140,8 +141,9 @@ print(CBD)
 
 Based on simulated data again, the analysis gives:
 <<cbd2, keep.source=TRUE>>=
-CBD$Y <- runif(20)
-CBD.aov <- aov(Y~Block+Treatment, data=CBD)
+dataCBD= as.data.frame(CBD)
+dataCBD$Y <- runif(20)
+CBD.aov <- aov(Y~Block+Treatment, data=dataCBD)
 summary(CBD.aov)
 @ 
 
@@ -173,8 +175,9 @@ print(LS)
 
 The analysis gives:
 <<LS2, keep.source=TRUE>>=
-LS$Y <- runif(16)
-LS.aov <- aov(Y~Judge + Period + Product, data=LS)
+dataLS=as.data.frame(LS)
+dataLS$Y <- runif(16)
+LS.aov <- aov(Y~Judge + Period + Product, data=dataLS)
 summary(LS.aov)
 @ 
 
