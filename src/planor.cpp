@@ -7,13 +7,13 @@
 #define  TYPEOFBIG short int 
 /* +++  includes from R +++ */
 #include <R.h>
-#include <Rmath.h>// pour pow
+#include <Rmath.h>// useful for pow
 #include <Rinternals.h>
 #include <Rdefines.h>
-#include <R_ext/Utils.h> // pour permettre d'interrompre
+#include <R_ext/Utils.h> // to allow user interrupt
 /* +++ system includes +++ */
 #include <float.h>
-#include <math.h> // pour pow
+#include <math.h> 
 extern "C" {
 /* ++++++++++++++++++++++++++++++++++++++++++++++++
 MACRO
@@ -93,47 +93,40 @@ NOTE
   BigMatrix *ptrout = (BigMatrix *) (R_ExternalPtrAddr(addressofres));
   MatrixAccessor<TYPEOFBIG> bigres(*ptrout);
 
-R_CheckUserInterrupt(); // permettre a l'utilisateur d'interrompre
+R_CheckUserInterrupt(); // to allow user interrupt
 
  for (r=0; r< N1;r++) {
-     // calculer iz
-     /* on ne détecte les lignes à éliminer que lorsqu'on
-rencontre un elt >1: comme on balaie colonne par colonne,
-en commençant par la première,
-on a déjà vus les elts précédents sur la ligne.
-Ils sont soit nuls, et c'est comme si on les ignorait, 
-soit égaux à 1, et alors, on a bien fait de les considérer */
+     // Compute iz
+     /* we detect the lines to eliminate, only when a element 
+	greater than 1  is encountered. As we progress column
+	by column, beginning by the first one, the preceeding
+	elements on the line have already been seen. They are,
+	either nuls, -- and then, it is as they are ignored --,
+	or equal to 1 -- and then, the line should be considered. */
    if (all==0) {
-     // calculer iz
-     /* on ne détecte les lignes à éliminer que lorsqu'on
-rencontre un elt >1 : les elts précédents sur la ligne ont donc été
-pris en compte; mais ce n'est pas grave: soit ils sont nuls,
-et c'est comme si on les ignorait, soit ils sont égaux à 1,
-et alors, il faut considérerla ligne */
      if ((iz[r]==0) && (B[r]==1))
 	 iz[r]=1;
        if ((iz[r]!=1) && (B[r]!=0) && (B[r]!=1))
 	   iz[r]=pp1;
-   } // fin all
+   } // end all
 
 
    if (iz[r] != pp1) {
-     // ligne pas a ignorer
+     // line to be looked at
      for (l=0; l <nrow; l++) {
       //      res[l,r]+= A[l,nc]*B[r]
        //NOTE: big matrix indexes: first the column index
        bigres[r][l] += (bigA[nc][l] * B[r]);
 
-     } // fin l
-   } // fin if iz
+     } // end l
+   } // end if iz
      else {
-       // ligne de coeffs a ignorer donc colonne de B
-       // res[0,r] =-1;
+       // line of coeffs to be ignored, so the: res[0,r] =-1;
        bigres[r ][0] =-1;
      }
- } //fin r
+ } // end r
 
-} // fin multcolpp1col
+} // end multcolpp1col
 
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++ */
@@ -154,13 +147,13 @@ CALLED BY
  gcrossingcol
  ++++++++++++++++++++++++++++++++++++++++++++++++ */
   int i;
-R_CheckUserInterrupt(); // permettre a l'utilisateur d'interrompre
+R_CheckUserInterrupt(); // for the user to interrupt
 
   for (i=l; i<(l+prod1); i++) {
     //    crosses[i, nc] = motif;
         crosses[i ] = motif;
   }
-} //fin repetcol
+} // end repetcol
 
 
 
@@ -175,8 +168,8 @@ void gcrossingcol( int nrow, int p,  int prod1,
  Generates all n1 x n2 x ... x ns combinations of size s 
  with n1,...,ns integers
  Here, the values n1,...,ns are all identical and equal to p
- (NOTE AB: Remplace la fonction R crossing dans subgroup,
-où les valeurs de n sont rep(p,nbg) donc toutes egales a p)
+ (NOTE AB: Replace the R function crossing of subgroup,
+where all the n values are rep(p,nbg), so all equal to p)
 INPUT
   nrow, ncol: dimension of the output matrix crosses
   p: the value of the series of integers
@@ -184,7 +177,7 @@ INPUT
 OUTPUT
   crosses: an integer matrix with nrows rows and ncol columns 
   giving all combinations along the rows, in lexicographic order.
-  (NOTE AB: l'ordre des colonnes est inversé par rapport a l'original)
+  (NOTE AB: the column order is reversed from the original)
   This program is called for each column, so the ouput is not
   the complete matrix, but one column
 CALLED BY
@@ -192,21 +185,21 @@ CALLED BY
 
  ++++++++++++++++++++++++++++++++++++++++++++++++ */
   int  k, l, motif;
-R_CheckUserInterrupt(); // permettre a l'utilisateur d'interrompre
+R_CheckUserInterrupt(); 
 
     motif= start;
 
     for (k=0; k < p; k++) {
       l=k*prod1;
       while ( (l+prod1) <= nrow) {
-      /* Répéter motif, prod1 fois dans les elements
-	 de  crosses, a partir du lième  */
+      /* Repeat motif, prod1 times in the elements
+	 of crosses, from the l-st  */
 	  repetcol(motif, prod1, l, crosses);
 	l += ( p * prod1);
       }
       motif++;
-    } // fin k
-} // fin gcrossingcol
+    } // end k
+} // end gcrossingcol
 
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++ */
@@ -256,32 +249,32 @@ CALLED BY
    //N= (int) R_pow_di( (double)(*p), (*nbg));
 
    /* coeffs <- matrix(0, nrow=N, ncol=nbg),
-      mais, ici on la calcule colonne par colonne */
+      but, here, it is calculated column by column */
 
   coeffs = (short int *) R_alloc((*N), sizeof(short int));
   iz = (short int *) S_alloc((long) (*N - 1), sizeof(short int));
-//iz: initialisé à zéro
+//iz: initialized at zero
 
   prod1=1;
 
-  // Calcul de la colonne nc de coeffs
+  // Compute column nc of coeffs
   for (nc=0; nc< *nbg; nc++) {
     gcrossingcol((*N),  (*p), prod1, start, coeffs);
     prod1 *= (*p);
  
-   /* Calcul matriciel en ne considérant que les elts
-      de coeffs/iz!= pp1   */
-   /* La 1iere ligne de coeffs est tjrs ignorée
-c'est pourquoi on démarre à coeffs+1, et on ne considère
-que N-1 elts */
+   /* Matrix calculation; only, the elts de coefs
+      such as coeffs/iz!= pp1 are considered.
+      The first line of coeffs is always ignored.
+      It is why we begin at coeffs+1 and consider
+      N-1 elts, only */
    multpp1col (addressofmat, (coeffs+1), iz, *all,
 	       nc, (*nrow), (*N-1), pp1, addressofres);
-  } // fin nc
+  } // end nc
 
-    /* Faire modulo p sur le résultat */
-  // NOTE AB: on ne le fait pas dans la foulée lorsqu'on calcule
-  // res car celui-ci est une accumulation progressive de valeurs
-  // dont le résultat final n'est déterminé qu'en fin de boucle 
+  /* Take modulo p of the result */
+  // NOTE AB: we don't do it in the run while res is calculated
+  // because this one is a progressive cumulation of values
+  // whose final result is determined at the end of loops only
   //Access to the resulting Big matrix
    BigMatrix *ptrout = (BigMatrix *) (R_ExternalPtrAddr(addressofres));
   MatrixAccessor<TYPEOFBIG> bigres(*ptrout);
@@ -293,15 +286,15 @@ que N-1 elts */
        //NOTE: big matrix indexes: first the column index
        //      a= ( (int) bigres[i,j]% (*p));
       if (bigres[j][i] >0) {
-	// Les valeurs nulles doivent etre ignorées
+	// The null values should be ignored
 	//	bigres[i,j]= bigres[i,j]%p
 	bigres[j][i]= (TYPEOFBIG) ( (int) bigres[j][i]% (*p)); 
       }
-    } // fin j
-  } // fin i
+    } // end j
+  } // end i
 
   return(addressofres);
-} // fin PLANORsubgroup
+} // end PLANORsubgroup
 
 
 
@@ -353,8 +346,8 @@ R_CheckUserInterrupt(); // permettre a l'utilisateur d'interrompre
 
       //      if (H[i,j] ==0) continue;
       //      if (H[j * (*nrow) + i] ==0) continue;
-      // que l'on remplace, pour eviter les erreurs d'arrondis par:
-      // (NB: H contient des entiers positifs)
+      // are replaced, to avoid rounding errors.
+      // (NB: H contains positive integers)
        //NOTE: big matrix indexes: first the column index
       //      if (ISZERO(bigH[i,j])) continue;
       if (ISZERO(bigH[j][i])) continue;
@@ -368,10 +361,10 @@ R_CheckUserInterrupt(); // permettre a l'utilisateur d'interrompre
 
     } //fin i
     Rprintf("\n");
-  } // fin j
+  } // end j
   return(addressofH);
 
-} // fin PLANORlibsk
+} // end PLANORlibsk
 
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++ */
@@ -402,7 +395,7 @@ div_t d;
       d= div(prodkv, p);
       if (d.rem ==1) 
 	return(l);
-    } // fin l
+    } // end l
 error("Internal error: prodk\n");
  return(-1);
 }
@@ -450,13 +443,13 @@ CALLED BY
  ++++++++++++++++++++++++++++++++++++++++++++++++ */
   int i;
   for (i=0; i <= *ifv; i++) {
-// egalité stricte assurée car factvu est rempli par des valeurs X
+// strict equality ensured because factvu is filled in by values from X
     if (factvu[i] == X) 
       return 0;
-  } // fin i
+  } // end i
   factvu[(*ifv++)]=X;
   return 1;
-} // fin pasvu
+} // end pasvu
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++ */
 SEXP PLANORweightorder(SEXP gnrow, SEXP gncol, SEXP gp,
@@ -470,7 +463,7 @@ SEXP PLANORweightorder(SEXP gnrow, SEXP gncol, SEXP gp,
 # fnz <- apply(mat, 2, function(x){min(seq(along=x)[x!=0])})
 # for(j in seq(nc)){
 #   mat[,j] <- (inverses.basep(p)[mat[fnz[j],j]] * mat[,j]) %% p
-#   } # fin j
+#   } # end j
 #  pseudoweight <- apply(mat, 2, function(x){sum(x!=0)})
 # weight <- apply(mat, 2, function(x){length(unique(factnum[x!=0]))})
 INPUT
@@ -505,16 +498,16 @@ CALLED BY
   BigMatrix *ptrin = (BigMatrix *) (R_ExternalPtrAddr(addressofmat));
   MatrixAccessor<TYPEOFBIG> bigmat(*ptrin);
 
-R_CheckUserInterrupt(); // permettre a l'utilisateur d'interrompre
+R_CheckUserInterrupt(); 
 
   factvu = (int *) R_alloc((*nrow), sizeof(int));
 
   for (j=0; j<*ncol; j++) {
     binrank[j]=0;
-    modrank[(*ncol)-j-1]=0; // on inverse l'ordre des colonnes
+    modrank[(*ncol)-j-1]=0; // we invert columns order
     weight[j] =0;
     pseudoweight[j] =0;
-  //    fnz est l' indice du 1ier non-zero dans la colonne j ou -1
+  //    fnz is the index of the first no-zero in the column j ou -1
     fnz =-1;
     for (i= 0; i< (*nrow); i++) {
       //      if (mat[i, j] != 0) {
@@ -524,11 +517,11 @@ R_CheckUserInterrupt(); // permettre a l'utilisateur d'interrompre
 	break; // sortir de la boucle i
       }
     } //fin i
-    // AB, 8/6/11 Ajout du test sur fnz:
-    // la matrice restreinte aux facteurs traitements ou
-    // blocs  peut  contenir  zéro valeurs non nulles
+    // AB, 8/6/11 Add the test on fnz:
+    // the matrix restricted to the treatment or block factors
+    // may contain no non-nul values
     if (fnz==-1) {
-      // pas de non nul sur la colonne j
+      // no non-nul value in the column j
       for (i=0; i< *nrow; i++) {
 	bigmat[j][i] = 0;
       } 
@@ -536,9 +529,9 @@ R_CheckUserInterrupt(); // permettre a l'utilisateur d'interrompre
     a=(int)bigmat[j][ fnz-1];
     PLANORinv(p, &a, &inv);
 
-    // factvu: les differentes valeurs deja rencontrees
-    // dans la colonne j, sans double
-    // ifv: indice du 1ier emplacement libre dans factvu
+    // factvu: the different values already encountered in column j
+    // without double
+    // ifv: index of the first empty place in factvu
     ifv =0;
     for (i=0; i< *nrow; i++)
       factvu[i]=-1;
@@ -558,16 +551,16 @@ R_CheckUserInterrupt(); // permettre a l'utilisateur d'interrompre
 	modrank[(*ncol)-j-1] += ( (double)(bigmat[j][i]) * 
 			R_pow_di( (double)(*p), ((*nrow)-i-1)));
 
-      } // fin if
+      } // end if
 
-    } // fin i
+    } // end i
     } 
 
 
-  } // fin j
+  } // end j
   return(retour);
 
-} // fin PLANORweightorder
+} // end PLANORweightorder
 
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++ */
@@ -609,28 +602,28 @@ CALLED BY
   MatrixAccessor<TYPEOFBIG> bigadmissible(*ptradmissible);
 
 
-R_CheckUserInterrupt(); // permettre a l'utilisateur d'interrompre
+R_CheckUserInterrupt(); // allow user interrupt
 
   for (k=0; k< *nbadmissible; k++) {
     test[k] =1;
     for (j=0; j < *nbineligible; j++) {
-      trouve =1; // 1 si toute la colonne est egale
+      trouve =1; // 1 if the whole column is equal
       for (l=0; l< *r; l++) {
 	//	if (ImagesIS[l,j] !=admissible [l,k]) {
        //NOTE: big matrix indexes: first the column index
 	if (!EQUAL(bigImagesIS[j][l], bigadmissible[k][l])) {
 	  trouve=0;
-	  break; // sortir de la boucle sur l
-	} // fin if
-      } // fin l
+	  break; // go out the loop on l
+	} // end if
+      } // end l
       if (trouve == 1) {
 	test[k] = 0;
-	break; // sortir de la boucle sur j
+	break; // go out the loop on j
       } 
-    } // fin j
-  } // fin k
+    } // end j
+  } // end k
   return(gtest);
 
-} // fin function
+} // end function
 
-} // fin extern C
+} // end extern C

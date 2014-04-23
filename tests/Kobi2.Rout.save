@@ -25,7 +25,7 @@ Loading required package: BH
 bigmemory >= 4.0 is a major revision since 3.1.2; please see packages
 biganalytics and and bigtabulate and http://www.bigmemory.org for more information.
 
-Loaded planor 0.1.10
+Loaded planor 0.1.12
 
 > #---------------------------------------------------------------------------
 > # EXAMPLES FROM THE PLANOR MANUAL
@@ -205,4 +205,4 @@ Treatment pseudo-effects confounded with block effects: 2^1
 > 
 > proc.time()
    user  system elapsed 
-  2.761   0.140   2.904 
+  4.151   0.203   4.371 

@@ -1,6 +1,6 @@
 # -----------------------------------------------------
-
-# Permet de voir les objets volumineux
+# This function displays the size of the objects
+# Allows to detect the memory consuming objects
 # -----------------------------------------------------
 all.object.sizes <- function() {
   res <- NULL
@@ -11,8 +11,8 @@ all.object.sizes <- function() {
 #     res <- c(res, object.size(mget(x, envir=parent.frame(), ifnotfound = list(1))))
      res <- c(res, object.size(zu))
      nomres <- c(nomres, x)
-     } else cat(x, "pas trouve\n")
-   } # fin for
+     } else cat(x, "not found trouve\n")
+   } # end for
   names(res) <-nomres
   return(sort(res))
 }

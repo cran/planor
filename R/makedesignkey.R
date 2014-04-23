@@ -1,9 +1,9 @@
+makedesignkey <- function(keys, primes){
 ## A function to create an object of class designkey directly
 ## from a list of simple matrices
-makedesignkey <- function(keys, primes){
   ## ARGUMENTS
-  ## keys : a list of n (integer) matrices
-  ## primes : a vector of n prime numbers
+  ## - keys : a list of n (integer) matrices
+  ## - primes : a vector of n prime numbers
   ## OUTPUT
   ## an object of class designkey
   ## DETAILS
@@ -20,7 +20,7 @@ makedesignkey <- function(keys, primes){
   ## summary(mat.dk)
   ## alias(mat.dk)
   ## mat.plan <- planor.design(mat.dk)
-
+  ## -----------------------------------------------------
   ## information extraction
   fact.names <- unlist( lapply(keys, colnames) )
   fact.levels <- rep( primes, unlist(lapply(keys, ncol)) )

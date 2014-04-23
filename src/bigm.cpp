@@ -69,19 +69,18 @@ SEXP PLANORmodBig(SEXP addressofmat, SEXP gp,
 //NOTE: big matrix indexes: first the column index
       // a= ( (int) bigin[i, j]% pp);
       a= ( (int) bigin[j][i]% pp);
-      /* VU difference du calcul du mod en C et en R quand <0 */
+      /* NOTE: the mod calculation is different in C and in R when <0 We do as in R. */
       if (a<0) {
-	// On fait comme en R:
 	//	bigout[i, j]= (TYPEOFBIG) (pp-abs(a));
 	bigout[j][i]= (TYPEOFBIG) (pp-abs(a));
-      } // fin a<0
+      } // end a<0
       else
 	// bigout[i, j]= (TYPEOFBIG) a; 
 	bigout[j][i]= (TYPEOFBIG) a; 
-    } // fin j
-  } // fin i
+    } // end j
+  } // end i
  return(addressofout);
- } // fin PLANORmodBig
+ } // end PLANORmodBig
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++
 FUNCTION
@@ -111,16 +110,16 @@ SEXP PLANORcol0Big( SEXP gnrow, SEXP gncol,
   //NOTE: big matrix indexes: first the column index
      if (!ISZERO(bigin[j][i]) ) {
 	*res=0;
-	break; // passer a la col suivante
+	break; // go to the next column
       }
-    } // fin i
+    } // end i
     if (*res==1) {
-    //une colonne est entierement nulle
+    // a column is entirely null
       return(gres);
     }
-  } // fin j
+  } // end j
  return(gres);
- } // fin PLANORcol0Big
+ } // end PLANORcol0Big
 
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++
@@ -155,34 +154,33 @@ NOTE
   BigMatrix *ptrout = (BigMatrix *) (R_ExternalPtrAddr(addressofout));
   MatrixAccessor<TYPEOFBIG> bigout(*ptrout);
 
-R_CheckUserInterrupt(); // permettre a l'utilisateur d'interrompre
+R_CheckUserInterrupt(); // allow user interrupt
 
 for (i=0; i< *n; i++) {
   for (j=0; j< *q; j++) {
-    //    ires= (*n) * j +i; // indice courant (=[i,j]) dans res
+    //    ires= (*n) * j +i; // current index (=[i,j]) in res
   //NOTE: big matrix indexes: first the column index
     //   bigout[i, j] =0;
    bigout[j][i] =0;
     for (l=0; l< *p; l++) {
 	 //      res[i,j] += (big1[i,l] * big2[l, j]);
       bigout[j][i] += ((*signe)*big1[l][i] * big2[ j][l]);
-    } // fin for l
+    } // end for l
     //    a= ( (int)bigout[i,j]%(*mp));
     a= ( (int)bigout[j][i]%(*mp));
-    /* VU difference du calcul du mod en C et en R quand <0 */
+      /* NOTE: the mod calculation is different in C and in R when <0 We do as in R. */
     if (a<0) {
-      // Version R
       //bigout[i,j] =  (TYPEOFBIG) (*mp-abs(a));
       bigout[j][i] =  (TYPEOFBIG) (*mp-abs(a));
-    } // fin a<0
+    } // end a<0
     else
       // bigout[i, j] = (TYPEOFBIG)a;
       bigout[j][i] = (TYPEOFBIG)a;
-  } // fin j
- } //fin i
+  } // end j
+ } // end i
   return(addressofout);
 
-} // fin PLANORmultBigmod
+} // end PLANORmultBigmod
 
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++
@@ -219,11 +217,11 @@ NOTE
   BigMatrix *ptrout = (BigMatrix *) (R_ExternalPtrAddr(addressofout));
   MatrixAccessor<TYPEOFBIG> bigout(*ptrout);
 
-R_CheckUserInterrupt(); // permettre a l'utilisateur d'interrompre
+R_CheckUserInterrupt(); 
 
 for (i=0; i< *n; i++) {
   for (j=0; j< *q; j++) {
-    //    ires= (*n) * j +i; // indice courant (=[i,j]) dans res
+    //    ires= (*n) * j +i; // current index (=[i,j]) in res
   //NOTE: big matrix indexes: first the column index
     //   bigout[i, j] =0;
    bigout[j][i] =0;
@@ -231,26 +229,25 @@ for (i=0; i< *n; i++) {
 	 //      res[i,j] += (big1[i,l] * matrix2[l, j]);
       bigout[j][i] += ((*signe)*big1[l][i] * (short int)matrix2[ j * (*p) +l]);
 
-    } // fin for l
+    } // end for l
     //    a= ( (int)bigout[i,j]%(*mp));
     a= ( (int)bigout[j][i]%(*mp));
 
-    /* VU difference du calcul du mod en C et en R quand <0 */
+      /* NOTE: the mod calculation is different in C and in R when <0 We do as in R. */
     if (a<0) {
-      // Version R
       //bigout[i,j] =  (TYPEOFBIG) (*mp-abs(a));
       bigout[j][i] =  (TYPEOFBIG) (*mp-abs(a));
-    } // fin a<0
+    } // end a<0
     else
       // bigout[i, j] = (TYPEOFBIG)a;
       bigout[j][i] = (TYPEOFBIG)a;
-  } // fin j
- } //fin i
+  } // end j
+ } // end i
  UNPROTECT(1);
 
   return(addressofout);
 
-} // fin PLANORmultBigSmod
+} // end PLANORmultBigSmod
 
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++
@@ -280,23 +277,23 @@ NOTE
   BigMatrix *ptrout = (BigMatrix *) (R_ExternalPtrAddr(addressofout));
   MatrixAccessor<TYPEOFBIG> bigout(*ptrout);
 
-R_CheckUserInterrupt(); // permettre a l'utilisateur d'interrompre
+R_CheckUserInterrupt(); 
 
 for (i=0; i< *n; i++) {
   for (j=0; j< *q; j++) {
-    //    ires= (*n) * j +i; // indice courant (=[i,j]) dans res
+    //    ires= (*n) * j +i; // current index (=[i,j]) in res
 //NOTE: big matrix indexes: first the column index
 //     bigout[i, j] =0;
     bigout[j][i] =0;
     for (l=0; l< *p; l++) {
 	 //      res[i,j] += (big1[i,l] * big2[l, j]);
       bigout[j][i] +=  (big1[l][i] * big2[j][l]);
-    } // fin for l
-  } // fin j
- } //fin i
+    } // end for l
+  } // end j
+ } // end i
   return(addressofout);
 
-} // fin PLANORmultBig
+} // end PLANORmultBig
 /* ++++++++++++++++++++++++++++++++++++++++++++++++
 FUNCTION
   cbind of two big.matrices
@@ -330,15 +327,15 @@ INPUT/OUTPUT
 	//	res[i,j]=big1[i,j];
 	//NOTE: big matrix indexes: first the column index
 	bigout[j][i]=big1[j][i];
-      } // fin j
+      } // end j
 
       for (j=0;j< *nc2; j++) {
 	//	res[i,j+nc1]=big2[i,j];
 	bigout[j+ *nc1][i]= big2[j][i];
-      } // fin j
-    } // fin i
+      } // end j
+    } // end i
     return(addressofout);
-  } // fin PLANORcbindBig
+  } // end PLANORcbindBig
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++
 FUNCTION
@@ -373,15 +370,15 @@ INPUT/OUTPUT
 	//	res[i,j]=big1[i,j];
 //NOTE: big matrix indexes: first the column index
 	bigout[j][i] = big1[j][i];
-      } // fin j
+      } // end j
       for (i=0;i< *nr2; i++) {
 	//	res[i+nr1,j]=big2[i,j];
 	bigout[j][i+ *nr1] = big2[j][i];
-      } // fin j
-    } // fin i
+      } // end j
+    } // end i
  
     return(addressofout);
-  } // fin PLANORrbindBig
+  } // end PLANORrbindBig
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++
 FUNCTION
@@ -415,18 +412,18 @@ INPUT/OUTPUT
 	//	res[i,j]=big1[i,j];
       //NOTE: big matrix indexes: first the column index
 	bigout[j][i] = big1[j][i];
-      } // fin j
+      } // end j
       for (i=0;i< *nr2; i++) {
 	//	res[i+nr1,j]=mat2[i,j];
 	bigout[j][i+ *nr1] =(TYPEOFBIG)mat2[j * (*nr2)+i];
-      } // fin j
-    } // fin i
+      } // end j
+    } // end i
  
     return(addressofout);
-  } // fin PLANORrbind1Big
+  } // end PLANORrbind1Big
 
 
 
 
-} // fin extern C
+} // end extern C
   

@@ -25,7 +25,7 @@ Loading required package: BH
 bigmemory >= 4.0 is a major revision since 3.1.2; please see packages
 biganalytics and and bigtabulate and http://www.bigmemory.org for more information.
 
-Loaded planor 0.1.10
+Loaded planor 0.1.12
 
 > #---------------------------------------------------------------------------
 > # EXAMPLES OF AUTOMATIC MODEL GENERATION FROM RESOLUTION
@@ -92,11 +92,11 @@ Slot "model":
 [[1]]
 [[1]]$Model
 ~(A + B + C + D)^2
-<environment: 0x2845de8>
+<environment: 0x3790500>
 
 [[1]]$Estimate
 ~(A + B + C + D)
-<environment: 0x2845de8>
+<environment: 0x3790500>
 
 
 
@@ -250,11 +250,11 @@ Slot "model":
 [[1]]
 [[1]]$Model
 ~(A + B + C + D + E + F)^2
-<environment: 0x27ca500>
+<environment: 0x372c490>
 
 [[1]]$Estimate
 ~(A + B + C + D + E + F)^2
-<environment: 0x27ca500>
+<environment: 0x372c490>
 
 
 
@@ -351,4 +351,4 @@ Treatment effects confounded with block effects
 > 
 > proc.time()
    user  system elapsed 
-  3.901   0.243   4.165 
+  4.860   0.215   5.087 

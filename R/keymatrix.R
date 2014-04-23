@@ -2,15 +2,14 @@
 
 #---------------------------------------------------------------------------
 # CLASS "keymatrix" and its METHODS
-#---------------------------------------------------------------------------
-# No roxygen documentation maintained, see directly the .Rd file
-#---------------------------------------------------------------------------
 # An S4 class to represent an elementary key matrix in the planor package
-# @slot main a matrix of integers modulo \note{p}
-# @slot p a prime number
-# @note An object of class \code{\linkS4class{designkey}} or \code{\linkS4class{keyring}} is a collection of \code{\linkS4class{keymatrix}} objects
-#---------------------------------------------------------------------------
-#  Methods of "keyring": summary, alias, show
+# SLOTS
+#  - .Data: a matrix of integers modulo \note{p}
+#  -  p: a prime number
+# METHODS
+#    summary, alias, show
+# NOTE
+# An object of class designkey or keyring is a collection of keymatrix objects
 #---------------------------------------------------------------------------
 setClass("keymatrix",
          contains=c("matrix"),
@@ -18,32 +17,25 @@ setClass("keymatrix",
 ##--------------------------------------------------------------------------
 
 
-# "summary.keymatrix" help description in roxygen syntax
-#' Summarises the main properties of a single key matrix, by displaying the key matrix, the factorial effects confounded with the mean, and the weight profiles of the effects confounded with the mean
-#'
-#' @aliases summary,keymatrix-method
-#' @name summary.keymatrix
-#' @aliases summary.keymatrix
-#' @title  Summarises the design properties of a single key matrix
-#'   @param object a key matrix denoted by 'key'
-#'   @param fact a character or numeric vector of parent factor names for the columns of 'key'
-#'   @param block a logical vector to identify the columns of 'key' associated with a block factor
-#'   @param \ldots ignored
-#' @note
-#' - The rows of \code{key} are associated with units factors (or pseudofactors)
-#' while its columns are associated with treatment or block factors (or pseudofactors).
-#' The vectors in the arguments \code{fact} and \code{block} give information on the treatment and block factors,
-#' so that their length is expected to be equal to the number of columns of \code{key}.
-#' If missing, \code{fact} attributes a distinct parent factor to each column of \code{key} and \code{block} is set to TRUE for all columns
-#'
-#' - The number of rows and columns of the matrices that are printed
-#' are limited by the option \code{planor.max.print}
-#' @return
-#'     A matrix whose columns are generators of the kernel of 'key'
-#' @author H. Monod, and al.
-#' @keywords  design
-#' @export
-# "End summary.keymatrix" help description in roxygen syntax
+# "summary.keymatrix"
+# Summarises the main properties of a single key matrix, by displaying the key matrix, the factorial effects confounded with the mean, and the weight profiles of the effects confounded with the mean
+#
+# ARGUMENTS
+#  - object: a key matrix denoted by 'key'
+#  - fact: a character or numeric vector of parent factor names for the columns of 'key'
+#  - block: a logical vector to identify the columns of 'key' associated with a block factor
+#  - ...: ignored
+# NOTE
+# - The rows of key are associated with units factors (or pseudofactors)
+# while its columns are associated with treatment or block factors (or pseudofactors).
+# The vectors in the arguments fact and block give information on the treatment and block factors,
+# so that their length is expected to be equal to the number of columns of key.
+# If missing, fact attributes a distinct parent factor to each column of key and block is set to TRUE for all columns
+#
+# - The number of rows and columns of the matrices that are printed
+# are limited by the option planor.max.print
+# Return
+#     A matrix whose columns are generators of the kernel of 'key'
 # ---------------------------------------------
 
 summary.keymatrix <- function(object, fact, block,
@@ -61,7 +53,7 @@ summary.keymatrix <- function(object, fact, block,
   ## maximal number of rows and columns that are printed
   maxprint <- getOption("planor.max.print", default=20)
 
-  ## Verification of some arguments
+  ## Check some arguments
   if (length(show) >0 && show != "") {
     if (!grepl("[d,t,b,w]", show, ignore.case=TRUE)) {
     ## no character recognized
@@ -88,12 +80,12 @@ summary.keymatrix <- function(object, fact, block,
   ## B. Design key kernels
   ## kernel calculation
   b.Hgen <- kernelmatrix.basep(object,p)
-  ## b.Hgen est une big.matrix ou bien une matrix à 0 colonne
+  ## b.Hgen is either a big.matrix or a matrix with 0 column
   if (ncol(b.Hgen) == 0) {
     warning("Regular matrix: no confounding\n")
   } else {
     b.H <- subgroup.basep(b.Hgen,p)
-    ## b.H est une big.matrix
+    ## b.H is a big.matrix
     b.H <- weightorder.basep(b.H, p, fact, block)
     ## printing
     ## no printing of b.H for the moment
@@ -114,7 +106,7 @@ summary.keymatrix <- function(object, fact, block,
         cat("\n")
       }
       else cat("nil\n\n")
-    } # fin grepl
+    } # end grepl
     ## remaining info if there are block factors
     if (grepl('b', show, ignore.case=TRUE)) {
     cat("BLOCK-and-TREATMENT EFFECTS CONFOUNDED WITH THE MEAN\n")
@@ -129,7 +121,7 @@ summary.keymatrix <- function(object, fact, block,
       cat("\n")
     }
     else cat("nil\n\n")
-  } # fin grepl
+  } # end grepl
     ## C. Design key kernels
     if (grepl('w', show, ignore.case=TRUE) ||
         grepl('w', save, ignore.case=TRUE)) {
@@ -175,10 +167,10 @@ summary.keymatrix <- function(object, fact, block,
     } else {
       cat("none\n")
       }
-} # fin (grepl('w', show, ignore.case=TRUE)
-  } # fin grepl sur show et save
+} # end (grepl('w', show, ignore.case=TRUE)
+  } # end grepl on show and save
     cat("\n")
-  } ## fin else Hgen a 0 colonne
+  } ## end  else Hgen with 0 column
 
     if (grepl('k', save, ignore.case=TRUE)) {
   ## b.Hgen is a big matrix; return normal matrix
@@ -195,19 +187,13 @@ summary.keymatrix <- function(object, fact, block,
   else
     return(invisible())
 
-} ## fin summary.keymatrix
+} ## end summary.keymatrix
 
 
 
 # --------------------------------------
-# "summary" method help description in roxygen syntax
+# "summary" method for "keymatrix"
 # --------------------------------------
-#' Method summary for "keymatrix"
-#'
-#' @title  Method summary for "keymatrix"
-#'
-#' @name summary-method.keymatrix
-#' @aliases summary-method.keymatrix
  setMethod("summary", signature(object="keymatrix"),
           definition=summary.keymatrix)
 
@@ -216,31 +202,24 @@ summary.keymatrix <- function(object, fact, block,
 ##--------------------------------------------------------------------------
 
 
-# "alias.keymatrix" help description in roxygen syntax
-#' Summarises the aliasing properties of a single key matrix
-#'
-#' @aliases alias,keymatrix-method
-#' @name alias.keymatrix
-#' @aliases alias.keymatrix
-#' @title  Summarises the aliasing properties of a single key matrix
-#'   @param object a key matrix denoted by 'key'
-#'   @param model a matrix representing factorial model terms
-#'   @param fact a character or numeric vector of parent factor names for the columns of 'key'
-#'   @param block a logical vector to identify the columns of 'key' associated with a block factor
-#'   @param \ldots ignored
-#' @note The function prints the unaliased treatment effects,
-#' then the groups of aliased treatment effects, then the treatments effects confounded with block effects
-#' and finally the unaliased block effects, when considering all the factorial terms that are represented in the \code{model} argument,
-#' which is set if missing to the identity matrix (main effects only)
-#' @return
-#'    A vector with
-#'     (i) the number of unaliased treatment effecs; (ii) the number of
-#'     mutually aliased treatment effects; (iii) the number of treatment effects
-#'     aliased with block effects
-#' @author H. Monod, and al.
-#' @keywords  design
-#' @export
-# "End alias.keymatrix" help description in roxygen syntax
+# "alias.keymatrix"
+# Summarises the aliasing properties of a single key matrix
+# ARGUMENTS
+# - object: a key matrix denoted by 'key'
+# - model: a matrix representing factorial model terms
+# - fact: a character or numeric vector of parent factor names for the columns of 'key'
+# - block: a logical vector to identify the columns of 'key' associated with a block factor
+# - ...: ignored
+# NOTE
+# The function prints the unaliased treatment effects,
+# then the groups of aliased treatment effects, then the treatments effects confounded with block effects
+# and finally the unaliased block effects, when considering all the factorial terms that are represented in the \code{model} argument,
+# which is set if missing to the identity matrix (main effects only)
+# RETURN
+#    A vector with
+#     (i) the number of unaliased treatment effects; (ii) the number of
+#     mutually aliased treatment effects; (iii) the number of treatment effects
+#     aliased with block effects
 # ---------------------------------------------
 
 alias.keymatrix <- function(object, model,  fact, block, ...){
@@ -442,48 +421,30 @@ alias.keymatrix <- function(object, model,  fact, block, ...){
 
   cat("\n")
   return(invisible(alias.stats))
-} ## fin alias.keymatrix
-
-
-
-
+} ## end alias.keymatrix
 
 ##---------------------------------------------------------------------------
-#' Method alias for "keymatrix"
-#'
-#' @title  Method alias for "keymatrix"
-#'
-#' @name alias-method.keymatrix
-#' @aliases alias-method.keymatrix
+# Method alias for "keymatrix"
  setMethod("alias", signature(object="keymatrix"),
           definition=alias.keymatrix)
 
 
 ##--------------------------------------------------------------------------
-# "show.keymatrix" help description in roxygen syntax
-#' Print an object of class \code{\linkS4class{keymatrix}}
-#'
-#' @aliases show,keymatrix-method
-#' @name show.keymatrix
-#' @aliases show.keymatrix
-#' @title  Print the key matrix of a 'keymatrix' object
-#'   @param object an object of class \code{\linkS4class{keymatrix}}
-#' @return
-#' \sQuote{show} returns an invisible \sQuote{NULL}.
-#' @author H. Monod, and al.
-#' @seealso The class \code{\linkS4class{keymatrix}}
-#' @note The number of rows and columns of the matrices that are printed
-#' are limited by the option \code{planor.max.print}
-#' @examples
-#' K0 <- planor.designkey(factors=c(LETTERS[1:4], "block"), nlevels=rep(3,5),
-#'   model=~block+(A+B+C+D)^2, estimate=~A+B+C+D,
-#'   nunits=3^3, base=~A+B+C, max.sol=2)
-#' show(K0[[1]][[1]])
-#' @keywords  design
-#' @export
-# "End show.keymatrix" help description in roxygen syntax
+# "show.keymatrix" 
+# Print an object of class keymatrix
+# ARGUMENT
+#   object: an object of class  keymatrix
+# RETURN
+#   an invisible NULL.
+# NOTE
+# The number of rows and columns of the matrices that are printed
+# are limited by the option planor.max.print
+# EXAMPLES
+# K0 <- planor.designkey(factors=c(LETTERS[1:4], "block"), nlevels=rep(3,5),
+#   model=~block+(A+B+C+D)^2, estimate=~A+B+C+D,
+#   nunits=3^3, base=~A+B+C, max.sol=2)
+# show(K0[[1]][[1]])
 # ---------------------------------------------
-
 
 show.keymatrix <- function(object){
   cat("An object of class keymatrix\n")
@@ -491,16 +452,10 @@ show.keymatrix <- function(object){
     printpower(p.k)
     printgmat(object)
   invisible()
-} ## fin show.keymatrix
+} ## end show.keymatrix
 # --------------------------------------
-# "show" method help description in roxygen syntax
+# "show" method for "keymatrix"
 # --------------------------------------
-#' Method show for "keymatrix"
-#'
-#' @title  Method alias for "keymatrix"
-#'
-#' @name show-method.keymatrix
-#' @aliases show-method.keymatrix
 setMethod("show", signature(object="keymatrix"),
           definition=show.keymatrix)
 

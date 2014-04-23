@@ -36,6 +36,7 @@ An S4 class to represent a final design
   \describe{
     \item{getDesign}{ extract
       a design data frame. See  \code{\link{getDesign}}}
+    \item{as.data.frame}{ turn into a data frame. See  \code{\link{as.data.frame.planordesign}}}
   }
   }
 \author{

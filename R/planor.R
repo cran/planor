@@ -1,65 +1,45 @@
-# "planor" package help description in roxygen syntax
+# "planor" package 
+# A package dedicated to automatic generation of regular fractional factorial designs, including fractional designs, orthogonal block designs, row-column designs and split-plots.
+#  Research Unit MIA, INRA, Jouy en Josas, France.
+# EXAMPLES
+# DESIGN SPECIFICATIONS
+# Treatments: four 3-level factors A, B, C, D
+# Units: 27 in 3 blocks of size 9
+# Non-negligible factorial terms:
+#   block + A + B + C + D + A:B + A:C + A:D + B:C + B:D + C:D
+# Factorial terms to estimate:
+#   A + B + C + D
+# 1. DIRECT GENERATION, USING 'regular.design'
+# >  mydesign <- regular.design(factors=c("block", LETTERS[1:4]),
+# >    nlevels=rep(3,5), model=~block+(A+B+C+D)^2, estimate=~A+B+C+D,
+# >    nunits=3^3, randomize=~block/UNITS)
+# >  print(mydesign)
+# DUMMY ANALYSIS
+# Here we omit two-factor interactions from the model, so they are 
+# confounded with the residuals (but not with ABCD main effects)
+# >  set.seed(123)
+# >  mydesigndata=mydesign@design
+# >  mydesigndata$Y <- runif(27)
+# >  mydesign.aov <- aov(Y ~ block + A + B + C + D, data=mydesigndata)
+# >  summary(mydesign.aov)
+# 2. STEP-BY-STEP GENERATION, USING 'planor.designkey'
+# >  F0 <- planor.factors(factors=c( "block", LETTERS[1:4]), nlevels=rep(3,5),
+# >    block=~block)
+# >  M0 <- planor.model(model=~block+(A+B+C+D)^2, estimate=~A+B+C+D) 
+# >  K0 <- planor.designkey(factors=F0, model=M0, nunits=3^3, max.sol=2)
+# >  summary(K0)
+# >  mydesign.S4 <- planor.design(key=K0, select=2)
 
 
-# -------------------------------------------------
-#' A package dedicated to automatic generation of regular fractional factorial designs with one or several block systems.
-#'
-#' The user invoke first the functions \code{\link{planor.factors}} and \code{\link{planor.model}}
-#' to describe its experiment.
-#' The function \code{\link{planor.designkey}} searches
-#' for a design key in a possibly mixed factorial context.
-#' A design from one of the solutions can be build by using
-#' \code{\link{planor.design}}.
-#' \code{\link{summary.designkey}} summarises the design properties from a design key matrix.
-#'
-#'
-#' @title Generation of regular fractional factorial designs
-#' @author Andr? Kobilinsky,  Annie Bouvier, Herv? Monod (Applied Mathematics and Informatics Unit, INRA - Jouy-en-Josas, France. URL:  \url{http://www.jouy.inra.fr/mia_eng/})
-#' @docType package
-#' @name planor-package
-#' @aliases planor
-#' @note
-#' \itemize{
-#' \item{Option  \code{planor.max.print} can be set to limit the amount of the matrices that are printed,
-#'  to \code{planor.max.print} rows and columns. Default: 20.}}
-#' @references
-#'
-#' Kobilinsky A., Bouvier A., Monod H. (2011). PLANOR: an R library
-#' for the automatic generation of regular fractional factorial
-#' designs. Rapport Technique, Unit\'e MIAj, INRA Jouy en
-#' Josas, France.
-#'
-#' Monod H., Bouvier A., Kobilinsky A. (2011). A quick guide to
-#' PLANOR, an R library for the automatic generation of regular
-#' fractional factorial designs. Rapport Technique, Unit\'e MIAj, INRA
-#' Jouy en Josas, France.
-#' @keywords package design
-#' @examples
-#' # EXEMPLE 1 PAGE 7  FROM THE PLANOR MANUAL
-#' #  Four 3-level treatment factors and one 3-level block factor
-#' #  Model: block+A+B+C+D
-#' #  Estimate: A+B+C+D
-#' #  N=3^3
-#' F0 <- planor.factors( factors=c(LETTERS[1:4], "block"), nlevels=rep(3,5) )
-#' M0 <- planor.model( model=~block+(A+B+C+D)^2, estimate=~A+B+C+D )
-#' K0 <- planor.designkey(factors=F0, model=M0, nunits=3^3,
-#'                        base=~A+B+C, max.sol=2)
-#' P0 <- planor.design(key=K0, select=2)
-#'  summary(K0[1])
-# End "planor" package help description in roxygen syntax
-# -------------------------------------------------
-# CUSTOMIZATION
-# In case of problems, you can reset the following variables:
+
+
+
+
 
  
  FREE <- FALSE
-  #  free:  if TRUE, big auxiliary structures are removed as soon as
-  #   no more used, and garbage collection is done
-  #  But is is more time consuming.
 #---------------------------------------------------------------------------
-#           PLANOR R FUNCTIONS
-#
-# MAIN STRUCTURES (specific classes or not)
+#  MAIN STRUCTURES (specific classes or not)
 # 1. Names for specific objects or arguments (see also INTERNAL NOTATION CONVENTIONS)
 # factors: a data.frame (usually with 0 row); can be created by planor.factors
 # modlist: a list of (model-formula, estimate-formula) pairs,
@@ -73,6 +53,13 @@
 #         pseudo.info : a dataframe with one row per pseudofactor and columns
 #                  'parent', 'nlev', 'block', 'ordered', 'model', 'basic'
 #         levels : a list giving the levels of the factors
+# designkey : an S4 class, typically an output from pick
+#         main: a single design-key solution = a list with one key matrix for each prime. Each one is a 'keymatrix' object.
+#         factors: the 'designfactors' object that defines the factors
+#         model: the list of components of type c(model,estimate)
+#                containing the model and estimate specifications
+#         nunits: the number of units in the design.
+#         recursive: logical, TRUE if the design has been constructed recursively
 # keymatrix : an S4 class, a component of designkey or keyring
 #         main: a solution  for a prime
 #         p: value of the prime
@@ -80,79 +67,105 @@
 #         main: a set of design-key solutions = a list of solutions for a prime. Each one is a keymatrix.
 #         p: value of the prime
 #         LIB: list of the rownames and colnames of the key matrices
+# listofdesignkeys : an S4 class, typically an output from planor.designkey when the research is recursive
+#         main: a list of design-key solutions; each component
+#                  of main is a whole solution list across the different primes. It is an object of class 'designkey'
+#         factors: the 'designfactors' object that defines the factors
+#         model: the list of components of type c(model,estimate)
+#                containing the model and estimate specifications
+#         nunits: the number of units in the design.
 # listofkeyrings : an S4 class, typically an output from planor.designkey when the research is not recursive
 #         main: a list of design-key solutions; each component
 #                  of main is  a list of design
-#                  key solutions for a given prime. It is an object of class \code{\linkS4class{keyring}}
+#                  key solutions for a given prime. It is an object of class 'keyring'
 #         factors: the 'designfactors' object that defines the factors
 #         model: the list of components of type c(model,estimate)
 #                containing the model and estimate specifications
-# listofdesignkeys : an S4 class, typically an output from planor.designkey when the research is recursive
-#         main: a list of design-key solutions; each component
-#                  of main is a whole solution list across the different primes. It is an object of class \code{\linkS4class{designkey}}
-#         factors: the 'designfactors' object that defines the factors
-#         model: the list of components of type c(model,estimate)
-#                containing the model and estimate specifications
-# designkey : an S4 class, typically an output from pick
-#         main: a single design-key solution = a list with one key matrix for each prime. Each one is a 'keymatrix' object.
-#         factors: the 'designfactors' object that defines the factors
-#         model: the list of components of type c(model,estimate)
-#                containing the model and estimate specifications
-#         recursive: logical, TRUE if the design has been constructed recursively
+#         nunits: the number of units in the design.
 # planordesign : an S4 class, typically an output from planor.design.designkey
 #         design: a dataframe containing the final design
 #         factors: the 'designfactors' object that defines the factors
 #         model: the modlist containing the model and estimate specifications
+#         designkey: a list which contains the designkey matrices used to create the object
+#         nunits: the number of units in the design.
+#         recursive: a "logical" equal to TRUE if the design has been constructed recursively
 # 3. Big matrices
 #  The names of the big.matrices are prefixed by "b."
 # (big.matrices: see the package big.memory)
 #---------------------------------------------------------------------------
-# MAIN FUNCTIONS
+#  FUNCTIONS IN THIS FILE
 #---------------------------------------------------------------------------
 # 1. DESIGN INPUT AND SPECIFICATIONS
 #---------------------------------------------------------------------------
 # planor.factors <- function(factors=NULL, nlevels=NULL,
-#                           block=NULL,
-#                           ordered=NULL,
-#                           hierarchy=NULL){
-# planor.model <- function(model,estimate,listofmodels)
+#                            block=NULL,
+#                            ordered=NULL,
+#                            hierarchy=NULL,
+#                            dummy=FALSE)
+# planor.model <- function(model, estimate, listofmodels,
+#                          resolution, factors)
 # planor.designkey <- function(
-#                              # arguments for planor.factors
+#                              ## arguments for planor.factors
 #                              factors=NULL, nlevels=NULL,
 #                              block=NULL,
 #                              ordered=NULL,
 #                              hierarchy=NULL,
-#                              # arguments for planor.model
+#                              ## arguments for planor.model
 #                              model=NULL, estimate=NULL,
 #                              listofmodels=NULL,
-#                              # or resolution for automatic generation of the model
+#                              ## or resolution for automatic generation of the model
 #                              resolution=NULL,
-#                              # other arguments
+#                              ## other arguments
 #                              nunits=NULL, base=NULL,
 #                              max.sol=1, randomsearch=FALSE,
-# 			       verbose=TRUE)
+# 			     verbose=TRUE)
 #---------------------------------------------------------------------------
 # 2. MAJOR CALCULUS FUNCTIONS
 #---------------------------------------------------------------------------
-# planor.hierarchy <- function(factors, hierarchy=NULL)
+# regular.design <- function(
+#                     ## arguments for planor.factors
+#                     factors=NULL, nlevels=NULL,
+#                     block=NULL, ordered=NULL, hierarchy=NULL,
+#                     ## arguments for planor.model
+#                     model=NULL, estimate=NULL, listofmodels=NULL,
+#                     ## or resolution for automatic generation of the model
+#                     resolution=NULL,
+#                     ## other arguments
+#                     nunits=NULL, base=NULL,
+#                     ## design stage
+#                     randomize=NULL,
+#                     randomsearch=FALSE,
+#                     ## information
+#                     output="planordesign",
+#                     verbose=FALSE,
+#                     ...)
+# planor.hierarchy  <- function(factors, hierarchy=NULL)
 # planor.pseudofactors <- function(factors)
-# planor.harmonize <- function(factors, model, base)
+# planor.harmonize <- function(
+#                              ## arguments for planor.factors
+#                              factors=NULL, nlevels=NULL,
+#                              ordered=NULL,
+#                              hierarchy=NULL,
+#                              ## arguments for planor.model
+#                              model=NULL, estimate=NULL,
+#                              listofmodels=NULL,
+#                              ## other arguments
+#                              base=NULL)
 # planor.modelterms <- function(modlist)
 # planor.ineligibleterms <- function(modmat)
 # planor.ineligibleset <- function(factors, ineligible)
 # planor.designkey.basep <- function(p, r, ineligible, hierarchy, predefined=NULL,
 #                                   max.sol=1, randomsearch=FALSE,
 #				    verbose=FALSE){
-# planor.designkey.recursive <- function(k,PVuqf,NPuqf,
-#                                        INELIGtpf,NIVtpf,
-#                                        INELIGuqf,PREDEF,
-#                                        PHISTAR,
+# planor.designkey.recursive <- function(k,nb.sol,PVuqf,NPuqf,
+#                                        b.INELIGtpf,NIVtpf,
+#                                        b.INELIGuqf,PREDEF,
 #                                        max.sol=1)
 #---------------------------------------------------------------------------
 # 3. SECONDARY CALCULUS FUNCTIONS
 #---------------------------------------------------------------------------
 # planor.kernelcheck.basep <- function(PhiStar, admissible, IneligibleSet, p)
-# weightorder.basep <- function(mat,p,factnum)
+# weightorder.basep <- function(mat,p,factnum,blocklog)
 
 # printpower <- function(p.k)
 # wprofile <- function(x)
@@ -160,26 +173,7 @@
 #---------------------------------------------------------------------------
 # 4. OUTPUT FUNCTIONS
 #---------------------------------------------------------------------------
-# pick.listofkeyrings <- function(keys,selection)
-# pick.listofdesignkeys <- function(keys,selection)
 # planor.design.levels <- function(key,start=1)
-# planor.design.designkey <- function(designkey)
-# planor.design.listofkeyrings <- function(key,selection=rep(1,length(key)))
-# planor.design.listofdesignkeys <- function(key,selection=rep(1,length(key)))
-
-# summary.keymatrix <- function(key,  fact, block, ...)
-
-# summary.designkey <- function(designkey)
-# summary.listofkeyrings <- function(listofkeyrings)
-# summary.listofdesignkeys <- function(listofdesignkeys)
-# show.designkey <- function(designkey)
-# show.keyring <- function(keyring)
-# show.listofkeyrings <- function(listofkeyrings)
-# show.listofdesignkeys <- function(listofdesignkeys)
-# alias.keymatrix <- function(object, model, fact, block, ...)
-# alias.designkey <- function(object, model, ...)
-# alias.listofkeyrings <- function(object, model, ...)
-# alias.listofdesignkeys <- function(object, model, ...)
 #---------------------------------------------------------------------------
 # INTERNAL NOTATION CONVENTIONS (not used in all functions any more)
 # Many scalar and vector objects are named by combining an uppercase prefix
@@ -223,53 +217,46 @@
 #---------------------------------------------------------------------------
 
 
-# "planor.factors" help description in roxygen syntax
-#'   A user-friendly function to create an
-#'   object of class \code{\linkS4class{designfactors}},
-#'    either by giving the factor names and level numbers, or by giving
-#'    a list of factor levels. Both ways can be used in the same call
-#'
-#' @name planor.factors
-#' @aliases planor.factors
-#' @title Creation of a 'designfactors' object
-#'   @param factors  a character vector of factor names, or possibly a scalar, a dataframe
-#'                     or a list (see DETAILS)
-#'   @param nlevels  a vector of level numbers for each factor name (see DETAILS)
-#'   @param block     an additive model formula to indicate the block factors
-#'   @param ordered   an additive model formula to indicate the ordered factors
-#'   @param hierarchy   a formula or a list of formulae to indicate hierarchy relationships between factors
-#' @note
-#'     The basic usage is to specify the names of the factors by a character vector of length \code{n} in argument \code{factors}
-#' and their numbers of levels by a numeric vector of length \code{n} in argument \code{nlevels}.
-#' Alternatively, the \code{factors} argument can be an integer \code{n},
-#' in which case the first \code{n} capital letters of the alphabet are used as factor names.
-#' If \code{nlevels} is a scalar, it is considered that all factors have this number of levels.
-#' There are two more possibilities.
-#' If \code{factors} is a dataframe, the factors in this dataframe are extracted together with their levels.
-#' Finally \code{factors} can be a list of vectors (but not a dataframe),
-#' where each vector in the list has the name of a factor and contains the levels of that factor.
-#' Note that \code{nlevels} is ignored in these latter two cases. See the examples.
-#'     The argument \code{block} is used by the functions that give the properties of the design keys.
-#'     The argument 'ordered' must be either
-#'     an integer or a vector of length equal to
-#'     the number of factors.
-#' @return
-#'   An object of class \code{\linkS4class{designfactors}}
-#' @author H. Monod, and al.
-#' @seealso Class \code{\linkS4class{designfactors}}
-#' @examples
-#'     planor.factors(c("A","B","C","P"),c(2,3,6,3))
-#'     planor.factors(LETTERS[1:12],2)
-#'     planor.factors(12,2)
-#'     planor.factors( c("A","B","Block"), 3, block=~Block )
-#'     zz <- planor.factors( c("A","B","Block"), c(2,3,5))
-#'     zz@@levels$A <- c("plus","moins")
-#' planor.factors(factors=list(A=c("plus","moins"), B=1:3, Block=1:5))
-#' AB <- data.frame( A=c(rep(c("a","b"),3)), B=rep(c("z","zz","zzz"),rep(2,3)), C=1:6  )
-#' planor.factors(factors=AB)
-#' @keywords design
-#' @export
-# End "planor.factors" help description in roxygen syntax
+# "planor.factors"
+#   A user-friendly function to create an
+#   object of class 'designfactors',
+#    either by giving the factor names and level numbers, or by giving
+#    a list of factor levels. Both ways can be used in the same call
+#
+# ARGUMENTS
+#   - factors:  a character vector of factor names, or possibly a scalar, a dataframe
+#                     or a list (see DETAILS)
+#   - nlevels:  a vector of level numbers for each factor name (see DETAILS)
+#   - block:     an additive model formula to indicate the block factors
+#   - ordered:   an additive model formula to indicate the ordered factors
+#   - hierarchy:   a formula or a list of formulae to indicate hierarchy relationships between factors
+# NOTE
+#     The basic usage is to specify the names of the factors by a character vector of length 'n' in argument 'factors'
+# and their numbers of levels by a numeric vector of length 'n' in argument 'nlevels'.
+# Alternatively, the 'factors' argument can be an integer 'n',
+# in which case the first 'n' capital letters of the alphabet are used as factor names.
+# If 'nlevels' is a scalar, it is considered that all factors have this number of levels.
+# There are two more possibilities.
+# If 'factors' is a dataframe, the factors in this dataframe are extracted together with their levels.
+# Finally 'factors' can be a list of vectors (but not a dataframe),
+# where each vector in the list has the name of a factor and contains the levels of that factor.
+# Note that 'nlevels' is ignored in these latter two cases. See the examples.
+#     The argument 'block' is used by the functions that give the properties of the design keys.
+#     The argument 'ordered' must be either
+#     an integer or a vector of length equal to
+#     the number of factors.
+# RETURN
+#   An object of class 'designfactors'
+# EXAMPLES
+#    planor.factors(c("A","B","C","P"),c(2,3,6,3))
+#     planor.factors(LETTERS[1:12],2)
+#     planor.factors(12,2)
+#     planor.factors( c("A","B","Block"), 3, block=~Block )
+#     zz <- planor.factors( c("A","B","Block"), c(2,3,5))
+#     zz@@levels$A <- c("plus","moins")
+# planor.factors(factors=list(A=c("plus","moins"), B=1:3, Block=1:5))
+# AB <- data.frame( A=c(rep(c("a","b"),3)), B=rep(c("z","zz","zzz"),rep(2,3)), C=1:6  )
+# planor.factors(factors=AB)
 # -----------------------------------------------------
 
 planor.factors <- function(factors=NULL, nlevels=NULL,
@@ -337,51 +324,43 @@ planor.factors <- function(factors=NULL, nlevels=NULL,
   FACTORS <- planor.pseudofactors(FACTORS)
   ##
   return(FACTORS)
-} # fin planor.factors
+} # end planor.factors
 ##---------------------------------------------------------------------------
-## "planor.model" help description in roxygen syntax
-## ------------------------------------------------------
-#'    A user-friendly function to declare the model and estimate specifications
-#'    for a design search by planor
-#'
-#' @name planor.model
-#' @aliases planor.model
-#' @title Model and estimate specifications for a design search
-#'   @param model   formula of the main model
-#'   @param estimate  optional formula specifying the factorial terms to estimate;
-#'               if missing, it is considered that all model terms have to be
-#'               estimated
-#'   @param listofmodels list of c(model, estimate) pairs, where model and estimate are
-#'              formulae; using several pairs allows more flexibility in the design
-#'              constraints  (see Kobilinsky, 2005); estimate is optional
-#'   @param resolution integer, larger than or equal to 3, equal to the design resolution. When set, the  \code{model} argument is ignored.
-#' See  Note.
-#'   @param factors a \code{\linkS4class{designfactors}} object,
-#'         typically an output from \code{\link{planor.factors}}.
-#' Should be set, when the \code{resolution} argument is set.
-#' @note
-#'  The user must specify one or the other set of arguments: \cr
-#' 1/ either, \code{model} or \code{listofmodels} or both \cr
-#' 2/ or, \code{resolution} and \code{factors}, and possibly \code{listofmodels}. \cr
-#' When \code{model} and \code{resolution} are all set,
-#' \code{model} is ignored. \cr
-#' The second case, ---  \code{resolution} and \code{factors} are set ---,
-#' causes the automatic generation of the (model, estimate) pairs: \cr
-#' Stating \code{S} is the addition of all the factors,
-#' the model formula is \code{~(S)^(resolution-1)/2},
-#' when \code{resolution} is odd. \cr
-#' When \code{resolution} is even, the model  formula is \code{~(S)^(resolution/2)} and the estimate formula is  \code{~(S)^(resolution/2)-1}
-#' @return
-#'     A list of c(model, estimate) pairs, where model and estimate are
-#'   formulae
-#' @author H. Monod, and al.
-#' @examples
-#'  planor.model(~A+B+C+D+A:B,~A+B+C+D, listofmodels=list(c(~E+F,~E)))
-#'  planor.model(~A+B+C+D+A:B,~A+B+C+D, listofmodels=list(c(~E+F,~E), ~G, ~H, c(~M+N,~N)))
-#' planor.model(resolution=4, factors=planor.factors( factors=c(LETTERS[1:4]),  nlevels=rep(2,4)))
-#' @keywords design
-#' @export
-# End "planor.model" help description in roxygen syntax
+## "planor.model"
+#    A function to declare the factorial terms that must be considered
+# as non-negligible and the factorial terms that must be estimable
+# when the experiment will be analysed.
+# ARGUMENTS
+#   - model:   formula of the main model
+#   - estimate:  optional formula specifying the factorial terms to estimate;
+#               if missing, it is considered that all model terms have to be
+#               estimated
+#   - listofmodels: list of c(model, estimate) pairs, where model and estimate are
+#              formulae; using several pairs allows more flexibility in the design
+#              constraints  (see Kobilinsky, 2005); estimate is optional
+#   - resolution: integer, larger than or equal to 3, equal to the design resolution. When set, the  'model' argument is ignored.
+# See  Note.
+#   - factors: a 'designfactors' object,
+#         typically an output from 'planor.factors'.
+#         Should be set, when the 'resolution' argument is set.
+# NOTE
+#  The user must specify one or the other set of arguments: 
+# 1/ either, 'model' or 'listofmodels' or both 
+# 2/ or, 'resolution' and 'factors', and possibly 'listofmodels'. 
+# When 'model' and 'resolution' are all set,
+# 'model' is ignored. 
+# The second case, ---  'resolution' and 'factors' are set ---,
+# causes the automatic generation of the (model, estimate) pairs: 
+# Assuming 'S' denotes the additive formula including all factors, 
+# - if 'resolution' is odd, the model formula is '~(S)^(resolution-1)/2',
+# - if 'resolution' is even, the model  formula is '~(S)^(resolution/2)' and the estimate formula is  '~(S)^(resolution/2)-1'
+# RETURN
+#     A list of c(model, estimate) pairs, where model and estimate are
+#   formulae
+# EXAMPLES
+#  planor.model(~A+B+C+D+A:B,~A+B+C+D, listofmodels=list(c(~E+F,~E)))
+#  planor.model(~A+B+C+D+A:B,~A+B+C+D, listofmodels=list(c(~E+F,~E), ~G, ~H, c(~M+N,~N)))
+# planor.model(resolution=4, factors=planor.factors( factors=c(LETTERS[1:4]),  nlevels=rep(2,4)))
 # ------------------------------------------------------
 
 planor.model <- function(model, estimate, listofmodels,
@@ -396,7 +375,7 @@ planor.model <- function(model, estimate, listofmodels,
      res <- generate.model(resolution, factors)
      model <- res$model
      estimate <- res$estimate
-  } ## fin (!missing(resolution))
+  } ## end (!missing(resolution))
 
   if(!missing(model) && !is.null(model)){
     if(missing(estimate) || is.null(estimate)) estimate <- model
@@ -412,36 +391,30 @@ planor.model <- function(model, estimate, listofmodels,
     }
   }
   return(listofmodels)
-} ## fin planor.model
+} ## end planor.model
 
 ##---------------------------------------------------------------------------
-## "generate.model" help description in roxygen syntax
+## "generate.model" 
 ## Internal function
-## ------------------------------------------------------
-#'    Automatic generation of the model from the design resolution and the factors
-#'
-#' @name generate.model
-#' @aliases generate.model
-#' @title Model generation from the design resolution and the factors
-#'   @param resolution integer, larger than or equal to 3, equal to the design resolution.
-#'   @param factors a \code{\linkS4class{designfactors}} object,
-#'         typically an output from \code{\link{planor.factors}}
-#'   @param listofmodels optional list of c(model, estimate) pairs, where model and estimate are
-#'              formulae; see  \code{\link{planor.model}}.
-#' @return
-#'     A list of c(model, estimate) pairs, where model and estimate are
-#'   formulae. \cr
-#' Stating \code{S} is the addition of all the factors,
-#' the model formula is \code{~(S)^(resolution-1)/2},
-#' when \code{resolution} is odd. \cr
-#' When \code{resolution} is even, the model  formula is \code{~(S)^(resolution/2)} and the estimate formula is  \code{~(S)^(resolution/2)-1}
-#' @author H. Monod, and al.
-#' @examples
-#'  F <- planor.factors(c(LETTERS[1:4], "bloc"),nlevels=rep(2,5))
-#'  M <- generate.model(3,F)
-#' @keywords design
-# End "generate.model" help description in roxygen syntax
-## ------------------------------------------------------
+#    Automatic generation of the model from the design resolution and the factors
+#
+# TITLE Model generation from the design resolution and the factors
+# ARGUMENTS
+#   - resolution: integer, larger than or equal to 3, equal to the design resolution.
+#   - factors: a 'designfactors' object,
+#         typically an output from 'planor.factors'
+#   - listofmodels: optional list of c(model, estimate) pairs, where model and estimate are
+#              formulae; see  'planor.model'.
+# RETURN
+#     A list of c(model, estimate) pairs, where model and estimate are
+#   formulae. 
+# NOTE
+# Assuming 'S' denotes the additive formula including all factors, 
+# - if 'resolution' is odd, the model formula is '~(S)^(resolution-1)/2',
+# - if 'resolution' is even, the model  formula is '~(S)^(resolution/2)' and the estimate formula is  '~(S)^(resolution/2)-1'
+# EXAMPLES
+#  F <- planor.factors(c(LETTERS[1:4], "bloc"),nlevels=rep(2,5))
+#  M <- generate.model(3,F)
 ##---------------------------------------------------------------------------
 
 generate.model <- function(resolution, factors) {
@@ -481,72 +454,65 @@ generate.model <- function(resolution, factors) {
   }
   eval(parse(text=mod))
   return( list(model=model, estimate=estimate))
-} ## fin generate.model
+} ## end generate.model
 
 ##---------------------------------------------------------------------------
-## "planor.designkey" help description in roxygen syntax
-#'  Searches for a design key in a possibly mixed factorial context
-#'
-#' @name planor.designkey
-#' @aliases planor.designkey
-#' @title Search for a design key in a possibly mixed factorial context
-#'   @param factors  \code{factors} can be of 2 types:
-#' either,  an object of class \code{\linkS4class{designfactors}} (typically an output
-#'               from \code{\link{planor.factors}}),
-#' or a character vector of factor names.
-#' In this last case, the arguments \code{nlevels}, \code{ordered}, \code{hierarchy} can also be set.
-#'   @param nlevels  a vector of level numbers for each factor name.
-#' Ignored if \code{factors} is an object of class \code{\linkS4class{designfactors}}.
-#'   @param block   an additive model formula to indicate the block factors
-#'   @param ordered   an additive model formula to indicate the ordered factors
-#' Ignored if \code{factors} is an object of class \code{\linkS4class{designfactors}}.
-#'   @param hierarchy   a formula or a list of formulae to indicate hierarchy relationships between factors
-#' Ignored if \code{factors} is an object of class \code{\linkS4class{designfactors}}.
-#' @param model either a list of model-estimate pairs of formulae, typically an output
-#'               from \code{\link{planor.model}}, or
-#'  the   formula of the main model. In this last case, the arguments
-#' \code{estimate} and \code{listofmodels} can also be set.
-#'   @param estimate  if \code{model} is a formula,
-#' optional formula specifying the factorial terms to estimate;
-#'               if missing, it is considered that all model terms have to be
-#'               estimated.
-#' Ignored if \code{model} is a list.
-#'   @param listofmodels  if \code{model} is a formula,
-#' list of c(model, estimate) pairs, where model and estimate are
-#'              formulae; using several pairs allows more flexibility in the design
-#'              constraints  (see Kobilinsky, 2005); estimate is optional.
-#' Ignored if \code{model} is a list.
-#'  @param resolution optional integer equal to the design resolution.
-#' When set, the model is generated from the factors and
-#' \code{model} and \code{estimate} are ignored. See Note.
-#' @param nunits a scalar ; the total number of units in the design
-#' @param base an optional additive formula to specify the basic factors
-#' @param max.sol maximum number of solutions before exit
-#' @param randomsearch a \code{logical};
-#'       if TRUE, the order of admissible elements is randomised
-#'                   at each new visit forward to \code{j}
-#' @param verbose a \code{logical};
-#' 		  if TRUE, verbose display
-#' @note The 'base' formula must be given as an additive model on the basic factors,
-#'     and the basic factors must be specified in the 'factors' argument. \cr
-#' When  \code{resolution} is set,
-#' the (model, estimate) pairs are automatically generated: \cr
-#' Stating \code{S} is the addition of all the factors,
-#' the model formula is \code{~(S)^(resolution-1)/2},
-#' when \code{resolution} is odd. \cr
-#' When \code{resolution} is even, the model  formula is \code{~(S)^(resolution/2)} and the estimate formula is  \code{~(S)^(resolution/2)-1}
-#' @return   When the research is not recursive, an object of class \code{\linkS4class{listofkeyrings}}. Each component is the solutions for a value of the prime.
-#'  When the research is recursive, an object  of class \code{\linkS4class{designkey}}. Each component is a whole solution list across the different primes.
-#' @author H. Monod, and al.
-#' @seealso \code{\link{planor.factors}}, \code{\link{planor.model}},
-#' and the classes  \code{\linkS4class{designfactors}}, \code{\linkS4class{listofkeyrings}}, \code{\linkS4class{listofdesignkeys}}
-#' @examples
-#' K0 <- planor.designkey(factors=c(LETTERS[1:4], "block"), nlevels=rep(3,5), model=~block+(A+B+C+D)^2, estimate=~A+B+C+D, nunits=3^3, base=~A+B+C, max.sol=2)
-#' ## With automatic model generation
-#' Km <- planor.designkey(factors=c(LETTERS[1:4], "block"),nlevels=rep(2,5),resolution=3,  nunits=2^4)
-#' @keywords design
-#' @export
-# End "planor.designkey" help description in roxygen syntax
+## "planor.designkey" 
+#  Search for a design key in a possibly mixed factorial context
+#  ARGUMENTS
+#   - factors:  'factors' can be of 2 types:
+# either,  an object of class 'designfactors' (typically an output
+#               from 'planor.factors'),
+# or a character vector of factor names.
+# In this last case, the arguments 'nlevels', 'ordered', 'hierarchy' can also be set.
+#   - nlevels:  a vector of level numbers for each factor name.
+# Ignored if 'factors' is an object of class 'designfactors'.
+#   - block :  an additive model formula to indicate the block factors
+#   - ordered:   an additive model formula to indicate the ordered factors
+# Ignored if 'factors' is an object of class 'designfactors'.
+#   - hierarchy:   a formula or a list of formulae to indicate hierarchy relationships between factors
+# Ignored if 'factors' is an object of class 'designfactors'.
+# - model: either a list of model-estimate pairs of formulae, typically an output
+#               from 'planor.model', or
+#  the   formula of the main model. In this last case, the arguments
+# 'estimate' and 'listofmodels' can also be set.
+#   - estimate:  if 'model' is a formula,
+# optional formula specifying the factorial terms to estimate;
+#               if missing, it is considered that all model terms have to be
+#               estimated.
+# Ignored if 'model' is a list.
+#   - listofmodels:  if 'model' is a formula,
+# list of c(model, estimate) pairs, where model and estimate are
+#              formulae; using several pairs allows more flexibility in the design
+#              constraints  (see Kobilinsky, 2005); estimate is optional.
+# Ignored if 'model' is a list.
+#  - resolution: optional integer equal to the design resolution.
+# When set, the model is generated from the factors and
+# 'model' and 'estimate' are ignored. See Note.
+# - nunits: a scalar ; the total number of units in the design
+# - base: an optional additive formula to specify the basic factors
+# - max.sol: maximum number of solutions before exit
+# - randomsearch: a 'logical';
+#       if TRUE, the order of admissible elements is randomised
+#                   at each new visit forward to 'j'
+# - verbose: a 'logical';
+# 		  if TRUE, verbose display
+# NOTE
+# The 'base' formula must be given as an additive model on the basic factors,
+#     and the basic factors must be specified in the 'factors' argument. 
+# When  'resolution' is set,
+# the (model, estimate) pairs are automatically generated: 
+# Stating 'S' is the addition of all the factors,
+# the model formula is '~(S)^(resolution-1)/2',
+# when 'resolution' is odd. 
+# When 'resolution' is even, the model  formula is '~(S)^(resolution/2)' and the estimate formula is  '~(S)^(resolution/2)-1'
+# RETURN
+# When the research is not recursive, an object of class 'listofkeyrings'. Each component is the solutions for a value of the prime.
+#  When the research is recursive, an object  of class 'listofdesignkeys'. Each component is a whole solution list across the different primes.
+# EXAMPLES
+# K0 <- planor.designkey(factors=c(LETTERS[1:4], "block"), nlevels=rep(3,5), model=~block+(A+B+C+D)^2, estimate=~A+B+C+D, nunits=3^3, base=~A+B+C, max.sol=2)
+# ## With automatic model generation
+# Km <- planor.designkey(factors=c(LETTERS[1:4], "block"),nlevels=rep(2,5),resolution=3,  nunits=2^4)
 ## -------------------------------------------------------
 planor.designkey <- function(
                              ## arguments for planor.factors
@@ -754,8 +720,8 @@ planor.designkey <- function(
                                max.sol=max.sol,
                                randomsearch=randomsearch,
                                verbose=verbose)
-    } ## fin k
-  } ## fin indpdt.searches
+    } ## end k
+  } ## end indpdt.searches
   ## E2b. Second case: recursive searches required
   else{
     PHISTAR <- planor.designkey.recursive(k = 1,
@@ -767,9 +733,9 @@ planor.designkey <- function(
                                           b.INELIGuqf = b.PTERMS.q,
                                           PREDEF = PREDEF,
                                           max.sol = max.sol)
-  } ## fin recursive search
+  } ## end recursive search
   ## FINALISATION OF THE SOLUTION OBJECTS
-  ## PHISTAR est vide quand il n'y a  de solution pour aucun k
+  ## PHISTAR is empty when there is no solution for any k
   if (length(PHISTAR) > 0) {
     ## PROPER NAMING OF THE COLUMNS OF THE KEY MATRICES
     ## loop on the distinct primes
@@ -781,7 +747,7 @@ planor.designkey <- function(
       LIBupf.k <- c(LIBupf.k, rep("*U*", r.k - length(LIBupf.k)))
       ## FIRST CASE: independent searches
       if(indpdt.searches){
-        ## test sur l'existence de solutions (PHISTAR[[k]] est nul sinon)
+        ## test on existence of solutions (PHISTAR[[k]] is null when none)
         if(!is.null(PHISTAR[[k]])){
           PHISTAR[[k]] <- lapply(PHISTAR[[k]], function(X,LIBtpf.k,LIBupf.k ){
             colnames(X) <- LIBtpf.k
@@ -795,7 +761,7 @@ planor.designkey <- function(
                               pseudo.info=P.info,
                               LIB=list(LIBtpf.k, LIBupf.k))
         }
-      } ## fin de indpdt.searches (etape de FINALISATION)
+      } ## end of indpdt.searches (step FINALISATION)
       ## SECOND CASE: recursive search
       else{
         ## loop on the solution designkeys
@@ -806,14 +772,14 @@ planor.designkey <- function(
           PHISTAR[[ll]][[k]] <- new("keymatrix", .Data=PHISTAR[[ll]][[k]],
                                     p=p.k)
         } ## end of the loop on the solution designkeys
-      } ## end of the recursive case (etape de FINALISATION)
+      } ## end of the recursive case (step FINALISATION)
     } ## end of the loop on the distinct primes
 
     ## CLASS DECLARATION
     ## FIRST CASE: independent searches
     if(indpdt.searches){
 
-      ##if(!is.null(PHISTAR[[k]])){
+      
         PHISTAR <- new("listofkeyrings",
                        .Data=PHISTAR,
                        factors=factors,
@@ -839,12 +805,17 @@ planor.designkey <- function(
   } ## end of  "if (length(PHISTAR) > 0)"
 
   return(PHISTAR)
-}  ## fin planor.designkey
+}  ## end planor.designkey
 ##---------------------------------------------------------------------------
 ## THE MOST INTEGRATIVE FUNCTION 05/07/2012
 ##---------------------------------------------------------------------------
 ## An integrated function to construct a regular design directly
 ## See the comments of planor.designkey and planor.design for more information
+# EXAMPLE
+# mydesign <- regular.design(factors=c("block", LETTERS[1:4]),
+#  nlevels=rep(3,5), model=~block + (A+B+C+D)^2, estimate=~A+B+C+D,
+#  nunits=3^3, randomize=~block/UNITS)
+# -------------------------------------------------------------
 regular.design <- function(
                     ## arguments for planor.factors
                     factors=NULL, nlevels=NULL,
@@ -892,20 +863,21 @@ regular.design <- function(
 planor.hierarchy <- function(factors, hierarchy=NULL){
   ## Calculates and stores information on the pseudofactor decomposition
   ## of the factors within the 'fact.info' slot of a 'designfactors' object
-  ## ARGUMENTS:
+  ## Called by planor.factors (internal function)
+  ## ARGUMENTS
   ##  factors : an object of class 'designfactors'
   ##  hierarchy : a formula or a list of formulae to indicate hierarchy
   ##              relationships between factors
-  ## OUTPUT:
+  ## RETURN
   ##  an object of class 'designfactors'
   ## DETAILS:
   ##  This is mainly a function to be used within other functions. It can
   ##  be used to create or renew hierarchy relationships in a 'designfactors'
   ##  object.
-  ## EXAMPLES:
+  ## EXAMPLES
   ##  F4v6 <- planor.factors( factors=LETTERS[1:4], nlevels=rep(6,4))
-  ##  planor.hierarchy(F4v6, hierarchy=list(C~A, D~B ))
-
+  ##  planor.hierarchy(F4v6, hierarchy=list(C~A, D~B )) # internal
+## -----------------------------------------------------------
   FACT.names <- rownames(factors@fact.info)
   FACT.N <- length(FACT.names)
   if(is.null(hierarchy)){
@@ -934,20 +906,20 @@ planor.hierarchy <- function(factors, hierarchy=NULL){
 planor.pseudofactors <- function(factors){
     ## Calculates and stores information on the pseudofactor decomposition
     ## of the factors within a 'designfactors' object
-    ## ARGUMENTS:
+    ## ARGUMENTS
     ##  factors : an object of class 'designfactors'
-    ## OUTPUT:
+    ## RETURN
     ##  the 'designfactors' object with the pseudofactors slot completed or updated
-    ## DETAILS:
+    ## DETAILS
     ##  This is mainly a function to be used within other functions. It should
     ##  be ran for updating each time a 'designfactors' object is modified.
-    ## EXAMPLES:
+    ## EXAMPLES
     ##  F2 <- planor.factors( factors=c(LETTERS[1:4], "block"), nlevels=c(6,6,4,2,6) )
     ##  M2 <- planor.model( model=~block+(A+B+C+D)^2, estimate=~A+B+C+D )
     ##  F2h <- planor.harmonize(factors=F2[,1:5], model=M2, base=~A+B+D)
-    ##  attributes(planor.pseudofactors(F2h))
+    ##  attributes(planor.pseudofactors(F2h)) # internal
 
-    ##
+    ## ---------------------------------------------------------------
     fact.info <- factors@fact.info
     FACT.N <- nrow(fact.info)
     ## prime decompositions
@@ -979,60 +951,53 @@ planor.pseudofactors <- function(factors){
     return(factors)
 }
 ##---------------------------------------------------------------------------
-# "planor.harmonize"  help description in roxygen syntax
-#' Harmonize the factors originating from a list of factors, a list of models, and a list of basic factors
-#'
-#' @name   planor.harmonize
-#' @aliases  planor.harmonize
-#' @title Harmonize the factors
-#'   @param factors  \code{factors} can be of 2 types:
-#' either,  an object of class \code{\linkS4class{designfactors}} (typically an output
-#'               from \code{\link{planor.factors}}),
-#' or a character vector of factor names.
-#' In this last case, the arguments \code{nlevels}, \code{ordered}, \code{hierarchy} can also be set.
-#'   @param nlevels  a vector of level numbers for each factor name.
-#' Ignored if \code{factors} is an object of class \code{\linkS4class{designfactors}}.
-#'   @param ordered   an additive model formula to indicate the ordered factors
-#' Ignored if \code{factors} is an object of class \code{\linkS4class{designfactors}}.
-#'   @param hierarchy   a formula or a list of formulae to indicate hierarchy relationships between factors
-#' Ignored if \code{factors} is an object of class \code{\linkS4class{designfactors}}.
-#' @param model either a list of model-estimate pairs of formulae, typically an output
-#'               from \code{\link{planor.model}}, or
-#'  the   formula of the main model. In this last case, the arguments
-#' \code{estimate} and \code{listofmodels} can also be set.
-#'   @param estimate  if \code{model} is a formula,
-#' optional formula specifying the factorial terms to estimate;
-#'               if missing, it is considered that all model terms have to be
-#'               estimated.
-#' Ignored if \code{model} is a list.
-#'   @param listofmodels  if \code{model} is a formula,
-#' list of c(model, estimate) pairs, where model and estimate are
-#'              formulae; using several pairs allows more flexibility in the design
-#'              constraints  (see Kobilinsky, 2005); estimate is optional.
-#' Ignored if \code{model} is a list.
-#'   @param  base an optional formula to specify the basic factors - these factors  must belong to the factors argument
-#' @return
-#'   An object of class \code{\linkS4class{designfactors}} very similar to \code{factors}, but with two additional columns in slots
-#'  \code{fact.info} and \code{pseudo.info}:
-#'
-#'  - \code{model} (logical, TRUE for factors present in some formula)
-#'
-#'  - \code{basic} (logical, TRUE for basic factors)
-#' @note
-#'     This function is essentially a check that the factors in all three arguments
-#'     are coherent, even though it performs some additional work.
-#'     The function stops if it detects a model or basic factor that is absent from
-#'     \code{factors}. This is because the number of levels of such a
-#'     factor is unknown and so the design search cannot proceed.
-#'     Besides, the function eliminates the factors that do appear neither in
-#'     \code{model} nor in \code{base} and it reorders the factors by putting first the basic  ones.
-#' @examples
-#'     F2 <- planor.factors( factors=c(LETTERS[1:4], "block"), nlevels=c(6,6,4,2,6) )
-#'     M2 <- planor.model( model=~block+(A+B+C+D)^2, estimate=~A+B+C+D )
-#'     planor.harmonize(factors=F2[,1:5], model=M2,base=~A+B+D)
-#' @keywords design
-#' @export
-# End "planor.harmonize" help description in roxygen syntax
+# "planor.harmonize"  
+# Harmonize the factors originating from a list of factors, a list of models, and a list of basic factors
+# ARGUMENTS
+#  - factors: can be of 2 types:
+# either,  an object of class 'designfactors' (typically an output
+#               from 'planor.factors'),
+# or a character vector of factor names.
+# In this last case, the arguments 'nlevels', 'ordered', 'hierarchy' can also be set.
+#   - nlevels:  a vector of level numbers for each factor name.
+# Ignored if 'factors' is an object of class 'designfactors'.
+#   - ordered:   an additive model formula to indicate the ordered factors
+# Ignored if 'factors' is an object of class 'designfactors'.
+#   - hierarchy:   a formula or a list of formulae to indicate hierarchy relationships between factors
+# Ignored if 'factors' is an object of class 'designfactors'.
+# - model: either a list of model-estimate pairs of formulae, typically an output
+#               from 'planor.model', or
+#  the   formula of the main model. In this last case, the arguments
+# 'estimate' and 'listofmodels' can also be set.
+#   - estimate:  if 'model' is a formula,
+# optional formula specifying the factorial terms to estimate;
+#               if missing, it is considered that all model terms have to be
+#               estimated.
+# Ignored if 'model' is a list.
+#   - listofmodels:  if 'model' is a formula,
+# list of c(model, estimate) pairs, where model and estimate are
+#              formulae; using several pairs allows more flexibility in the design
+#              constraints  (see Kobilinsky, 2005); estimate is optional.
+# Ignored if 'model' is a list.
+#   -  base: an optional formula to specify the basic factors. These factors  must belong to the factors argument
+# RETURN
+#   An object of class 'designfactors' very similar to 'factors', but with two additional columns in slots  'fact.info' and 'pseudo.info':
+#
+#  - 'model' (logical, TRUE for factors present in some formula)
+#
+#  - 'basic' (logical, TRUE for basic factors)
+# NOTE
+#     This function is essentially a check that the factors in all three arguments
+#     are coherent, even though it performs some additional work.
+#     The function stops if it detects a model or basic factor that is absent from
+#     'factors'. This is because the number of levels of such a
+#     factor is unknown and so the design search cannot proceed.
+#     Besides, the function eliminates the factors that do appear neither in
+#     'model' nor in 'base' and it reorders the factors by putting first the basic  ones.
+# EXAMPLES
+#     F2 <- planor.factors( factors=c(LETTERS[1:4], "block"), nlevels=c(6,6,4,2,6) )
+#     M2 <- planor.model( model=~block+(A+B+C+D)^2, estimate=~A+B+C+D )
+#     planor.harmonize(factors=F2[,1:5], model=M2,base=~A+B+D)
 # -----------------------------------------------------
 planor.harmonize <- function(
                              ## arguments for planor.factors
@@ -1057,10 +1022,10 @@ planor.harmonize <- function(
   ## Names of the factors in the 'factors' argument
   factors.names <- rownames(factors@fact.info)
   ## Names of the factors in the 'base' argument
-  ## HM, 25/06/10 : to manage the case when base is NULL
+  
   if(is.null(base)) base.names <- vector(mode="character",length=0)
   else base.names <- attr(terms(base),"term.labels")
-  ## HM, 25/06/10 : END
+  
   ## Names of the factors in the model argument
   ## remark: the names are searched for only in the right side of the formulae
   model.names <- vector("character",0)
@@ -1099,37 +1064,38 @@ planor.harmonize <- function(
   factors@fact.info$basic <- (factors.type == 0) | (factors.type == 2)
   ## Keep only the factors of type 0, 1, or 2
     factors <- factors[ factors.type < 3 ]
-  ## HM, 25/06/10 : to manage the case when base is NULL
+  
   ## Re-order to put basic factors first
   if(! is.null(base)){
     is.basic <- factors@fact.info$basic
-    ## Application de la m?thode "bind" de designfactors
+    ## Application of the method "bind" of designfactors
     if(!all(is.basic)){
       factors <- bind( factors[is.basic], factors[!is.basic] )
     }
   }
-  ## HM, 25/06/10 : END
+  
 
   return(factors)
 }
 ##---------------------------------------------------------------------------
 planor.modelterms <- function(modlist){
-    ## Creates the 0-1 matrix pairs of model and estimate terms
-    ## ARGUMENTS:
+    ## Creates the 0-1 matrix pairs of model and estimate terms.
+    ## Internal function
+    ## ARGUMENTS
     ##  modlist: list of c(model, estimate) pairs, where model and estimate are
     ##           formulae; typically, an output from planor.model
-    ## OUTPUT:
+    ## RETURN
     ##  a list of c(model, estimate) pairs,
     ##  where model and estimate are 0-1 matrices indexed by factors in rows and
     ##  factorial terms in columns
-    ## DETAILS:
+    ## DETAILS
     ##  the factors indexing rows are those appearing in the model and estimate formulae
-    ## EXAMPLES:
-    ##  modelexample <- planor.model(~A+B+C+D+A:B,~A+B+C+D, modlist=list(c(~E+F,~E)))
+    ## EXAMPLES
+    ##  modelexample <- planor.model(~A+B+C+D+A:B,~A+B+C+D)
     ##  planor.modelterms(modelexample)
     ##  M2 <- planor.model( model=~block+(A+B+C+D)^2, estimate=~A+B+C+D )
     ##  planor.modelterms(M2)
-
+  ## ------------------------------------------------------
 
     modmat <- vector("list", length=length(modlist))
     for(i in seq_along(modlist)){
@@ -1197,16 +1163,18 @@ planor.modelterms <- function(modlist){
 #---------------------------------------------------------------------------
 planor.ineligibleterms <- function(modmat){
     ## Calculates the ineligible factorial terms of a planor-type model
-    ## ARGUMENTS:
+    ## Internal function
+    ## ARGUMENTS
     ##  modmat: a list of model-estimate pairs of 0-1 matrices, typically an output
     ##         from planor.modelterms
-    ## OUTPUT:
+    ## RETURN
     ##  A 0-1 Big matrix with each row associated with a factor and each column with
     ##  an ineligible factorial term;
     ## EXAMPLE
     ##  M2 <- planor.model( model=~block+(A+B+C+D)^2, estimate=~A+B+C+D )
     ##  M2terms <- planor.modelterms(M2)
-    ##  planor.ineligibleterms(M2terms)
+    ##  print(planor.ineligibleterms(M2terms)) # internal
+  ## --------------------------------------------------------
 
     LIBtf <- c()
     for(i in seq_along(modmat)){
@@ -1220,7 +1188,7 @@ planor.ineligibleterms <- function(modmat){
     ## all levels of each factor will be represented in the designs,
     ## whereas it was optional in the APL PLANOR
   
-    # b.ineligible <- NULL
+  
   
     include.all.factors <- diag(Ntf)
     b.ineligible <- as.big.matrix( include.all.factors, type="short" )
@@ -1268,14 +1236,15 @@ planor.ineligibleterms <- function(modmat){
     rownames(b.ineligible) <- LIBtf
 
     return(b.ineligible)
-} ## fin planor.ineligibleterms
+} ## end planor.ineligibleterms
 ##---------------------------------------------------------------------------
 planor.ineligibleset <- function(factors, b.ineligible){
     ## Construction of the set of ineligible pseudofactorial effects from a
     ## set of ineligible model terms.
+  ## Internal function
     ## ARGUMENTS
-    ##  factors: a 'designfactors' object
-    ##  ineligible: an output from planor.ineligibleterms, that is, a 0-1 matrix
+    ##  - factors: a 'designfactors' object
+    ##  - ineligible: an output from planor.ineligibleterms, that is, a 0-1 matrix
     ##              with one row per factor and one column per ineligible term
     ## a big.matrix
     ## OUTPUT
@@ -1297,7 +1266,8 @@ planor.ineligibleset <- function(factors, b.ineligible){
     ##  Fset <- planor.factors( factors=c(LETTERS[1:3]), nlevels=c(6,6,4) )
     ##  Iset <- cbind(diag(3), c(1,1,1))
     ##  rownames(Iset) <- c("A","B","C")
-    ##  planor.ineligibleset(Fset, Iset)
+    ##  print(planor.ineligibleset(Fset, Iset)) # internal
+  ## --------------------------------------------------------------
 
     ## restriction to the factors present in the rows of 'ineligible'
     F.select <- names(factors) %in% rownames(b.ineligible)
@@ -1455,28 +1425,29 @@ planor.ineligibleset <- function(factors, b.ineligible){
     rownames(b.eiTr) <- rownames(PSEUDO.info)
 
     return(b.eiTr)
-} ## fin planor.ineligibleset
+} ## end planor.ineligibleset
 ##---------------------------------------------------------------------------
 planor.designkey.basep <- function(p, r, b.ineligible,
                                    hierarchy, predefined=NULL,
                                    max.sol=1, randomsearch=FALSE,
 				   verbose=FALSE){
   ## Searches for a design key matrix when all s treatment factors are at p levels
-  ## ARGUMENTS:
-  ##  p: a prime number
-  ##  r: integer (the power of p that gives the number of units)
+  ## Internal function
+  ## ARGUMENTS
+  ##  - p: a prime number
+  ##  - r: integer (the power of p that gives the number of units)
   ##  ineligible: a 0-1 matrix of ineligible (pseudo-)factorial terms
   ## a big.matrix
-  ##  hierarchy: NULL or a matrix 0-p
-  ##  predefined: if specified, a (r x f) matrix of prespecified defining
+  ##  - hierarchy: NULL or a matrix 0-p
+  ##  - predefined: if specified, a (r x f) matrix of prespecified defining
   ##              relationships (f smaller than s)
-  ##  max.sol: maximum number of solutions before exit
-  ##  randomsearch: if TRUE, the order of admissible elements is randomised
+  ##  - max.sol: maximum number of solutions before exit
+  ##  - randomsearch: if TRUE, the order of admissible elements is randomised
   ##                at each new visit forward to j
-  ##  verbose: logical TRUE to trace the execution
-  ## OUTPUT:
+  ##  - verbose: logical TRUE to trace the execution
+  ## RETURN
   ##  a list of design key matrices of size r x s with elements in Zp
-
+## -----------------------------------------------------------------
   ## PRELIMINARIES: (a) ineligible characters
   s <- nrow(b.ineligible)
   ## turn the ineligible factorial terms into ineligible p-group characters
@@ -1537,12 +1508,12 @@ planor.designkey.basep <- function(p, r, b.ineligible,
     b.aux = multBigmod(b.PhiStar, b.ineligible, p)
     check <- !col0Big(b.aux)
     if(check){
-      ## check est 1 si une col est entierement nulle
+      ## check is 1 when a column is entirely null
       if(verbose){ cat("  no need (all columns are predefined)\n") }
       return(list(matrix(b.PhiStar[,], ncol=ncol(b.PhiStar))))
     }
     else stop("Design key completely predefined but inadequate. Check the base factors.")
-  } ## fin (s == f)
+  } ## end (s == f)
   if(verbose){
     if((s-f)==1){ cat("  => search for column",s,".\n") }
     else{ cat("  => search for columns",f+1,"to",s,"\n") }
@@ -1721,7 +1692,7 @@ planor.designkey.basep <- function(p, r, b.ineligible,
   cat("The search is closed: ",
       length(PhiStar.solution), "solutions found \n")
   return(PhiStar.solution)
-} ## fin planor.designkey.basep
+} ## end planor.designkey.basep
 ##---------------------------------------------------------------------------
 planor.designkey.recursive <- function(k,nb.sol,PVuqf,NPuqf,
                                        b.INELIGtpf,NIVtpf,
@@ -1729,8 +1700,9 @@ planor.designkey.recursive <- function(k,nb.sol,PVuqf,NPuqf,
                                        max.sol=1){
   ## Organises the loop over primes (Sylow subgroups) to calculate
   ## the design key submatrices
+  ## Internal function
   
-  ## ARGUMENTS:
+  ## ARGUMENTS
   ##  k: index of the prime number to be treated
   ##  nb.sol: current number of solutions found
   ##  PVuqf: vector of the (units) prime numbers
@@ -1738,11 +1710,13 @@ planor.designkey.recursive <- function(k,nb.sol,PVuqf,NPuqf,
   ##  b.INELIGtpf: ineligible pseudofactorial terms
   ##  NIVtpf: vector of the pseudofactors' numbers of levels
   ##  b.INELIGuqf: correspondence matrix between ineligible pseudofactorial terms and primes
+
   ##  PREDEF: predefined columns of the key matrices (listed by primes)
   ##  max.sol: maximum number of solutions before exit
-
-  ## OUTPUT
+  ## RETURN
   ##  a list of design keys, where "design key" means a list with one key matrix per prime
+## -------------------------------------------------------------
+
   Nuqf <- length(PVuqf)
   p <- PVuqf[k]
   r <- NPuqf[k]
@@ -1896,7 +1870,7 @@ planor.designkey.recursive <- function(k,nb.sol,PVuqf,NPuqf,
                                           " solutions have been found\n") )
   }
   return(PhiStar.solutions)
-} ## fin planor.designkey.recursive
+} ## end planor.designkey.recursive
 ##---------------------------------------------------------------------------
 ## 3. SECONDARY CALCULUS FUNCTIONS
 ##---------------------------------------------------------------------------
@@ -1905,32 +1879,33 @@ planor.kernelcheck.basep <- function(b.PhiStar, b.admissible, b.IneligibleSet, p
     ## the kernel of cbind(PhiStar, admissible[,k]), with PhiStar a p-morphism
     ## matrix and 'admissible' a set of n candidates for making the next
     ## column of PhiStar.
-    ## ARGUMENTS:
-    ##  b.PhiStar: a (r x s) matrix of integers modulo p
+  ## Internal function
+    ## ARGUMENTS
+    ##  - b.PhiStar: a (r x s) matrix of integers modulo p
     ##     (short int big.matrix)
-    ##  b.admissible: a (r x n) matrix of integers modulo p
+    ##  - b.admissible: a (r x n) matrix of integers modulo p
     ##     (short int big.matrix)
-    ##  b.IneligibleSet: a (s x N) matrix of integers modulo p
+    ##  - b.IneligibleSet: a (s x N) matrix of integers modulo p
     ##     (short int big.matrix)
-    ##  p: a prime number
-    ## OUTPUT:
+    ##  - p: a prime number
+    ## RETURN
     ##  a logical vector of length n
-    ## DETAILS:
+    ## DETAILS
     ##  for each column A_k of the matrix 'b.admissible', the function evaluates
     ##  the (r x (s+1)) matrix (PhiStar|A_k). It returns TRUE if no vector
     ##  (I_j'|1)' belongs to the kernel of (PhiStar|A_k), where I_j is the jth column
     ##  of 'IneligibleSet'
-
+## --------------------------------------------------------
     r <- nrow(b.admissible)
     nb.admissible <- ncol(b.admissible)
     nb.ineligible <- ncol(b.IneligibleSet)
-    ## +++++++++++++++++++++++++++++++++++++++++++++++++++
-    ## NOTE: le modulo des nbres <0 est diff?rent en R et C
-    ## (-15)%%300 = -15 en C, et est 285 en R
-    ## On adopte la solution R
-    ## +++++++++++++++++++++++++++++++++++++++++++++++++++
+    
+    
+    
+    
+    
     b.ImagesIS <- multBigmod(b.PhiStar, b.IneligibleSet, p, signe=-1)
-    test <- rep(2, nb.admissible) ## init par n'importe quelle valeur non NA
+    test <- rep(2, nb.admissible) ## init by any value different from NA
     test <- as.logical(.Call("PLANORloopkernelcheck",
                              as.integer(r),
                              as.integer(nb.admissible),
@@ -1940,20 +1915,21 @@ planor.kernelcheck.basep <- function(b.PhiStar, b.admissible, b.IneligibleSet, p
                              test=as.integer(test)))
 
     return(test)
-} ## fin planor.kernelcheck.basep
+} ## end planor.kernelcheck.basep
 ##---------------------------------------------------------------------------
 
 weightorder.basep <- function(b.mat,p,factnum,blocklog){
   ## Reordering of matrix columns taking account of their weights and trt/block type
-  ## ARGUMENTS:
-  ##  b.mat: Big matrix of pseudofactorial effects
-  ##  p: a prime
-  ##  factnum: a numeric factor to identify rows of mat associated
+  ## Internal function
+  ## ARGUMENTS
+  ##  - b.mat: Big matrix of pseudofactorial effects
+  ##  - p: a prime
+  ##  - factnum: a numeric factor to identify rows of mat associated
   ##           with the same factor
-  ##  blocklog: a logical vector to identify rows of mat associated
+  ##  - blocklog: a logical vector to identify rows of mat associated
   ##           with a block factor
   ##
-  ## OUTPUT:
+  ## RETURN
   ##  the same matrix with columns reordered, and weights given as attributes.
   ##  For each factorial term T confounded with the mean (columns of b.mat),
   ##  the attributes are:
@@ -1961,6 +1937,7 @@ weightorder.basep <- function(b.mat,p,factnum,blocklog){
   ##   $trt.pseudoweight : number of distinct treatment pseudofactors in T
   ##   $blc.weight : number of distinct block factors in T
   ##   $blc.pseudoweight : number of distinct block pseudofactors in T
+  ## -----------------------------------------------------------------
   nr <- nrow(b.mat)
   nc <- ncol(b.mat)
   labels <- rownames(b.mat)
@@ -2023,8 +2000,8 @@ weightorder.basep <- function(b.mat,p,factnum,blocklog){
                    retour1$weight, retour2$weight,
                    retour1$binrank, retour1$modrank)
 
-  ## Les argu modifi?s en sortie de PLANORweightorder, sont:
-  ## mat, weight, pseudoweight, binrank, modrank
+  
+  
 
   b.mat <- exchangeColBig(b.mat, NULL, reorder)
 
@@ -2035,7 +2012,7 @@ weightorder.basep <- function(b.mat,p,factnum,blocklog){
   rownames(b.mat) <- labels
 
   return(b.mat)
-} ## fin weightorder.basep
+} ## end weightorder.basep
 ##---------------------------------------------------------------------------
 ## Preliminary printing conventions
 
@@ -2054,24 +2031,16 @@ wprofile <- function(x){
 ## 4. OUTPUT FUNCTIONS
 ##---------------------------------------------------------------------------
 #---------------------------------------------------------------------------
-# "planor.design.levels" help description in roxygen syntax
-#' Generate a full factorial n1 x n2 x ... x ns design with columns
-#' considered as factors
-#'
-#' @title Generate a full factorial design
-#' @aliases planor.design,numeric-method
-#' @name planor.design.levels
-#' @aliases planor.design.levels
-#' @param key a vector of integers of length s
-#' @param start  an integer from where to start the series of symbols
-#' @return an integer matrix with prod(n) rows and s columns giving all
-#'  combinations along the rows, in lexicographic order
-#' @examples
-#' planor.design.levels(rep(2,3))
-#' @keywords design
-#' @author H. Monod, and al.
-#' @export
-# End "planor.design.levels" help description in roxygen syntax
+# "planor.design.levels"
+# Generate a full factorial n1 x n2 x ... x ns design with columns
+# considered as factors
+# ARGUMENTS
+# - key a vector of integers of length s
+# - start  an integer from where to start the series of symbols
+# RETURN an integer matrix with prod(n) rows and s columns giving all
+#  combinations along the rows, in lexicographic order
+# Examples
+# planor.design.levels(rep(2,3))
 # --------------------------------------
 
 planor.design.levels <- function(key,start=1){
@@ -2084,24 +2053,17 @@ planor.design.levels <- function(key,start=1){
 }
 
 # --------------------------------------
-# "planor.design" method help description in roxygen syntax
+# "planor.design" method for "numeric"
 # --------------------------------------
-#' Method planor.design for "numeric"
-#'
-#' @title  Method planor.design for "numeric"
-#'
-#' @name planor.design-method.numeric
-#' @aliases planor.design-method.numeric
 setMethod("planor.design", signature(key="numeric"),
           definition=planor.design.levels)
 
 
 ##--------------------------------------------------------------------------
-# printgmat : Fonction utilitaire
-# Impression d'une matrice
-# Pour limiter la taille des IP,
-# on ?crit au maximum que les maxprint premi?res
-# lignes et colonnes des matrices
+# printgmat : utility function
+# Display a matrix.
+# To bound the display amount,  we print the first maxprint first
+# lines and columns, only. 
 ##--------------------------------------------------------------------------
 printgmat <- function(mat, maxprint=getOption("planor.max.print", default=20)) {
   prnrow <- min(nrow(mat), maxprint)
@@ -2116,5 +2078,5 @@ printgmat <- function(mat, maxprint=getOption("planor.max.print", default=20)) {
   if ( prncol < ncol(mat))
     cat(paste("\nThe first",  prncol, "columns on a total of", ncol(mat),"\n"))
   cat("\n")
-} ##fin printgmat
+} ## end printgmat
 ## ------------------------------------

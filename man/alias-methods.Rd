@@ -50,7 +50,7 @@ matrix with one row per solution for prime p. The columns
 give (i) the number of unaliased treatment effecs; (ii) the number of
 mutually aliased treatment effects;  (iii) the number of treatment effects
 aliased with block effects.
-\item The method is not yet implemented on objects of class
+\item The method is NOT YET IMPLEMENTED on objects of class
 \code{\linkS4class{listofdesignkeys}}.
  }
 }

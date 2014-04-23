@@ -1,15 +1,15 @@
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++
 # FUNCTIONS to manipulate big.matrices
-# modBig: big %%p
-# cbindBig = cbind(big1, big2)
-# rbindBig = rbind(big1, big2)
-# multBigmod = (signe*big1  %*% big2) %%p
-# multBig: (big1  %*% big2)
-# applyBig(Big, dim, fun)
-# col0Big: 1 if one column at least is entirely equal to zero
-# exchangeColBig: res[,indT] <- signe*big[,indS] and return res
-# crossingBig = crossing(n,start=1) return a big.matrix
+# modBig(big, p) = big %%p
+# cbindBig(big1, big2) = cbind(big1, big2)
+# rbindBig(big1, big2) = rbind(big1, big2)
+# multBigmod(big1, big2, p, signe=+1) = (signe*big1  %*% big2) %%p
+# multBig(big1, big2) = (big1  %*% big2)
+# applyBig(big, dimension, fun)= apply(big, dimension, fun)
+# col0Big(big) = 1 if one column at least is entirely equal to zero
+# exchangeColBig(big, indT, indS, signe=+1) = res[,indT] <- signe*big[,indS] and return res
+# crossingBig(n,start=1) = crossing(n,start=1) return a big.matrix
 # converttfromBig.basep= converttfrom.basep
 # NOTE: the dimensions of the matrices in argument
 #   are not verified (these functions are internal functions)
@@ -25,7 +25,7 @@ modBig <- function(big, p)
           as.integer(p),
           res@address)
     return(res)
-  } # fin modBig
+  } # end modBig
 # ----------------------------------------------------
 cbindBig <- function(big1, big2, deparse.level=1)
   {
@@ -33,17 +33,17 @@ cbindBig <- function(big1, big2, deparse.level=1)
     # big1 may be NULL
     if (is.null(big1)) {
       ncol1 <- 0
-      address1 <- big2@address # adresse quelconque: sera ignorée
+      address1 <- big2@address # any address: will be ignored
     }    else {
 ##     if (VERIF) {
 ##        if (nrow(big1) != nrow(big2))
 ##          stop("Error in cbindBig: the matrices should have the same number of rows")
-##      } # fin VERIF
+##      } # end VERIF
       ncol1 <- ncol(big1)
       address1 <- big1@address
     }
      ret <- big.matrix(nrow(big2), (ncol1+ncol(big2)), type="short",
-                      init=111) # init a n'importe quoi
+                      init=111) # init with anything
     .Call("PLANORcbindBig", address1, big2@address,
           ret@address,
           as.integer(nrow(big2)), as.integer(ncol1),
@@ -55,9 +55,9 @@ cbindBig <- function(big1, big2, deparse.level=1)
           rownames(ret) <- rownames(big1)
       else
         rownames(ret) <- rownames(big2)
-    } # fin deparse
+    } # end deparse
      return(ret)
-  } # fin cbindBig
+  } # end cbindBig
 
 #---------------------------------------------------------------------------
 rbindBig <- function(big1, big2, deparse.level=1)
@@ -66,7 +66,7 @@ rbindBig <- function(big1, big2, deparse.level=1)
 ##      if (VERIF) {
 ##      if (ncol(big1) != ncol(big2))
 ##        stop("Error in rbindBig: the matrices should have the same number of cols")
-##      } # fin VERIF
+##      } # end VERIF
 
       ncolb <- ncol(big1)
       nrow1 <- nrow(big1)
@@ -84,9 +84,9 @@ rbindBig <- function(big1, big2, deparse.level=1)
         colnames(ret) <- colnames(big1)
       else
         colnames(ret) <- colnames(big2)
-    } # fin deparse
+    } # end deparse
      return(ret)
-  } # fin rbindBig
+  } # end rbindBig
 
 
 #---------------------------------------------------------------------------
@@ -96,7 +96,7 @@ rbind1Big <- function(big1, mat2, deparse.level=1)
 ##      if (VERIF) {
 ##     if (ncol(big1) != ncol(mat2))
 ##        stop("Error in rbindBig: the matrices should have the same number of cols")
-##      } # fin VERIF
+##      } # end VERIF
 
       ncolb <- ncol(big1)
       nrow1 <- nrow(big1)
@@ -114,9 +114,9 @@ rbind1Big <- function(big1, mat2, deparse.level=1)
         colnames(ret) <- colnames(big1)
       else
         colnames(ret) <- colnames(mat2)
-    } # fin deparse
+    } # end deparse
      return(ret)
-  } # fin rbind1Big
+  } # end rbind1Big
 
 #---------------------------------------------------------------------------
 
@@ -124,10 +124,10 @@ gotconvertintoBig.basep <- function (x, p) {
   # Conversion of an integer vector x into base p
   # The coefficients are ordered by increasing powers of p
   # Called by tconvertintoBig.basep
-  # ARGUMENTS:
-  #  x an integer variate
-  #  p a prime
-  # OUTPUT:
+  # ARGUMENTS
+  #  - x: an integer variate
+  #  - p: a prime
+  # RETURN
   #   a big.matrix with length(x) columns
   #       and the adequate number of rows
     l <- big.matrix(length(go1convertinto.basep(max(x),p)),
@@ -138,24 +138,24 @@ gotconvertintoBig.basep <- function (x, p) {
       l[ seq_along(dec.i), i ] <- dec.i
     }
     return(l)
-  } # fin gotconvertintoBig.basep
+  } # end gotconvertintoBig.basep
 
 
 #---------------------------------------------------------------------------
 tconvertintoBig.basep <- function (x, p) {
   # Conversion of an integer or integer vector x into base p
   # The coefficients are ordered by increasing powers of p
-  # ARGUMENTS:
-  #  x an integer or an integer variate
-  #  p a prime
-  # OUTPUT:
+  # ARGUMENTS
+  #  - x: an integer or an integer variate
+  #  - p: a prime
+  # RETURN
   #  if x is an integer, a big.matrix with 1 column of elements in Zp
   #  if x is a vector, a big.matrix matrix with length(x) columns
   #       and the adequate number of rows
-  # NOTE:
+  # NOTE
   #  return
   # t(convertinto.basep(x,p))  into a big.matrix
-
+  # ----------------------------------------------
 
   if (length(x) > 1)
     return(gotconvertintoBig.basep(x, p))
@@ -166,13 +166,13 @@ tconvertintoBig.basep <- function (x, p) {
     return(b.ret)
   }
 
-} # fin tconvertintoBig.basep
+} # end tconvertintoBig.basep
 
 #---------------------------------------------------------------------------
 multBigmod <- function(big1, big2, p, signe=+1)
   {
     res <- big.matrix(nrow(big1), ncol(big2), type="short")
-    # big2 peut ne pas être une big
+    # big2 may be a no big matrix
     if (is.big.matrix(big2)) {
     .Call("PLANORmultBigmod",
        big1@address,    big2@address,
@@ -195,7 +195,7 @@ multBigmod <- function(big1, big2, p, signe=+1)
   }
     dimnames(res) <- list(rownames(big1), colnames(big2))
     return(res)
-  } # fin multBigmod
+  } # end multBigmod
 # --------------------------------------------------------
 #---------------------------------------------------------------------------
 multBig <- function(big1, big2)
@@ -210,16 +210,16 @@ multBig <- function(big1, big2)
           res@address)
     dimnames(res) <- list(rownames(big1), colnames(big2))
     return(res)
-  } # fin multBig
+  } # end multBig
 
 # --------------------------------------------------------
 applyBig <- function(big, dimension, fun)
   {
-    # NOTE AB: en attendant que apply soit dans la nouvelle version de bigmemory
-    # (dixit Jay Emerson le 29/10/09)
+    
+    
     z <- matrix(big[,], ncol=ncol(big))
     return(apply(z, dimension, fun))
-  } # fin applyBig
+  } # end applyBig
 # --------------------------------------------------------
 col0Big <- function(big)
   {
@@ -248,7 +248,7 @@ exchangeColBig <- function(big, indT, indS, signe=+1)
       }
       else
         indT <- seq_along(indS)
-    } # fin null
+    } # end null
 
     res <- big.matrix(nrow(big), length(indT), type="short")
     res[,indT] <- signe*big[,indS]
@@ -258,21 +258,22 @@ exchangeColBig <- function(big, indT, indS, signe=+1)
       rownames(res) <- rownames(big)
 
     return(res)
-  } # fin exchangeColBig
+  } # end exchangeColBig
 # ----------------------------------------------------------
 crossingBig <- function(n,start=1){
   # Version big.matrix of crossing
   # Generates all n1 x n2 x ... x ns combinations of size s with n1,...,ns integers
-  # ARGUMENTS:
-  #  n: a vector of positive integers of length s
-  #  start: integer from where to start the series of integers
-  # OUTPUT:
+  # ARGUMENTS
+  #  - n: a vector of positive integers of length s
+  #  - start: integer from where to start the series of integers
+  # RETURN
   #  an integer matrix with prod(n) rows and s columns giving all
   #  combinations along the rows, in lexicographic order;
   # big.matrix
-  # EXAMPLE:
+  # EXAMPLE
   #  a <- crossingBig(rep(2,3))
   # print(a)
+  # -----------------------------------------------
 
   N <- prod(n)
   s <- length(n)
@@ -287,7 +288,7 @@ crossingBig <- function(n,start=1){
       b.crosses[,s-i+1] <- rep( rep( motif, repet1 ), repet2 )
     }
   return(b.crosses)
-} # fin crossingBig
+} # end crossingBig
 #---------------------------------------------------------------------------
 converttfromBig.basep <- function (x, p) {
   # Version of convertfrom where the argument x, when it is a matrix,
@@ -296,9 +297,9 @@ converttfromBig.basep <- function (x, p) {
   # EXAMPLE
   #  vec3 <- convertinto.basep(1:10, 3)
   #  aref <- convertfrom.basep( vec3, 3 )
-  # vv=as.big.matrix(t(vec3), type="short")  # no matter the type
-  # a<- converttfromBig.basep(vv,3)
-  # all.equal(aref,a)
+  #  vv=as.big.matrix(t(vec3), type="short")  # no matter the type
+  #  a<- converttfromBig.basep(vv,3)
+  #  all.equal(aref,a)
   
   
   

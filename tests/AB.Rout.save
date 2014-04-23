@@ -25,7 +25,7 @@ Loading required package: BH
 bigmemory >= 4.0 is a major revision since 3.1.2; please see packages
 biganalytics and and bigtabulate and http://www.bigmemory.org for more information.
 
-Loaded planor 0.1.10
+Loaded planor 0.1.12
 
 > cat("\n")
 
@@ -97,4 +97,4 @@ The search is closed: max.sol =  1 solution(s) found
 > 
 > proc.time()
    user  system elapsed 
- 20.966   1.204  22.292 
+ 21.299   1.631  23.034 

@@ -1,13 +1,15 @@
 #---------------------------------------------------------------------------
 # CLASS "planordesign"
-#---------------------------------------------------------------------------
-# planordesign : an S4 class, typically an output from planor.design.designkey
-#         design: a dataframe containing the final design
-#         factors: the 'designfactors' object that defines the factors
-#         model: the modlist containing the model and estimate specifications
-# designkey, nunits, recursive: data extracted from the  designkey
+#  S4 class, typically an output from planor.design.designkey
+# SLOTS
+#    - design: a dataframe containing the final design
+#    - factors: the 'designfactors' object that defines the factors
+#    - model: list containing the model and estimate specifications
+#    - designkey, nunits, recursive:
+# all these slots are data extracted from the  designkey
 # from which the object has been built
-# Objects of this class are created by calls to planor.design.designkey
+# Objects of this class are created by calls to planor.design
+# METHODS: getDesign, as.data.frame
 #---------------------------------------------------------------------------
 setClass("planordesign",
          representation(design="data.frame",
@@ -17,7 +19,7 @@ setClass("planordesign",
                         nunits="numeric",
                         recursive="logical"))
 ##------------------------------------------------------------------------
-## Extraction methods for "planordesign"
+## getDesign: Extraction methods for "planordesign"
 ##------------------------------------------------------------------------
 getDesign.planordesign <- function(object){return(object@design)}
 setMethod("getDesign", signature(object="planordesign"),
@@ -50,7 +52,7 @@ setMethod("[",
           })
 ##
 ##--------------------------------------------------------------------------
-#' Method as.data.frame for "planordesign"
+# Method as.data.frame for "planordesign"
 # The data.frame is the slot 'design' of the "planordesign" object.
 # All the other slots are stored in attributes
 

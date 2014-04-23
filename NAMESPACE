@@ -26,4 +26,5 @@ exportClasses(keyring)
 exportClasses(listofkeyrings)
 exportClasses(listofdesignkeys)
 exportMethods(bind, pick, planor.design,  getDesign)
+import(biganalytics, bigmemory, conf.design, methods)
 

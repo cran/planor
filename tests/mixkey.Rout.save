@@ -27,7 +27,7 @@ Loading required package: BH
 bigmemory >= 4.0 is a major revision since 3.1.2; please see packages
 biganalytics and and bigtabulate and http://www.bigmemory.org for more information.
 
-Loaded planor 0.1.10
+Loaded planor 0.1.12
 
 > # Four treatment factors at 6, 6, 4, 2 levels and one 6-level block factor
 > # Model: block+(A+B+C+D)^2 ; Estimate: A+B+C+D\n")
@@ -282,4 +282,4 @@ nil
 > 
 > proc.time()
    user  system elapsed 
-  3.802   0.170   3.981 
+  4.970   0.304   5.285 

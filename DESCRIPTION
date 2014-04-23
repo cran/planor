@@ -1,7 +1,7 @@
 Package: planor
 Title: Generation of regular factorial designs
-Date: 2013-09-20
-Version: 0.1-10
+Date: 2014-04-23
+Version: 0.1-12
 Author: Hervé Monod, Annie Bouvier, André Kobilinsky
 Description: planor is a package dedicated to the automatic generation of regular factorial designs, including fractional designs, orthogonal block designs,
   row-column designs and split-plots.
@@ -9,7 +9,7 @@ Maintainer: Annie Bouvier <Annie.Bouvier@jouy.inra.fr>
 MailingList: planor-commits@lists.mulcyber.toulouse.inra.fr
 License: GPL (>= 2)
 Depends: methods, conf.design, biganalytics, bigmemory (>= 4.2.3)
-LinkingTo: bigmemory
+LinkingTo: bigmemory, BH
 Suggests:
 Note: a version which does not require bigmemory is available is
         available at the URL
@@ -20,7 +20,7 @@ Collate: zzz.R debug.R generic.R designfactors.R keymatrix.R keyring.R
         listofdesignkeys.R planordesign.R bigm.R makedesignkey.R
 LazyLoad: yes
 BuildVignettes: no
-Packaged: 2013-09-20 11:55:04 UTC; abouvier
+Packaged: 2014-04-23 08:58:37 UTC; abouvier
 NeedsCompilation: yes
 Repository: CRAN
-Date/Publication: 2013-09-20 14:59:44
+Date/Publication: 2014-04-23 12:49:14

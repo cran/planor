@@ -20,14 +20,15 @@
 #---------------------------------------------------------------------------
 crossing <- function(n,start=1){
   # Generates all n1 x n2 x ... x ns combinations of size s with n1,...,ns integers
-  # ARGUMENTS:
-  #  n: a vector of integers of length s
-  #  start: integer from where to start the series of integers
-  # OUTPUT:
+  # ARGUMENTS
+  # - n: a vector of integers of length s
+  # - start: integer from where to start the series of integers
+  # RETURN
   #  an integer matrix with prod(n) rows and s columns giving all
   #  combinations along the rows, in lexicographic order
-  # EXAMPLE:
-  #  crossing(rep(2,3))
+  # EXAMPLE
+  #  crossing(rep(2,3)) # Internal
+  # ----------------------------------------------------------
   N <- prod(n)
   s <- length(n)
   n <- c(n,1)
@@ -41,23 +42,24 @@ crossing <- function(n,start=1){
       crosses[,s-i+1] <- rep( rep( motif, repet1 ), repet2 )
     }
   return(crosses)
-}   # fin crossing
+}   # end crossing
 #---------------------------------------------------------------------------
 symmdiff <- function(x,y){
   # Calculates the symmetric differences between two collections Cx and Cy of
   # subsets of S, where S is a set of size n
   # cf. the Delta operation in Kobilinsky 2000, p.5
-  # ARGUMENTS:
-  #  x: a n-row 0-1 matrix, each column of which defines a subset in Cx
-  #  y: a n-row 0-1 matrix, each column of which defines a subset in Cy
-  # OUTPUT:
+  # ARGUMENTS
+  #  - x: a n-row 0-1 matrix, each column of which defines a subset in Cx
+  #  - y: a n-row 0-1 matrix, each column of which defines a subset in Cy
+  # RETURN
   #  a n-row 0-1 Big matrix with one column per distinct symmetric difference
   #  between a subset in Cx and a subset in Cy
-  # EXAMPLE:
+  # EXAMPLE: (Internal)
   #  M1 <- diag(3)
   #  M2 <- cbind( c(1,1,0), c(1,0,1) )
   #  a <-symmdiff(M1,M2)
   # print(a)
+  # -----------------------------------------------------------------
 
   Nf <- nrow(x)
   Nx <- ncol(x)
@@ -78,18 +80,18 @@ symmdiff <- function(x,y){
 #---------------------------------------------------------------------------
 cross.designs <- function(designs){
   # generates a design by crossing one, two or more subdesigns
-  # ARGUMENTS:
+  # ARGUMENTS
   #  designs: a list of design matrices
-  # OUTPUT:
+  # RETURN
   #  the new design Big  matrix;
-  # EXAMPLE:
+  # EXAMPLE
   #  pl1 <- crossing(c(2,3))
   #  colnames(pl1) <- c("A","B")
   #  pl2 <- crossing(5)
   #  colnames(pl2) <- c("C")
   #  a <- cross.designs(list(pl1,pl2))
   # print(a)
-
+# -------------------------------------------------------
 
   nrows <- unlist(lapply(designs,nrow))
   ncols <- unlist(lapply(designs,ncol))
@@ -112,7 +114,7 @@ cross.designs <- function(designs){
     }
   }
   return(b.crossdesign)
-}  # fin cross.designs
+}  # end cross.designs
 #---------------------------------------------------------------------------
 # 2. MATRIX ALGEBRA MODULO p, with p a prime
 #---------------------------------------------------------------------------
@@ -120,9 +122,11 @@ cross.designs <- function(designs){
 
 #---------------------------------------------------------------------------
 go1convertinto.basep <- function (x, p) {
-   # Conversion of an integer  into base p
-  # Called by convertinto.basep and goconvertinto.basep
- # return c(n1, n2, .. nx) such as x=n1+n2*p+n3*p**2+n4*p**3
+ # Conversion of an integer  into base p
+ # Called by convertinto.basep and goconvertinto.basep
+ # RETURN
+ # c(n1, n2, .. nx) such as x=n1+n2*p+n3*p**2+n4*p**3
+  # -------------------------------------------------
 
   if (x != round(x) || x < 0)
     return(x)
@@ -132,13 +136,12 @@ go1convertinto.basep <- function (x, p) {
     val <- c(val,newval)
   }
     return(val)
-} #fin go1convertinto.basep
+} # end go1convertinto.basep
 
 #---------------------------------------------------------------------------
 
 goconvertinto.basep <- function (x, p) {
   # called by convertinto.basep: loop when its argument is vector
-
   # Call go1convertinto.basep on  max(x) to know
   # the maximal number of columns of the result
 
@@ -147,36 +150,36 @@ goconvertinto.basep <- function (x, p) {
   
   
   
-  
+  # ----------------------------------------------------------------
     l <- matrix(0, length(x), length(go1convertinto.basep(max(x),p)))
     for(i in seq_along( x)){
       dec.i <- go1convertinto.basep(x[i],p)
       l[i, seq_along(dec.i) ] <- dec.i
     }
     return(l)
-  } # fin goconvertinto.basep
+  } # end goconvertinto.basep
 
 
 #---------------------------------------------------------------------------
 convertinto.basep <- function (x, p) {
   # Conversion of an integer or integer vector x into base p
   # The coefficients are ordered by increasing powers of p
-  # ARGUMENTS:
-  #  x an integer or an integer variate
-  #  p a prime
-  # OUTPUT:
+  # ARGUMENTS
+  #  - x: an integer or an integer variate
+  #  - p: a prime
+  # RETURN
   #  if x is an integer, a vector of elements in Zp
   #  if x is a vector, a matrix with length(x) rows
   #       and the adequate number of columns
-  # EXAMPLE:
+  # EXAMPLE
   #  convertinto.basep(1:10, 3)
-
+  # -------------------------------------------------------
 
   if (length(x) > 1)
     return(goconvertinto.basep(x, p))
   else
      return(go1convertinto.basep(x, p))
-} # fin convertinto.basep
+} # end convertinto.basep
 
 #---------------------------------------------------------------------------
 
@@ -193,12 +196,12 @@ goconvertfrom.basep <- function (x, p) {
 convertfrom.basep <- function (x, p) {
   # Conversion of integers x coded as vectors of coefficients in base p
   # to classical integers in base 10
-  # ARGUMENTS:
-  #  x: a vector of coefficients ordered by increasing p powers
+  # ARGUMENTS
+  #  - x: a vector of coefficients ordered by increasing p powers
   #     or a n-row matrix with each row interpreted as such a vector;
   #     the elements of x must be between 0 and p-1
-  #  p: a prime
-  # Output:
+  #  - p: a prime
+  # RETURN
   #  a scalar integer if x is a vector, or an integer n-vector if x is a matrix
   # EXAMPLE:
   #  vec3 <- convertinto.basep(1:10, 3)
@@ -214,7 +217,7 @@ convertfrom.basep <- function (x, p) {
 
 
 
-
+# ------------------------------------------------------------
   if (is.matrix(x)) {
     
     
@@ -233,14 +236,14 @@ convertfrom.basep <- function (x, p) {
 representative.basep <- function(b.mat,p){
   # generates the minimal set of representatives in base p
   # of the columns x of matrix mat
-  # ARGUMENTS:
-  #  mat : a 0-1 Big matrix
-  #  p : a prime
-  # OUTPUT:
+  # ARGUMENTS
+  #  - b.mat : a 0-1 Big matrix
+  #  - p : a prime
+  # RETURN
   #  a Big matrix whose columns are the minimal representatives, with 1
   #  in the last non-zero position of x and all possible combinations
   #  of 1,...,p-1 in the other non-zero positions of x
-  # EXAMPLE:
+  # EXAMPLE
   #  a <-representative.basep( as.big.matrix(c(1,0,1,1,0)), 3 )
   # print(a)
   #  a <- representative.basep( as.big.matrix(cbind( c(1,1,0),c(1,1,1) )), 3 )
@@ -267,26 +270,26 @@ representative.basep <- function(b.mat,p){
                         dimnames=dimnames(mat.j))
     b.aux[,] <- mat.j
     b.representative <- cbindBig(b.representative, b.aux)
-  } # fin j
+  } # end j
   return(modBig(b.representative,p))
-} # fin representative.basep
+} # end representative.basep
 #---------------------------------------------------------------------------
 kernelmatrix.basep <- function(mat,p){
   # Calculates a kernel basis of a p-morphism
-  # ARGUMENTS:
-  #  mat : the n x s matrix associated with the p-morphism, with elements in Zp;
-  #  p : a prime
-  # OUTPUT:
+  # ARGUMENTS
+  #  - mat : the n x s matrix associated with the p-morphism, with elements in Zp;
+  #  - p : a prime
+  # RETURN
   #  an s x q Big matrix of q independent kernel generators, with elements in Zp;
   #  if mat is a regular matrix, then the output is an s x 0 simple matrix
-  # DETAILS:
+  # DETAILS
   #  done by an adaptation of the Gauss-Jordan elimination algorithm
-  # EXAMPLE:
+  # EXAMPLE
   #  mat[,] <- matrix(
   #  c(1,1,0,0, 2,0,1,0,  0,1,2,4, 0,1,2,3, 0,0,0,1) , nrow=4)
   #  matker <- kernelmatrix.basep(mat,5)
-  #  a <- multBigSmod(mat, matker,5)
-  # print(a) # null matrix
+  #   Note: mat %*% matker[,] %%5 is a null matrix
+# -------------------------------------------------------------------
 
   nr <- nrow(mat)
   nc <- ncol(mat)
@@ -381,7 +384,7 @@ kernelmatrix.basep <- function(mat,p){
   rownames(b.mat.kernel) <- pseudonames
 
   return(b.mat.kernel)
-} # fin kernelmatrix.basep
+} # end kernelmatrix.basep
 
 
 #---------------------------------------------------------------------------
@@ -389,16 +392,16 @@ subgroup.basep <- function(b.mat,p,all=FALSE){
   # FUNCTION
   # calculates the non null elements of the subgroup H generated by the columns
   # of b.mat, considered as vectors in (Zp)^s
-  # ARGUMENTS:
-  #  b.mat: a Big matrix of integers modulo p whose columns are assumed to
+  # ARGUMENTS
+  #  - b.mat: a Big matrix of integers modulo p whose columns are assumed to
   #       be independent vectors in (Zp)^s;
-  # Ne peut etre appelé sur une matrice à 0 colonne
-  #  p: a prime
-  #  all: if TRUE all elements in H are given, if FALSE only elements up
+  # Cannot be a matrix with 0 column
+  #   - p: a prime
+  #   - all: if TRUE all elements in H are given, if FALSE only elements up
   #       to multiplication by an integer modulo p are given
-  # OUTPUT:
+  # RETURN
   #  a Big matrix of integers modulo p whose columns are the subgroup elements;
-  # DETAILS:
+  # DETAILS
   #  it is not checked whether the column vectors of b.mat are independent, so there
   #  may be several times
   
@@ -408,7 +411,7 @@ subgroup.basep <- function(b.mat,p,all=FALSE){
   
   
   
-  # EXAMPLES:
+  # EXAMPLES
   #  a <- subgroup.basep( as.big.matrix(cbind(c(1,2,0),c(2,0,1)), type="short"), 3)
   # print(a)
   # a <- subgroup.basep( as.big.matrix(cbind(c(1,2,0),c(2,0,1)), type="short"), 3, all=TRUE)
@@ -423,15 +426,15 @@ subgroup.basep <- function(b.mat,p,all=FALSE){
     stop(paste("Matrix too big in subgroup.basep\n",
                "Need", p, "^", nbg,"\n"))
   # ---------------------------------------------
-  # On vérifie que l'on peut indicer la matrice résultat,
-  # i.e que l'indice max est inf. à l'entier max:
+  # We check that the result matrix can be indexed,
+  # i.e that the maximum index is less than the maximum integer:
   if ((nrow(b.mat) * (N-1)) > (2**31-1))
     stop(paste("Matrix too big in subgroup.basep\n",
                "Need", (nrow(b.mat) * (N-1)),
                "(nbg=", nbg, "p=", p, "nrow(b.mat)=", nrow(b.mat), ")",
                "max", (2**31-1),"\n"))
   # ---------------------------------------------
-#  b.outmat a au plus N-1 colonnes (N>=2)
+#  b.outmat has at most plus N-1 columns (N>=2)
     b.outmat <- big.matrix( nrow=nrow(b.mat), ncol=(N-1),
                        type="short", init=0,
                        dimnames=list(rownames(b.mat), NULL))
@@ -445,16 +448,16 @@ subgroup.basep <- function(b.mat,p,all=FALSE){
                   b.outmat@address)
 
 
-  # Calcul de b.outmat, colonne par colonne
-  # En sortie de PLANORsubgroup, b.outmat est modifiée
-  # Eliminer les -1 tout en gardant les dim
-  # S'il n'y a que des -1, c'est que la 1ière valeur
-  # non nulle, sur chaque ligne de coeffs, est tjrs !=1
+  # Computation of b.outmat, column by column.
+  # In output of de PLANORsubgroup, b.outmat is modified.
+  # Remove all the values -1 while keeping the dimensions
+  # If all values are -1, the first non-null value,
+  # on each line of coeffs, is always !=1
   if (all(b.outmat[1,]<0))
     stop("Internal error: subgroup.basep\n")
 
   b.outmat <- b.outmat[,b.outmat[1,]>=0, drop=FALSE]
   b.outmat <- as.big.matrix(b.outmat,   type="short")
   return(b.outmat)
-} # fin subgroup.basep
+} # end subgroup.basep
 #---------------------------------------------------------------------------

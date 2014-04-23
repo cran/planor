@@ -1,3 +1,11 @@
+2014-04-23 Annie Bouvier
+	* DESCRIPTION:  planor version is 1.0-12
+	* NAMESPACE: add "import" line for other packages importation 
+	
+2014-04-23 Annie Bouvier
+	* DESCRIPTION:  planor version is 1.0-11
+	Add BH among LinkingTo list.
+	
 2013-09-20  Annie Bouvier
 	* DESCRIPTION:  planor version is 1.0-10
 	* Move the source vignettes from the directory

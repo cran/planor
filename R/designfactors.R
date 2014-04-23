@@ -3,8 +3,6 @@
 #---------------------------------------------------------------------------
 #  Methods of "designfactors" : names, length, "[", bind
 #---------------------------------------------------------------------------
-# No roxygen documentation maintained, see directly the .Rd file
-#---------------------------------------------------------------------------
 setClass("designfactors",
          representation(fact.info="data.frame",
                         pseudo.info="data.frame",
@@ -39,10 +37,11 @@ signature(x = "designfactors", i = "ANY", j = "ANY", drop = "ANY"),
 #-------------------------------------------------------
 # "bind.designfactors"
 # --------------------------------------
-#' @param x an object of class \code{\linkS4class{designfactors}}
-#' @param y  an object of class \code{\linkS4class{designfactors}}
-#' @return An object of class \code{\linkS4class{designfactors}},
-#'   where the input are binded.
+# ARGUMENTS
+# - x: an object of class designfactors
+# - y: an object of class designfactors
+# RETURN
+#   An object of class designfactors,  where the input are binded.
 # --------------------------------------
 bind.designfactors <- function(x,y){
   # Warning if factors have the same name
@@ -62,7 +61,7 @@ bind.designfactors <- function(x,y){
 }
 
 # --------------------------------------
-# "bind" method help description in roxygen syntax
+# "bind" method 
 # --------------------------------------
 setMethod("bind", signature(x="designfactors",y="designfactors"),
           definition=bind.designfactors)
