@@ -1,3 +1,8 @@
+2014-07-11  Annie Bouvier
+	* DESCRIPTION:  planor version is 2.0-0
+	* planor without use of bigmemory package becomes the usual
+	version. planor using bigmemory is renamed planorB.
+
 2014-04-23 Annie Bouvier
 	* DESCRIPTION:  planor version is 1.0-12
 	* NAMESPACE: add "import" line for other packages importation 

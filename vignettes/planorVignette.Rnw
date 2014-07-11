@@ -11,15 +11,15 @@
 \usepackage{a4wide}
 \usepackage{color}
 
-\newcommand{\PLANOR}{\texttt{PLANOR }}
+\newcommand{\PLANOR}{\texttt{planor }}
 
 \begin{document}
 
-\title{A quick guide to PLANOR, an R package for the automatic
+\title{A quick guide to planor, an R package for the automatic
   generation of regular factorial designs} 
 
 \SweaveOpts{engine=R}
-%\VignetteIndexEntry{A quick guide to PLANOR}
+%\VignetteIndexEntry{Quick guide}
 \author{Monod H., Bouvier A., Kobilinsky A.\\[2mm] 
   INRA, UR 341, Unit\'e MIA-Jouy \\ 
   Math\'ematiques

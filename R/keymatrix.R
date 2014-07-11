@@ -97,12 +97,12 @@ summary.keymatrix <- function(object, fact, block,
       cat("TREATMENT EFFECTS CONFOUNDED WITH THE MEAN\n")
       if(sum(selectCol) > 0){
         H.show <- matrix(b.H[,selectCol], nrow=nrow(b.H))
-        b.H.show <- as.big.matrix(H.show, type="short")
-        .Call("PLANORlibsk", as.integer(nrow(b.H.show)),
-            as.integer(ncol(b.H.show)),
-            b.H.show@address,
+         .Call("PLANORlibsk", as.integer(nrow(H.show)),
+            as.integer(ncol(H.show)),
+            H.show,
             as.character(lib),
             as.integer(maxprint))
+
         cat("\n")
       }
       else cat("nil\n\n")
@@ -112,12 +112,12 @@ summary.keymatrix <- function(object, fact, block,
     cat("BLOCK-and-TREATMENT EFFECTS CONFOUNDED WITH THE MEAN\n")
     if(sum(block) > 0){
       H.show <- matrix(b.H[,!selectCol], nrow=nrow(b.H))
-      b.H.show <- as.big.matrix( H.show, type="short")
-      .Call("PLANORlibsk", as.integer(nrow(b.H.show)),
-            as.integer(ncol(b.H.show)),
-            b.H.show@address,
+       .Call("PLANORlibsk", as.integer(nrow(H.show)),
+            as.integer(ncol(H.show)),
+            H.show,
             as.character(lib),
             as.integer(maxprint))
+
       cat("\n")
     }
     else cat("nil\n\n")
@@ -173,8 +173,8 @@ summary.keymatrix <- function(object, fact, block,
   } ## end  else Hgen with 0 column
 
     if (grepl('k', save, ignore.case=TRUE)) {
-  ## b.Hgen is a big matrix; return normal matrix
-      sortie$k <- b.Hgen[,,drop=FALSE]
+      sortie$k <- b.Hgen
+
     }
     if (grepl('w', save, ignore.case=TRUE)) {
       sortie$w <- sortiew
@@ -238,11 +238,13 @@ alias.keymatrix <- function(object, model,  fact, block, ...){
   p <- object@p
   lib <- colnames(object)
   ## expansion of the model and estimate matrices
-  b.model.full <- representative.basep( as.big.matrix(model,type="short"), p )
+  b.model.full <- representative.basep( model, p )
+
   Nfull <- ncol(b.model.full)
 
   ## images of the model terms by the key matrix
-  b.images.mat <- multBigmod(as.big.matrix(object,type="short"), b.model.full, p)
+    b.images.mat <- (object %*% b.model.full) %% p
+
 
   ## info on the columns of b.model.full and on the columns of b.images.mat
   trt.log <- rep(NA,Nfull)    # effect with at least one trt pseudofactor

@@ -2,9 +2,7 @@
 # Le 1ier nom est le nom de la librairie qui doit être le même
 # que le nom du  package
 useDynLib(planor, PLANORsubgroup, 
-          PLANORcbindBig, PLANORrbindBig,
-          PLANORmultBigmod, PLANORmultBigSmod, PLANORmultBig,
-          PLANORcol0Big, PLANORloopkernelcheck,
+          PLANORloopkernelcheck,
           PLANORweightorder, PLANORlibsk,
           PLANORinv)
 # Les fonctions R a disposition de l'utilisateur
@@ -13,11 +11,11 @@ export(
   planor.factors, planor.harmonize, planor.model,
   planor.randomize,
   regular.design,
-  as.data.frame.planordesign,
+ as.data.frame.planordesign,
   summary.listofkeyrings, summary.designkey , summary.keymatrix,
-       summary.keyring,  summary.listofdesignkeys,
+  summary.keyring,  summary.listofdesignkeys,
   alias.designkey, alias.keymatrix, alias.listofdesignkeys,
-       alias.listofkeyrings,  makedesignkey )    
+       alias.listofkeyrings ,  makedesignkey )
 exportClasses(designfactors)
 exportClasses(designkey)
 exportClasses(planordesign )
@@ -26,5 +24,4 @@ exportClasses(keyring)
 exportClasses(listofkeyrings)
 exportClasses(listofdesignkeys)
 exportMethods(bind, pick, planor.design,  getDesign)
-import(biganalytics, bigmemory, conf.design, methods)
-
+import(conf.design, methods)

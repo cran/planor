@@ -17,15 +17,7 @@ Type 'q()' to quit R.
 
 > library("planor")
 Loading required package: conf.design
-Loading required package: biganalytics
-Loading required package: bigmemory
-Loading required package: bigmemory.sri
-Loading required package: BH
-
-bigmemory >= 4.0 is a major revision since 3.1.2; please see packages
-biganalytics and and bigtabulate and http://www.bigmemory.org for more information.
-
-Loaded planor 0.1.12
+Loaded planor 0.2.0
 
 > #---------------------------------------------------------------------------
 > # EXAMPLES OF AUTOMATIC MODEL GENERATION FROM RESOLUTION
@@ -92,11 +84,11 @@ Slot "model":
 [[1]]
 [[1]]$Model
 ~(A + B + C + D)^2
-<environment: 0x3790500>
+<environment: 0x32070f0>
 
 [[1]]$Estimate
 ~(A + B + C + D)
-<environment: 0x3790500>
+<environment: 0x32070f0>
 
 
 
@@ -250,11 +242,11 @@ Slot "model":
 [[1]]
 [[1]]$Model
 ~(A + B + C + D + E + F)^2
-<environment: 0x372c490>
+<environment: 0x2a3aa78>
 
 [[1]]$Estimate
 ~(A + B + C + D + E + F)^2
-<environment: 0x372c490>
+<environment: 0x2a3aa78>
 
 
 
@@ -351,4 +343,4 @@ Treatment effects confounded with block effects
 > 
 > proc.time()
    user  system elapsed 
-  4.860   0.215   5.087 
+  1.175   0.043   1.210 

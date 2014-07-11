@@ -61,8 +61,9 @@ planor.design.designkey <- function(key, randomize=NULL, ...){
     for(k in seq_len(Nuqf)){
         p.k <- PVuqf[k]
         r.k <- nrow(key[[k]])
-      b.aux <- crossingBig(rep(p.k,r.k),start=0)
-      b.pseudodesign.k[[k]] <- multBigmod(b.aux, key[[k]], p.k)
+      aux <-  crossing(rep(p.k,r.k),start=0)
+      b.pseudodesign.k[[k]] <- (aux %*% key[[k]]) %%p.k
+
 
     }
 
@@ -71,21 +72,19 @@ planor.design.designkey <- function(key, randomize=NULL, ...){
 
     ## C. Reordering of the columns by treatment factor
     pseudosorder <- order(NIVtpf, FACTtpf, seq_along(NIVtpf))
-    b.fullpseudodesign <- exchangeColBig(b.fullpseudodesign,
-                                         pseudosorder,
-                                         seq.int(ncol(b.fullpseudodesign)))
+      b.fullpseudodesign[,pseudosorder] <- b.fullpseudodesign
+
 
     ## D. Calculation of the design with the original treatment factors
-    b.back <- big.matrix( Ntpf, Ntf, init=0, type="short")
+       b.back <- matrix(0, nrow= Ntpf, ncol= Ntf)
+
 
     for(i in seq_len(Ntpf)){
         select <- (FACTtpf == FACTtpf[i]) & (seq_len(Ntpf) > i)
         b.back[i,FACTtpf[i]] <- prod( NIVtpf[select] )
     }
-    b.finaldesign <- multBig(b.fullpseudodesign, b.back)
-    
-    
-    b.finaldesign <- as.data.frame(b.finaldesign[,])
+       b.finaldesign <- as.data.frame(b.fullpseudodesign %*% b.back)
+
 
     names(b.finaldesign) <- LIBtf ## columns names
     for(i in seq_len(Ntf)){
@@ -290,7 +289,8 @@ alias.designkey <- function(object, model, ...){
   ModelFine[mLIBtf,] <- ModelTerms[mLIBtf,]
   ## take off any all-zero column
   ModelFine <- ModelFine[,apply(ModelFine,2,function(x){sum(x)>0})]
-  b.modterms <- as.big.matrix(ModelFine,type="short")
+   b.modterms <- ModelFine
+
 
 
   ## Decomposition into pseudofactors

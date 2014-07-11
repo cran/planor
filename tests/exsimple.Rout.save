@@ -18,15 +18,7 @@ Type 'q()' to quit R.
 > # Fichier pour tester l'enchainement des fonctions sur des exemples simples
 > library("planor")
 Loading required package: conf.design
-Loading required package: biganalytics
-Loading required package: bigmemory
-Loading required package: bigmemory.sri
-Loading required package: BH
-
-bigmemory >= 4.0 is a major revision since 3.1.2; please see packages
-biganalytics and and bigtabulate and http://www.bigmemory.org for more information.
-
-Loaded planor 0.1.12
+Loaded planor 0.2.0
 
 > toto <- planor.factors(LETTERS[1:5],c(2,6,12,3,2))
 > tata <- planor.model(y~A+B+C+D+E)
@@ -104,4 +96,4 @@ $bloc
 > 
 > proc.time()
    user  system elapsed 
-  2.783   0.161   2.938 
+  1.209   0.041   1.243 

@@ -17,15 +17,7 @@ Type 'q()' to quit R.
 
 > library("planor")
 Loading required package: conf.design
-Loading required package: biganalytics
-Loading required package: bigmemory
-Loading required package: bigmemory.sri
-Loading required package: BH
-
-bigmemory >= 4.0 is a major revision since 3.1.2; please see packages
-biganalytics and and bigtabulate and http://www.bigmemory.org for more information.
-
-Loaded planor 0.1.12
+Loaded planor 0.2.0
 
 > 
 > #---------------------------------------------------------------------------
@@ -334,4 +326,4 @@ Treatment pseudo-effects confounded with block effects: 1^5 2^10 3^10 4^5 5^1
 > 
 > proc.time()
    user  system elapsed 
-  5.340   0.234   5.643 
+  1.303   0.045   1.341 

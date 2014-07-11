@@ -17,15 +17,7 @@ Type 'q()' to quit R.
 
 > library("planor")
 Loading required package: conf.design
-Loading required package: biganalytics
-Loading required package: bigmemory
-Loading required package: bigmemory.sri
-Loading required package: BH
-
-bigmemory >= 4.0 is a major revision since 3.1.2; please see packages
-biganalytics and and bigtabulate and http://www.bigmemory.org for more information.
-
-Loaded planor 0.1.12
+Loaded planor 0.2.0
 
 > #---------------------------------------------------------------------------
 > # Aucun terme ineligible
@@ -46,4 +38,4 @@ The search is closed: max.sol =  2 solution(s) found
 > 
 > proc.time()
    user  system elapsed 
-  1.988   0.075   2.063 
+  0.925   0.026   0.946 

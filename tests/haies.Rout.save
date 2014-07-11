@@ -17,15 +17,7 @@ Type 'q()' to quit R.
 
 > library("planor")
 Loading required package: conf.design
-Loading required package: biganalytics
-Loading required package: bigmemory
-Loading required package: bigmemory.sri
-Loading required package: BH
-
-bigmemory >= 4.0 is a major revision since 3.1.2; please see packages
-biganalytics and and bigtabulate and http://www.bigmemory.org for more information.
-
-Loaded planor 0.1.12
+Loaded planor 0.2.0
 
 >  haies.fnames <- c("A1","A2","B1","B2","C1","C2","P1","P2","Q1","Q2")
 >  haies.key1 <- planor.designkey(factors=haies.fnames,
@@ -52,4 +44,4 @@ named list()
 > 
 > proc.time()
    user  system elapsed 
-  3.597   0.215   3.836 
+  1.033   0.035   1.060 

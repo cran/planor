@@ -317,7 +317,8 @@ alias.listofkeyrings <- function(object, model, ...){
   ModelFine[mLIBtf,] <- ModelTerms[mLIBtf,]
   ## take off any all-zero column
   ModelFine <- ModelFine[,apply(ModelFine,2,function(x){sum(x)>0})]
-  b.modterms <- as.big.matrix(ModelFine,type="short")
+  b.modterms <- ModelFine
+
 
   ## Decomposition into pseudofactors
   ## the function "planor.ineligibleset" can do that, assuming that

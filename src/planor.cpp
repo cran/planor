@@ -1,10 +1,6 @@
-/* +++  includes from package bigmemory +++ */
-/* For access to bigmatrices  */
-// NOTE: these includes should be before the others
-#include "bigmemory/BigMatrix.h"
-#include "bigmemory/MatrixAccessor.hpp"
-/* TYPE OF THE big matrices */
-#define  TYPEOFBIG short int 
+/* TYPE OF THE matrices */
+#define  TYPEOFMAT double
+
 /* +++  includes from R +++ */
 #include <R.h>
 #include <Rmath.h>// useful for pow
@@ -66,13 +62,13 @@ RETURN VALUE
 		   SEXP addressofres)
 {
 /* FUNCTION
- Multiplication of a given column, nc, of the Big matrix A
+ Multiplication of a given column, nc, of the matrix A
  by the column nc of a matrix b. This column is stored in B.
  If iz[i]==pp1, B[i] is ignored.
  iz[i]=pp1, if the first nonzero value of the row i of t(b)
  is not 1
 INPUT
- addressofA: address of Big matrix A (nrow, N1)
+ addressofA: address of matrix A (nrow, N1)
  B: vector (N1)
  iz: vector (N1)
  all: see subgroup.base
@@ -80,7 +76,7 @@ INPUT
  nrow, N1: dimensions
  pp1: marker of values to ignored 
 OUTPUT
- addressofres:  address of resulting Big matrix (nrow,N1)
+ addressofres:  address of resulting matrix (nrow,N1)
 CALLED BY
  PLANORsubgroup
 NOTE
@@ -88,10 +84,9 @@ NOTE
  ++++++++++++++++++++++++++++++++++++++++++++++++ */
   int l, r;
   /* Access to the values of the matrices */
-  BigMatrix *ptrin = (BigMatrix *) (R_ExternalPtrAddr(addressofa));
-  MatrixAccessor<TYPEOFBIG> bigA(*ptrin);
-  BigMatrix *ptrout = (BigMatrix *) (R_ExternalPtrAddr(addressofres));
-  MatrixAccessor<TYPEOFBIG> bigres(*ptrout);
+  TYPEOFMAT *A = (TYPEOFMAT *) NUMERIC_POINTER(addressofa);
+  TYPEOFMAT *res = (TYPEOFMAT *) NUMERIC_POINTER(addressofres);
+
 
 R_CheckUserInterrupt(); // to allow user interrupt
 
@@ -115,14 +110,16 @@ R_CheckUserInterrupt(); // to allow user interrupt
      // line to be looked at
      for (l=0; l <nrow; l++) {
       //      res[l,r]+= A[l,nc]*B[r]
-       //NOTE: big matrix indexes: first the column index
-       bigres[r][l] += (bigA[nc][l] * B[r]);
+//NOTE: in C, the values are stored by column
+       res[nrow *r + l] += (A[nrow* nc +l] * B[r]);
+
 
      } // end l
    } // end if iz
      else {
        // line of coeffs to be ignored, so the: res[0,r] =-1;
-       bigres[r ][0] =-1;
+res[nrow * r ] =-1;
+
      }
  } // end r
 
@@ -221,7 +218,7 @@ INPUT
   all: if TRUE all elements in H are given, if FALSE only elements up
        to multiplication by an integer modulo p are given
 OUTPUT:
- addressofres:  resulting Big matrix:
+ addressofres:  resulting matrix:
    a matrix of integers modulo p whose columns are the subgroup 
    elements
    dimension (nrow, N-1)
@@ -233,6 +230,8 @@ CALLED BY
  ++++++++++++++++++++++++++++++++++++++++++++++++ */
    short int  *coeffs, start, pp1, *iz;
    int prod1, nc,i, j;
+   int aux;
+
 
   int *nrow = INTEGER_POINTER(gnrow);
   int *nbg = INTEGER_POINTER(gnbg);
@@ -275,20 +274,22 @@ CALLED BY
   // NOTE AB: we don't do it in the run while res is calculated
   // because this one is a progressive cumulation of values
   // whose final result is determined at the end of loops only
-  //Access to the resulting Big matrix
-   BigMatrix *ptrout = (BigMatrix *) (R_ExternalPtrAddr(addressofres));
-  MatrixAccessor<TYPEOFBIG> bigres(*ptrout);
+  //Access to the resulting matrix
+TYPEOFMAT *res = (TYPEOFMAT *) NUMERIC_POINTER(addressofres);
+
 
 
 
   for (i=0; i< (*nrow); i++) {
     for (j=0; j< (*N)-1 ;j++) {
-       //NOTE: big matrix indexes: first the column index
-       //      a= ( (int) bigres[i,j]% (*p));
-      if (bigres[j][i] >0) {
+     //NOTE:  matrix strored by column
+       //      a= ( (int) res[i,j]% (*p));
+      if (res[(*nrow) *j +i] >0) {
 	// The null values should be ignored
-	//	bigres[i,j]= bigres[i,j]%p
-	bigres[j][i]= (TYPEOFBIG) ( (int) bigres[j][i]% (*p)); 
+	//	res[i,j]= res[i,j]%p
+	aux= (int) res[(*nrow) *j +i]% (*p); 
+	res[(*nrow) *j +i]= (double)aux; 
+
       }
     } // end j
   } // end i
@@ -318,7 +319,7 @@ SEXP PLANORlibsk(SEXP gnrow, SEXP gncol,
 
 INPUT
   nrow, ncol: dimension of H
-  addressofH: address of H: a Big matrix
+  addressofH: address of H: a matrix
   LIBtpf.k: character vector
   MAXPRINT: maximum number of rows and columns to print
 OUTPUT
@@ -336,9 +337,9 @@ CALLED BY
   int bc = imin2(*ncol, *maxprint);
 
 R_CheckUserInterrupt(); // permettre a l'utilisateur d'interrompre
-// Access to the Big matrix H
-  BigMatrix *ptrin = (BigMatrix *) (R_ExternalPtrAddr(addressofH));
-  MatrixAccessor<TYPEOFBIG> bigH(*ptrin);
+// Access to the matrix H
+TYPEOFMAT *H = (TYPEOFMAT *) NUMERIC_POINTER(addressofH);
+
 
   for (j=0; j< bc; j++) {
     Rprintf("1 =") ; 
@@ -350,14 +351,16 @@ R_CheckUserInterrupt(); // permettre a l'utilisateur d'interrompre
       // (NB: H contains positive integers)
        //NOTE: big matrix indexes: first the column index
       //      if (ISZERO(bigH[i,j])) continue;
-      if (ISZERO(bigH[j][i])) continue;
+if (ISZERO(H[  (*nrow)*j+i])) continue;
+
 
    Rprintf(" %s", CHAR(STRING_ELT(gLIBtpf,i)));
 
       //      if (H[i,j] !=1) 
-      if (!ISUN(bigH[j][i])) {
-	Rprintf("^%d ", bigH[j][i]);
-      }
+if (!ISUN(H[(*nrow)*j+i])) {
+Rprintf("^%d ", (int)H[(*nrow)*j+i]);
+   }
+
 
     } //fin i
     Rprintf("\n");
@@ -494,9 +497,9 @@ CALLED BY
   double *pseudoweight = NUMERIC_POINTER(gpseudoweight);
   double *binrank  = NUMERIC_POINTER(gbinrank);
   double *modrank = NUMERIC_POINTER(gmodrank);
-  //Access to the Big matrix mat
-  BigMatrix *ptrin = (BigMatrix *) (R_ExternalPtrAddr(addressofmat));
-  MatrixAccessor<TYPEOFBIG> bigmat(*ptrin);
+  //Access to the matrix mat
+TYPEOFMAT *mat =  NUMERIC_POINTER(addressofmat);
+
 
 R_CheckUserInterrupt(); 
 
@@ -511,8 +514,8 @@ R_CheckUserInterrupt();
     fnz =-1;
     for (i= 0; i< (*nrow); i++) {
       //      if (mat[i, j] != 0) {
-//NOTE: big matrix indexes: first the column index
-      if ( !ISZERO(bigmat[j ][i])) {
+ if ( !ISZERO(mat[(*nrow)* j +i])) {
+
 	  fnz=(i+1);
 	break; // sortir de la boucle i
       }
@@ -523,10 +526,12 @@ R_CheckUserInterrupt();
     if (fnz==-1) {
       // no non-nul value in the column j
       for (i=0; i< *nrow; i++) {
-	bigmat[j][i] = 0;
+mat[(*nrow)* j +i] = 0;
+
       } 
     } else {
-    a=(int)bigmat[j][ fnz-1];
+a=(int)mat[(*nrow)*j +( fnz-1)];
+
     PLANORinv(p, &a, &inv);
 
     // factvu: the different values already encountered in column j
@@ -537,19 +542,21 @@ R_CheckUserInterrupt();
       factvu[i]=-1;
     for (i=0; i< *nrow; i++) {
       //      d= div(inv * mat[i,j], p);
-      d= div((inv * (int)bigmat[j][i]), *p);
+d= div((inv * (int)mat[(*nrow)* j +i]), *p);
       //      mat[i,j] = d.rem;
-      bigmat[j][i] = (short int) d.rem;
+      mat[(*nrow)* j +i] = (short int) d.rem;
 
       //      if (mat[i,j] != 0) {
-      if (ISZERO(bigmat[j][i]) == 0) {
+      if (ISZERO(mat[(*nrow)* j +i]) == 0) {
+
 	//	pseudoweight[j] += 1;
 	pseudoweight[j] += 1;
 	weight[j] += pasvu(factnum[i], &ifv, factvu);
 	binrank[j] += (double) R_pow_di( (double)(*p), i);
 	//	modrank[j] += (mat[i,j] * pow(p, (nr-i-1)));
-	modrank[(*ncol)-j-1] += ( (double)(bigmat[j][i]) * 
-			R_pow_di( (double)(*p), ((*nrow)-i-1)));
+modrank[(*ncol)-j-1] += ( (double)(mat[(*nrow)* j +i]) * 
+		R_pow_di( (double)(*p), ((*nrow)-i-1)));
+
 
       } // end if
 
@@ -579,8 +586,8 @@ INPUT
   r: integer
   nbadmissible: integer
   nbineligible: integer
-  addressofImagesIS: (r x  nbineligible) Big matrix of integers
-  addressofadmissible: (r x nbadmissible) Big matrix of integers 
+  addressofImagesIS: (r x  nbineligible) matrix of integers
+  addressofadmissible: (r x nbadmissible) matrix of integers 
 OUTPUT
   test:  a logical vector of length nbadmissible
 CALLED BY
@@ -594,12 +601,11 @@ CALLED BY
 
 
 
-  // Access to the short big matrices
-  BigMatrix *ptrImagesIS = (BigMatrix *) (R_ExternalPtrAddr(addressofImagesIS));
-  MatrixAccessor<TYPEOFBIG> bigImagesIS(*ptrImagesIS);
+  // Access to the matrices
+  TYPEOFMAT *ImagesIS = (TYPEOFMAT *) NUMERIC_POINTER(addressofImagesIS);
 
-  BigMatrix *ptradmissible = (BigMatrix *) (R_ExternalPtrAddr(addressofadmissible));
-  MatrixAccessor<TYPEOFBIG> bigadmissible(*ptradmissible);
+  TYPEOFMAT *admissible = (TYPEOFMAT *)  NUMERIC_POINTER(addressofadmissible);
+
 
 
 R_CheckUserInterrupt(); // allow user interrupt
@@ -610,8 +616,9 @@ R_CheckUserInterrupt(); // allow user interrupt
       trouve =1; // 1 if the whole column is equal
       for (l=0; l< *r; l++) {
 	//	if (ImagesIS[l,j] !=admissible [l,k]) {
-       //NOTE: big matrix indexes: first the column index
-	if (!EQUAL(bigImagesIS[j][l], bigadmissible[k][l])) {
+//NOTE: values stored by column
+	if (!EQUAL(ImagesIS[(*r)*j +l], admissible[(*r)*k+l])) {
+
 	  trouve=0;
 	  break; // go out the loop on l
 	} // end if

@@ -1,11 +1,11 @@
 \name{planor-package}
 \docType{package}
 \alias{planor-package}
-\alias{planor}
-\title{Generation of regular factorial designs}
+\title{Generation of regular factorial designs, big-package-free version
+of planor }
 \description{A package dedicated to the automatic generation of regular
   factorial designs, including fractional designs, orthogonal block designs,
-  row-column designs and split-plots.}
+  row-column designs and split-plots. }
 \details{The user describes the factors to be controlled in the
   experiment and the anova model to be used when the results will be
   analysed. He or she also specifies the size of the design, that is,
@@ -27,10 +27,6 @@
   final design.}
 
 \note{\itemize{
- \item{The \bold{bigmemory} package should have been installed
-  previously to the \bold{planor} installation ; if installed in a non
-  standard library, \bold{planor} must be installed in the same
-  directory}
  \item{Option \code{planor.max.print} can be set to limit the amount of
   the matrices that are printed, to \code{planor.max.print} rows and
   columns. Default: 20.}}}

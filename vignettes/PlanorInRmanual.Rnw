@@ -94,7 +94,7 @@
 \hyphenation{pseudo-factors pseudo-factor}
 %---------------------------------------------------------------------------
 % For the R version
-\newcommand{\PLANOR}{\texttt{PLANOR} }
+\newcommand{\PLANOR}{\texttt{planor} }
 \newcommand{\attention}{\marginpar{adapter ? la version R}}
 %---------------------------------------------------------------------------
 \begin{document}
