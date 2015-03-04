@@ -191,13 +191,6 @@ summary.keymatrix <- function(object, fact, block,
 
 
 
-# --------------------------------------
-# "summary" method for "keymatrix"
-# --------------------------------------
- setMethod("summary", signature(object="keymatrix"),
-          definition=summary.keymatrix)
-
-
 
 ##--------------------------------------------------------------------------
 
@@ -425,10 +418,6 @@ alias.keymatrix <- function(object, model,  fact, block, ...){
   return(invisible(alias.stats))
 } ## end alias.keymatrix
 
-##---------------------------------------------------------------------------
-# Method alias for "keymatrix"
- setMethod("alias", signature(object="keymatrix"),
-          definition=alias.keymatrix)
 
 
 ##--------------------------------------------------------------------------

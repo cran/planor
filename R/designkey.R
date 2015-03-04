@@ -188,9 +188,7 @@ summary.designkey <- function(object,show="dtbw", save="k", ...){
 } ## end summary.designkey
 
 ##--------------------------------------------------------------------------
-setMethod("summary", signature(object="designkey"),
-          definition=summary.designkey)
-##--------------------------------------------------------------------------
+
 # "show.designkey" 
 # Print the design key matrices of an object of class designkey
 #
@@ -317,7 +315,4 @@ alias.designkey <- function(object, model, ...){
   return(invisible())
 } ## end alias.designkey
 
-##--------------------------------------------------------------------------
-setMethod("alias", signature(object="designkey"),
-          definition=alias.designkey)
 ##--------------------------------------------------------------------------

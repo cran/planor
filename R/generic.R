@@ -50,3 +50,7 @@ setGeneric("getDesign",
                value <- standardGeneric("getDesign")
            })
 
+setGeneric("alias",
+           function(object, model, ...){
+             value <- standardGeneric("alias")
+             })

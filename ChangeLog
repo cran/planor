@@ -1,3 +1,15 @@
+2015-03-03   Annie Bouvier
+	* DESCRIPTION:  planor version is 2.0-3
+	* Some changes for complying with CRAN policies
+
+2015-03-02   Herve Monod
+	* DESCRIPTION:  planor version is 2.0-2
+	* Function planor.designkey.basep: fix a bug
+	
+2014-08-29  Annie Bouvier
+	* DESCRIPTION:  planor version is 2.0-1
+	* inst/doc/index.html: remove extra html tags
+	
 2014-07-11  Annie Bouvier
 	* DESCRIPTION:  planor version is 2.0-0
 	* planor without use of bigmemory package becomes the usual

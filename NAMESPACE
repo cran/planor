@@ -25,3 +25,16 @@ exportClasses(listofkeyrings)
 exportClasses(listofdesignkeys)
 exportMethods(bind, pick, planor.design,  getDesign)
 import(conf.design, methods)
+S3method(as.data.frame, planordesign)
+S3method(summary,designkey)
+S3method(summary,keymatrix)
+S3method(summary, keyring)
+S3method(summary,listofdesignkeys) 
+S3method(summary,listofkeyrings)
+S3method(alias, designkey)
+S3method(alias, keymatrix)
+S3method(alias, listofdesignkeys)
+S3method(alias, listofkeyrings)
+
+
+         

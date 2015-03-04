@@ -190,11 +190,6 @@ summary.listofkeyrings <- function(object, show="tbw", save="kw", ...){
   }  else    return(invisible())
 } ## end summary.listofkeyrings
 
-# --------------------------------------
-# "summary" method for "listofkeyrings
-# --------------------------------------
-setMethod("summary", signature(object="listofkeyrings"),
-          definition=summary.listofkeyrings)
 
 
 ##--------------------------------------------------------------------------
@@ -360,7 +355,3 @@ alias.listofkeyrings <- function(object, model, ...){
   return(invisible(alias.stats))
 } ## end alias.listofkeyrings
 # -------------------------------------------------
-# Method alias for "listofkeyrings"
-setMethod("alias", signature(object="listofkeyrings"),
-          definition=alias.listofkeyrings)
-

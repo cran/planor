@@ -1,6 +1,6 @@
 
-R version 3.0.1 (2013-05-16) -- "Good Sport"
-Copyright (C) 2013 The R Foundation for Statistical Computing
+R version 3.1.1 (2014-07-10) -- "Sock it to Me"
+Copyright (C) 2014 The R Foundation for Statistical Computing
 Platform: x86_64-unknown-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -19,7 +19,7 @@ Type 'q()' to quit R.
 > ## cf Planor Manual, Example 2 page 12
 > library("planor")
 Loading required package: conf.design
-Loaded planor 0.2.0
+Loaded planor 0.2.3
 
 > # Four treatment factors at 6, 6, 4, 2 levels and one 6-level block factor
 > # Model: block+(A+B+C+D)^2 ; Estimate: A+B+C+D\n")
@@ -274,4 +274,4 @@ nil
 > 
 > proc.time()
    user  system elapsed 
-  1.322   0.057   1.372 
+  1.093   0.023   1.141 

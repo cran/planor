@@ -1,6 +1,6 @@
 
-R version 3.0.1 (2013-05-16) -- "Good Sport"
-Copyright (C) 2013 The R Foundation for Statistical Computing
+R version 3.1.1 (2014-07-10) -- "Sock it to Me"
+Copyright (C) 2014 The R Foundation for Statistical Computing
 Platform: x86_64-unknown-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -17,7 +17,7 @@ Type 'q()' to quit R.
 
 > library("planor")
 Loading required package: conf.design
-Loaded planor 0.2.0
+Loaded planor 0.2.3
 
 > 
 > #---------------------------------------------------------------------------
@@ -326,4 +326,4 @@ Treatment pseudo-effects confounded with block effects: 1^5 2^10 3^10 4^5 5^1
 > 
 > proc.time()
    user  system elapsed 
-  1.303   0.045   1.341 
+  1.223   0.027   1.274 
