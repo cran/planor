@@ -1,9 +1,13 @@
+2015-06-16
+	* Fix a bug in function planor.designkey and regular.design:
+	when there is no solution, return NULL
+	* Add methods alias and summary to class planordesign
+	
 2015-03-03   Annie Bouvier
 	* DESCRIPTION:  planor version is 2.0-3
 	* Some changes for complying with CRAN policies
 
 2015-03-02   Herve Monod
-	* DESCRIPTION:  planor version is 2.0-2
 	* Function planor.designkey.basep: fix a bug
 	
 2014-08-29  Annie Bouvier

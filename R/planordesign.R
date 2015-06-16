@@ -9,7 +9,7 @@
 # all these slots are data extracted from the  designkey
 # from which the object has been built
 # Objects of this class are created by calls to planor.design
-# METHODS: getDesign, as.data.frame
+# METHODS: getDesign, as.data.frame, summary, alias
 #---------------------------------------------------------------------------
 setClass("planordesign",
          representation(design="data.frame",
@@ -63,3 +63,45 @@ as.data.frame.planordesign <- function(x, ...) {
   }
   return(ret)
 } # end as.data.frame.planordesign
+##--------------------------------------------------------------------------
+# Method summary  for "planordesign"
+
+# Summarises the design properties of a planordesign  object, by
+# calling summary.keymatrix on each of its key matrices contained
+# in the slot designkey 
+# ---------------------------------------------
+
+summary.planordesign <- function(object, fact, block,
+                              show="dtbw", save="k", ...){
+  onesummary <- function(i, oneobject, ...) {
+    cat("\n********** Keymatrix ", i, "**********\n\n")
+    return( summary.keymatrix(oneobject, ...))
+  }
+  sortie <- vector("list", length=length(object@designkey))
+  for (i in 1:length(object@designkey)) {
+    sortie[[i]] <- onesummary(i, object@designkey[[i]], ...)
+  }
+   if (save != "")
+    return(invisible(sortie))
+  else
+    return(invisible())
+
+}
+##--------------------------------------------------------------------------
+# Method alias  for "planordesign"
+
+# Summarises the design properties of a planordesign  object, by
+# calling alias on each of its key matrices
+# ---------------------------------------------
+
+alias.planordesign <- function(object, model,  fact, block, ...){
+  onealias <- function(i, oneobject, ...) {
+    cat("\n********** Keymatrix ", i, "**********\n\n")
+    return( alias.keymatrix(oneobject, ...))
+  }
+  sortie <- vector("list", length=length(object@designkey))
+  for (i in 1:length(object@designkey)) {
+    sortie[[i]] <- onealias(i, object@designkey[[i]], ...)
+  }
+  return(invisible(sortie))
+}

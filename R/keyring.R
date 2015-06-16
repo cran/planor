@@ -117,3 +117,9 @@ summary.keyring <- function(object, show="tbw", save ="kw", ...){
 
 } ## end summary.keyring
 
+# --------------------------------------
+# "summary" method for "keyring"
+# --------------------------------------
+setMethod("summary", signature(object="keyring"),
+          definition=summary.keyring)
+

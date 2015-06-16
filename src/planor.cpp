@@ -62,13 +62,13 @@ RETURN VALUE
 		   SEXP addressofres)
 {
 /* FUNCTION
- Multiplication of a given column, nc, of the matrix A
+ Multiplication of a given column, nc, of the  matrix A
  by the column nc of a matrix b. This column is stored in B.
  If iz[i]==pp1, B[i] is ignored.
  iz[i]=pp1, if the first nonzero value of the row i of t(b)
  is not 1
 INPUT
- addressofA: address of matrix A (nrow, N1)
+ addressofA: address of  matrix A (nrow, N1)
  B: vector (N1)
  iz: vector (N1)
  all: see subgroup.base
@@ -76,7 +76,7 @@ INPUT
  nrow, N1: dimensions
  pp1: marker of values to ignored 
 OUTPUT
- addressofres:  address of resulting matrix (nrow,N1)
+ addressofres:  address of resulting  matrix (nrow,N1)
 CALLED BY
  PLANORsubgroup
 NOTE
@@ -113,13 +113,11 @@ R_CheckUserInterrupt(); // to allow user interrupt
 //NOTE: in C, the values are stored by column
        res[nrow *r + l] += (A[nrow* nc +l] * B[r]);
 
-
      } // end l
    } // end if iz
      else {
        // line of coeffs to be ignored, so the: res[0,r] =-1;
 res[nrow * r ] =-1;
-
      }
  } // end r
 
@@ -212,13 +210,13 @@ INPUT
   nrow, nbg: dimension of mat
   N: number of columns of res (= p^nbg)
   addressofmat: address of mat:
-    a big matrix of integers modulo p whose columns are assumed to
+    a  matrix of integers modulo p whose columns are assumed to
        be independent vectors in (Zp)^s
   p: a prime
   all: if TRUE all elements in H are given, if FALSE only elements up
        to multiplication by an integer modulo p are given
 OUTPUT:
- addressofres:  resulting matrix:
+ addressofres:  resulting  matrix:
    a matrix of integers modulo p whose columns are the subgroup 
    elements
    dimension (nrow, N-1)
@@ -231,7 +229,6 @@ CALLED BY
    short int  *coeffs, start, pp1, *iz;
    int prod1, nc,i, j;
    int aux;
-
 
   int *nrow = INTEGER_POINTER(gnrow);
   int *nbg = INTEGER_POINTER(gnbg);
@@ -274,10 +271,8 @@ CALLED BY
   // NOTE AB: we don't do it in the run while res is calculated
   // because this one is a progressive cumulation of values
   // whose final result is determined at the end of loops only
-  //Access to the resulting matrix
+  //Access to the resulting  matrix
 TYPEOFMAT *res = (TYPEOFMAT *) NUMERIC_POINTER(addressofres);
-
-
 
 
   for (i=0; i< (*nrow); i++) {
@@ -289,7 +284,6 @@ TYPEOFMAT *res = (TYPEOFMAT *) NUMERIC_POINTER(addressofres);
 	//	res[i,j]= res[i,j]%p
 	aux= (int) res[(*nrow) *j +i]% (*p); 
 	res[(*nrow) *j +i]= (double)aux; 
-
       }
     } // end j
   } // end i
@@ -319,7 +313,7 @@ SEXP PLANORlibsk(SEXP gnrow, SEXP gncol,
 
 INPUT
   nrow, ncol: dimension of H
-  addressofH: address of H: a matrix
+  addressofH: address of H: a  matrix
   LIBtpf.k: character vector
   MAXPRINT: maximum number of rows and columns to print
 OUTPUT
@@ -337,7 +331,7 @@ CALLED BY
   int bc = imin2(*ncol, *maxprint);
 
 R_CheckUserInterrupt(); // permettre a l'utilisateur d'interrompre
-// Access to the matrix H
+// Access to the  matrix H
 TYPEOFMAT *H = (TYPEOFMAT *) NUMERIC_POINTER(addressofH);
 
 
@@ -349,10 +343,7 @@ TYPEOFMAT *H = (TYPEOFMAT *) NUMERIC_POINTER(addressofH);
       //      if (H[j * (*nrow) + i] ==0) continue;
       // are replaced, to avoid rounding errors.
       // (NB: H contains positive integers)
-       //NOTE: big matrix indexes: first the column index
-      //      if (ISZERO(bigH[i,j])) continue;
 if (ISZERO(H[  (*nrow)*j+i])) continue;
-
 
    Rprintf(" %s", CHAR(STRING_ELT(gLIBtpf,i)));
 
@@ -360,7 +351,6 @@ if (ISZERO(H[  (*nrow)*j+i])) continue;
 if (!ISUN(H[(*nrow)*j+i])) {
 Rprintf("^%d ", (int)H[(*nrow)*j+i]);
    }
-
 
     } //fin i
     Rprintf("\n");
@@ -475,7 +465,7 @@ INPUT
   factnum: a numeric factor to identify rows of mat associated
            with the same factor; length=nrow
 INPUT-OUTPUT
-  addressofmat: a design key matrix in base p (big matrix)
+  addressofmat: a design key matrix in base p
 OUTPUT
   weight, pseudoweight, binrank, modrank : vectors of length ncol
 CALLED BY
@@ -497,7 +487,8 @@ CALLED BY
   double *pseudoweight = NUMERIC_POINTER(gpseudoweight);
   double *binrank  = NUMERIC_POINTER(gbinrank);
   double *modrank = NUMERIC_POINTER(gmodrank);
-  //Access to the matrix mat
+  //Access to the  matrix mat
+
 TYPEOFMAT *mat =  NUMERIC_POINTER(addressofmat);
 
 
@@ -586,8 +577,8 @@ INPUT
   r: integer
   nbadmissible: integer
   nbineligible: integer
-  addressofImagesIS: (r x  nbineligible) matrix of integers
-  addressofadmissible: (r x nbadmissible) matrix of integers 
+  addressofImagesIS: (r x  nbineligible)  matrix of integers
+  addressofadmissible: (r x nbadmissible)  matrix of integers 
 OUTPUT
   test:  a logical vector of length nbadmissible
 CALLED BY
@@ -598,8 +589,6 @@ CALLED BY
   int *nbadmissible = INTEGER_POINTER(gnbadmissible);
   int *nbineligible = INTEGER_POINTER(gnbineligible);
   int *test = INTEGER_POINTER(gtest);
-
-
 
   // Access to the matrices
   TYPEOFMAT *ImagesIS = (TYPEOFMAT *) NUMERIC_POINTER(addressofImagesIS);

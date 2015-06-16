@@ -1,12 +1,12 @@
 \name{planor.harmonize}
-\title{Harmonize the factors}
+\title{Harmonize the Factors}
 \alias{planor.harmonize}
 \usage{planor.harmonize(factors, nlevels, ordered, hierarchy, model, estimate,
     listofmodels, base)}
 
 \description{Harmonize the factors originating from a list of factors, a
   list of models, and a list of basic factors (this function is
-  essentially for internal use)}
+  essentially for internal use).}
 
 \arguments{
   \item{factors}{an object of class \code{\linkS4class{designfactors}},
@@ -14,13 +14,13 @@
     the arguments \code{factors}, \code{nlevels}, \code{ordered},
     \code{hierarchy} follow the syntax of \code{\link{planor.factors}}.}
   
-  \item{nlevels}{See \code{\link{planor.factors}}.  Ignored if
+  \item{nlevels}{see \code{\link{planor.factors}}.  Ignored if
     \code{factors} is of class \code{\linkS4class{designfactors}}.}
 
-  \item{ordered}{See \code{\link{planor.factors}}. Ignored if
+  \item{ordered}{see \code{\link{planor.factors}}. Ignored if
     \code{factors} is of class \code{\linkS4class{designfactors}}.}
 
-  \item{hierarchy}{See \code{\link{planor.factors}}. Ignored if
+  \item{hierarchy}{see \code{\link{planor.factors}}. Ignored if
     \code{factors} is an object of class
     \code{\linkS4class{designfactors}}.}
 
@@ -29,10 +29,10 @@
     \code{model}, \code{estimate} and \code{listofmodels} follow
     the syntax of \code{\link{planor.model}}.}
 
-  \item{estimate}{See \code{\link{planor.model}}. Ignored if
+  \item{estimate}{see \code{\link{planor.model}}. Ignored if
     \code{model} is a list.}
 
-  \item{listofmodels}{See \code{\link{planor.model}}. Ignored if
+  \item{listofmodels}{see \code{\link{planor.model}}. Ignored if
     \code{model} is a list.}
 
   \item{base}{an optional formula to specify the basic factors. These
@@ -40,10 +40,8 @@
 
 \value{An object of class \code{\linkS4class{designfactors}} very
   similar to \code{factors}, but with two additional logical columns in
-  slots \code{fact.info} and \code{pseudo.info}:
-
-- \code{model} (TRUE for the factors present in at least one model formula),
-
+  slots \code{fact.info} and \code{pseudo.info}:\cr
+- \code{model} (TRUE for the factors present in at least one model formula),\cr
 - \code{basic} (TRUE for the basic factors).}
 
 \note{This function is called at the start of the design search. It is
@@ -64,5 +62,5 @@ F2.h <- planor.harmonize(factors=F2, model=M2, base=~A+B)
 names(F2)
 names(F2.h)
 }
-\author{H. Monod, and A. Bouvier}
+\author{ Monod, H. and Bouvier, A. }
 \keyword{design}

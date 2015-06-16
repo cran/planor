@@ -11,10 +11,13 @@
 \alias{summary.listofdesignkeys}
 \alias{summary,listofkeyrings-method}
 \alias{summary.listofkeyrings}
-\title{  Methods for function \code{summary} in package \pkg{planor} }
+\alias{summary,planordesign-method}
+\alias{summary.planordesign}
+
+\title{  Summarize the Design Properties }
 \description{
-  Summarize the design properties of an object, by
-printing the summary of each key matrix
+ Methods to summarize the design properties of an object, by
+printing the summary of each key matrix.
 }
 \usage{
 \S4method{summary}{designkey}(object, show="dtbw", save="k", \dots)
@@ -26,21 +29,26 @@ printing the summary of each key matrix
 \S4method{summary}{listofdesignkeys}(object, show="tbw", save="kw", \dots)
 
 \S4method{summary}{listofkeyrings}(object,  show="tbw",  save="kw", \dots)
+
+\S4method{summary}{planordesign}(object, fact, block,  show="dtbw", save="k", \dots)
 }
 \note{
-  The number of rows and columns of the matrices that are printed
-  are limited by the option \code{planor.max.print}.
-}
+  An R option named \code{planor.max.print} is set. It is equal
+  to the number of printed
+  rows and columns in the display of \pkg{planor} matrices. Default is 20.
+  You can change its value by using the function
+  \code{options()} (see \code{?options}).
+  }
 \value{
   A list. See Details\cr
   Information returned for each key matrix
   depends on the argument \code{save}.
   \itemize{
-    \item When \code{save} includes the character 'k',
-    the returned list has a component named 'k'.It is a matrix,
+    \item When \code{save} includes the character \sQuote{k},
+    the returned list has a component named \sQuote{k}.It is a matrix,
     the columns of which are kernel generators of the key matrices.
-   \item When \code{save} includes the character 'w',
-the returned list has a component named 'w', which contains
+   \item When \code{save} includes the character \sQuote{w},
+the returned list has a component named \sQuote{w}, which contains
 the  weight profiles of the
 	effects confounded with the mean.
 }
@@ -88,50 +96,53 @@ the components required by the  argument \code{save}.
     \code{\linkS4class{keyring}},
     \dQuote{summary} prints   the summary of each of its key matrices.
     It returns a list with as many components as  key matrices.
+\item When \code{object} is a \code{\linkS4class{planordesign}},
+this function is the summary method applied on each of the  keymatrix
+objects contained in its \code{designkey} slot.
 
 	
   }
 }
 
 \arguments{
-  \item{object}{an object of the class}
+  \item{object}{an object of the class.}
   \item{fact}{a character or numeric vector of parent factor names for
-    the columns of the object}
+    the columns of the object.}
 \item{block}{a logical vector to identify the columns of the object
   associated with a block factor}
 \item{show}{ an optional string to  identify the
-  type of information to display. The recognized letters are: 'd' for the design keys matrices, 't'
+  type of information to display. The recognized letters are: \sQuote{d} for the design keys matrices, \sQuote{t}
   for the treatment effects
   confounded with the mean,
-  'b' for the block-and-treatment effects confounded with the mean,
-  'w' for the weight profiles}
+  \sQuote{b} for the block-and-treatment effects confounded with the mean,
+  \sQuote{w} for the weight profiles.}
 \item{save}{ an optional string to  identify the
   type of information to return. The recognized letters are:
-  'k' for the kernel matrices, 'w' for the  weight profiles of the
+  \sQuote{k} for the kernel matrices, \sQuote{w} for the  weight profiles of the
 treatment effects confounded with the mean.}
-\item{\ldots}{ignored}
+\item{\ldots}{ignored.}
 }
 \examples{
-### Creation of a "listofdesignkeys" object
+### Creation of a listofdesignkeys object
 K0 <- planor.designkey(factors=c("R","C","U","A","B1","B2"),
   nlevels=c(3,2,2,3,2,2), model=~R*C + (A+B1+B2)^2, estimate=~A:B1+A:B2,
   nunits=12, base=~R+C+U, max.sol=2)
-## Method summary applied on a "keymatrix" object
+### Method summary applied on a keymatrix object
 r <- summary(K0[[1]][[1]])
-## Method summary applied on a "designkey"  object
+### Method summary applied on a designkey  object
 summary(K0[1], save=NULL)
-# Method summary applied on the "listofdesignkeys" object
+### Method summary applied on the listofdesignkeys object
 r <-summary(K0, show="dt")
 
-### Creation of a "listofkeyrings" object
+### Creation of a listofkeyrings object
 K0 <- planor.designkey(factors=c(LETTERS[1:4], "block"), nlevels=rep(3,5),
    model=~block+(A+B+C+D)^2, estimate=~A+B+C+D,
    nunits=3^3, base=~A+B+C, max.sol=2)
-# Method summary applied on the "keymatrix" object
+### Method summary applied on the keymatrix object
 r <-summary(K0[[1]][[1]])
-# Method summary applied on the "keyring" object
+### Method summary applied on the keyring object
 r <-summary(K0[[1]])
-# Method summary applied on the "listofkeyrings" object
+### Method summary applied on the listofkeyrings object
 r <- summary(K0, show="dtb", save ="k")
 print(r)
 }
@@ -141,6 +152,7 @@ print(r)
   \code{\linkS4class{keymatrix}},
   \code{\linkS4class{keyring}},
   \code{\linkS4class{listofdesignkeys}},
-  \code{\linkS4class{listofkeyrings}}      
+  \code{\linkS4class{listofkeyrings}},
+  \code{\linkS4class{planordesign}}
 }
 \keyword{methods}

@@ -1,10 +1,10 @@
 \name{planor.designkey}
-\title{Search for a design key or a collection of design keys}
+\title{Search for a Design Key or a Collection of Design Keys}
 \alias{planor.designkey}
 
 \description{Search for a design key or a collection of design keys that
 satisfy the design properties specified by the arguments. This function
-calls the core algorithms implemented in \pkg{planor}.}
+implements the core algorithms of the  \pkg{planor} package.}
 
 \usage{planor.designkey(factors, nlevels, block, ordered, hierarchy, model,
     estimate, listofmodels, resolution, nunits, base, max.sol=1,
@@ -16,16 +16,16 @@ calls the core algorithms implemented in \pkg{planor}.}
     the arguments \code{factors}, \code{nlevels}, \code{ordered},
     \code{hierarchy} may follow the syntax of \code{\link{planor.factors}}.}
   
-  \item{nlevels}{See \code{\link{planor.factors}}. Ignored if
+  \item{nlevels}{see \code{\link{planor.factors}}. Ignored if
     \code{factors} is of class \code{\linkS4class{designfactors}}.}
 
-  \item{block}{See \code{\link{planor.factors}}. Ignored if
+  \item{block}{see \code{\link{planor.factors}}. Ignored if
     \code{factors} is of class \code{\linkS4class{designfactors}}.}
   
-  \item{ordered}{See \code{\link{planor.factors}}. Ignored if
+  \item{ordered}{see \code{\link{planor.factors}}. Ignored if
     \code{factors} is of class \code{\linkS4class{designfactors}}.}
   
-  \item{hierarchy}{See \code{\link{planor.factors}}. Ignored if
+  \item{hierarchy}{see \code{\link{planor.factors}}. Ignored if
     \code{factors} is of class \code{\linkS4class{designfactors}}.}
   
   \item{model}{a list of model-estimate pairs of formulae, typically an
@@ -34,13 +34,13 @@ calls the core algorithms implemented in \pkg{planor}.}
     \code{resolution} may follow the syntax of
     \code{\link{planor.model}}.}
   
-  \item{estimate}{See \code{\link{planor.model}}. Ignored if
+  \item{estimate}{see \code{\link{planor.model}}. Ignored if
     \code{model} is a list.}
   
-  \item{listofmodels}{See \code{\link{planor.model}}. Ignored if
+  \item{listofmodels}{see \code{\link{planor.model}}. Ignored if
     \code{model} is a list.}
 
-  \item{resolution}{See \code{\link{planor.model}}. Ignored if
+  \item{resolution}{see \code{\link{planor.model}}. Ignored if
     \code{model} is a list.}
   
   \item{nunits}{a scalar giving the total number of units in the design}
@@ -50,13 +50,13 @@ calls the core algorithms implemented in \pkg{planor}.}
   
   \item{max.sol}{maximum number of solutions before exit.}
   
-  \item{randomsearch}{a \code{logical}; if TRUE, the searches for a key
+  \item{randomsearch}{a \code{logical}. If TRUE, the searches for a key
   matrix are performed in a random order.}
   
   \item{verbose}{a \code{logical} to set to \code{TRUE} for verbose
   display.}}
 
-\value{an object of class \code{\linkS4class{listofkeyrings}} in most
+\value{An object of class \code{\linkS4class{listofkeyrings}} in most
   cases. Otherwise, i.e in recursive cases, an object of class
   \code{\linkS4class{listofdesignkeys}}.}
 
@@ -101,7 +101,7 @@ calls the core algorithms implemented in \pkg{planor}.}
   different solutions are directly stored in a list of class
   \code{\linkS4class{listofdesignkeys}}.  }
 
-\author{H. Monod, and A. Bouvier}
+\author{ Monod, H. and Bouvier, A. }
 
 \seealso{\code{\link{planor.factors}}, \code{\link{planor.model}}, and
   the classes \code{\linkS4class{designfactors}},
@@ -112,7 +112,7 @@ calls the core algorithms implemented in \pkg{planor}.}
 K0 <- planor.designkey(factors=c("block", LETTERS[1:4]),
   nlevels=rep(3,5), model=~block+(A+B+C+D)^2, estimate=~A+B+C+D,
   nunits=3^3, base=~A+B+C, max.sol=2)
-## With automatic model generation
+### With automatic model generation
 Km <- planor.designkey(factors=c("block", LETTERS[1:4]),
   nlevels=rep(2,5), resolution=3, nunits=2^4)
 }

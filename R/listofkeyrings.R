@@ -190,6 +190,11 @@ summary.listofkeyrings <- function(object, show="tbw", save="kw", ...){
   }  else    return(invisible())
 } ## end summary.listofkeyrings
 
+# --------------------------------------
+# "summary" method for "listofkeyrings
+# --------------------------------------
+setMethod("summary", signature(object="listofkeyrings"),
+          definition=summary.listofkeyrings)
 
 
 ##--------------------------------------------------------------------------
@@ -314,7 +319,6 @@ alias.listofkeyrings <- function(object, model, ...){
   ModelFine <- ModelFine[,apply(ModelFine,2,function(x){sum(x)>0})]
   b.modterms <- ModelFine
 
-
   ## Decomposition into pseudofactors
   ## the function "planor.ineligibleset" can do that, assuming that
   ## we are in an "independent search" case
@@ -355,3 +359,7 @@ alias.listofkeyrings <- function(object, model, ...){
   return(invisible(alias.stats))
 } ## end alias.listofkeyrings
 # -------------------------------------------------
+# Method alias for "listofkeyrings"
+setMethod("alias", signature(object="listofkeyrings"),
+          definition=alias.listofkeyrings)
+

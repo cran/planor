@@ -1,35 +1,31 @@
 \name{makedesignkey}
 \alias{makedesignkey}
 \title{
-  A function to turn integer matrices into an object of class designkey
+  Turn Integer Matrices into an Object of Class designkey
 }
 \description{
-  Creates an object of class designkey directly from a list of integer
-  matrices
+  Create an object of class
+  \code{\link[=designkey-class]{designkey}}  from a list of integer
+  matrices.
 }
 \usage{
 makedesignkey(keys, primes)
 }
 \arguments{
   \item{keys}{
-a list of \code{n} integer matrices with column names
+a list of \code{n} integer matrices with column names.
 }
   \item{primes}{
-a vector of \code{n} prime numbers
+a vector of \code{n} prime numbers.
 }
 }
 \details{
-the names of the factors are extracted from the matrix column names
+The names of the factors are extracted from the matrix column names.
 }
 \value{
-an object of class designkey
+An object of class \code{\link[=designkey-class]{designkey}}.
 }
-\author{
-H. Monod
-}
-\seealso{
-Class designkey
-}
+\author{Monod, H. }
 \examples{
   mat1 <- cbind(diag(3),1)
   colnames(mat1) <- c("A","B","C","D")

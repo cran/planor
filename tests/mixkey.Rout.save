@@ -19,7 +19,7 @@ Type 'q()' to quit R.
 > ## cf Planor Manual, Example 2 page 12
 > library("planor")
 Loading required package: conf.design
-Loaded planor 0.2.3
+Loaded planor 0.2.4
 
 > # Four treatment factors at 6, 6, 4, 2 levels and one 6-level block factor
 > # Model: block+(A+B+C+D)^2 ; Estimate: A+B+C+D\n")
@@ -274,4 +274,4 @@ nil
 > 
 > proc.time()
    user  system elapsed 
-  1.093   0.023   1.141 
+  1.272   0.031   1.321 

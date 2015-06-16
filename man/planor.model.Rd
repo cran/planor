@@ -1,9 +1,9 @@
 \name{planor.model}
-\title{Model and estimate specifications for a design search}
+\title{Model and Estimate Specifications for a Design Search}
 \alias{planor.model}
 \usage{planor.model(model, estimate, listofmodels, resolution, factors)}
 
-\description{A function to declare the factorial terms that must be
+\description{Declare the factorial terms that must be
   considered as non-negligible and the factorial terms that must be
   estimable when the experiment will be analysed.}
 
@@ -30,7 +30,7 @@
 }
 
 \value{A list of \code{c(model, estimate)} pairs, where \code{model} and
-    \code{estimate} are formulae}
+    \code{estimate} are formulae.}
 
   \note{The user can specify:
     \cr 1/ either, \code{model} or \code{listofmodels} or both,
@@ -50,16 +50,16 @@
     \code{~(S)^(resolution/2)} and the estimate formula is
     \code{~(S)^(resolution/2)-1}. }
 
-\author{H. Monod, and A. Bouvier}
+\author{ Monod, H. and Bouvier, A. }
 \keyword{design}
 \examples{
-# Basic example
+### Basic example
 planor.model(model=~block + (A+B+C)^2, estimate=~(A+B+C)^2)
-# Resolution: both calls to 'planor.model' below are equivalent
+### Resolution: both calls to planor.model below are equivalent
 planor.model(model=~(A+B+C+D)^2, estimate=~A+B+C+D)
 myfactors <- planor.factors(factors=c(LETTERS[1:4]), nlevels=rep(2,4))
 planor.model(resolution=4, factors=myfactors)
-# Complicated examples
+### Complicated examples
 planor.model(~A+B+C+D+A:B, ~A+B+C+D, listofmodels=list(c(~E+F,~E)))
 planor.model(~A+B+C+D+A:B,~A+B+C+D, listofmodels=
                               list(c(~E+F,~E), ~G, ~H, c(~M+N,~N)))

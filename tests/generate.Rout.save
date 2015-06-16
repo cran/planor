@@ -17,7 +17,7 @@ Type 'q()' to quit R.
 
 > library("planor")
 Loading required package: conf.design
-Loaded planor 0.2.3
+Loaded planor 0.2.4
 
 > #---------------------------------------------------------------------------
 > # EXAMPLES OF AUTOMATIC MODEL GENERATION FROM RESOLUTION
@@ -84,11 +84,11 @@ Slot "model":
 [[1]]
 [[1]]$Model
 ~(A + B + C + D)^2
-<environment: 0x2b223c0>
+<environment: 0x3340780>
 
 [[1]]$Estimate
 ~(A + B + C + D)
-<environment: 0x2b223c0>
+<environment: 0x3340780>
 
 
 
@@ -242,11 +242,11 @@ Slot "model":
 [[1]]
 [[1]]$Model
 ~(A + B + C + D + E + F)^2
-<environment: 0x36f1c50>
+<environment: 0x3ff67b8>
 
 [[1]]$Estimate
 ~(A + B + C + D + E + F)^2
-<environment: 0x36f1c50>
+<environment: 0x3ff67b8>
 
 
 
@@ -343,4 +343,4 @@ Treatment effects confounded with block effects
 > 
 > proc.time()
    user  system elapsed 
-  1.062   0.026   1.111 
+  1.098   0.038   1.150 

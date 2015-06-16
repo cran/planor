@@ -1,4 +1,3 @@
- 
 
 #---------------------------------------------------------------------------
 # CLASS "keymatrix" and its METHODS
@@ -80,12 +79,14 @@ summary.keymatrix <- function(object, fact, block,
   ## B. Design key kernels
   ## kernel calculation
   b.Hgen <- kernelmatrix.basep(object,p)
-  ## b.Hgen is either a big.matrix or a matrix with 0 column
+  ## b.Hgen is  a matrix with 0 column
   if (ncol(b.Hgen) == 0) {
     warning("Regular matrix: no confounding\n")
+    
+    save <- sub('w', '', save) 
   } else {
     b.H <- subgroup.basep(b.Hgen,p)
-    ## b.H is a big.matrix
+    ## b.H is a matrix
     b.H <- weightorder.basep(b.H, p, fact, block)
     ## printing
     ## no printing of b.H for the moment
@@ -102,7 +103,6 @@ summary.keymatrix <- function(object, fact, block,
             H.show,
             as.character(lib),
             as.integer(maxprint))
-
         cat("\n")
       }
       else cat("nil\n\n")
@@ -117,7 +117,6 @@ summary.keymatrix <- function(object, fact, block,
             H.show,
             as.character(lib),
             as.integer(maxprint))
-
       cat("\n")
     }
     else cat("nil\n\n")
@@ -174,7 +173,6 @@ summary.keymatrix <- function(object, fact, block,
 
     if (grepl('k', save, ignore.case=TRUE)) {
       sortie$k <- b.Hgen
-
     }
     if (grepl('w', save, ignore.case=TRUE)) {
       sortie$w <- sortiew
@@ -189,10 +187,15 @@ summary.keymatrix <- function(object, fact, block,
 
 } ## end summary.keymatrix
 
+# --------------------------------------
+# "summary" method for "keymatrix"
+# --------------------------------------
+ setMethod("summary", signature(object="keymatrix"),
+          definition=summary.keymatrix)
 
 
 
-##--------------------------------------------------------------------------
+##-----------------------------------------------------
 
 
 # "alias.keymatrix"
@@ -232,12 +235,10 @@ alias.keymatrix <- function(object, model,  fact, block, ...){
   lib <- colnames(object)
   ## expansion of the model and estimate matrices
   b.model.full <- representative.basep( model, p )
-
   Nfull <- ncol(b.model.full)
 
   ## images of the model terms by the key matrix
     b.images.mat <- (object %*% b.model.full) %% p
-
 
   ## info on the columns of b.model.full and on the columns of b.images.mat
   trt.log <- rep(NA,Nfull)    # effect with at least one trt pseudofactor
@@ -418,6 +419,10 @@ alias.keymatrix <- function(object, model,  fact, block, ...){
   return(invisible(alias.stats))
 } ## end alias.keymatrix
 
+##---------------------------------------------------------------------------
+# Method alias for "keymatrix"
+ setMethod("alias", signature(object="keymatrix"),
+          definition=alias.keymatrix)
 
 
 ##--------------------------------------------------------------------------

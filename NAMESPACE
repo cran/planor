@@ -13,9 +13,9 @@ export(
   regular.design,
  as.data.frame.planordesign,
   summary.listofkeyrings, summary.designkey , summary.keymatrix,
-  summary.keyring,  summary.listofdesignkeys,
+  summary.keyring,  summary.listofdesignkeys, summary.planordesign,
   alias.designkey, alias.keymatrix, alias.listofdesignkeys,
-       alias.listofkeyrings ,  makedesignkey )
+       alias.listofkeyrings, alias.planordesign,  makedesignkey )
 exportClasses(designfactors)
 exportClasses(designkey)
 exportClasses(planordesign )
@@ -31,10 +31,9 @@ S3method(summary,keymatrix)
 S3method(summary, keyring)
 S3method(summary,listofdesignkeys) 
 S3method(summary,listofkeyrings)
+S3method(summary,planordesign)
 S3method(alias, designkey)
 S3method(alias, keymatrix)
 S3method(alias, listofdesignkeys)
 S3method(alias, listofkeyrings)
-
-
-         
+S3method(alias,planordesign)

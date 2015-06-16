@@ -17,7 +17,7 @@ Type 'q()' to quit R.
 
 > library("planor")
 Loading required package: conf.design
-Loaded planor 0.2.3
+Loaded planor 0.2.4
 
 > #---------------------------------------------------------------------------
 > # EXAMPLES FROM THE PLANOR MANUAL
@@ -197,4 +197,4 @@ Treatment pseudo-effects confounded with block effects: 2^1
 > 
 > proc.time()
    user  system elapsed 
-  0.947   0.033   1.003 
+  0.997   0.032   1.048 

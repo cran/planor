@@ -1,4 +1,3 @@
- 
 #---------------------------------------------------------------------------
 # CLASS designkey and its METHODS
 #---------------------------------------------------------------------------
@@ -63,8 +62,6 @@ planor.design.designkey <- function(key, randomize=NULL, ...){
         r.k <- nrow(key[[k]])
       aux <-  crossing(rep(p.k,r.k),start=0)
       b.pseudodesign.k[[k]] <- (aux %*% key[[k]]) %%p.k
-
-
     }
 
     ## B. Crossing of the subdesigns
@@ -74,17 +71,14 @@ planor.design.designkey <- function(key, randomize=NULL, ...){
     pseudosorder <- order(NIVtpf, FACTtpf, seq_along(NIVtpf))
       b.fullpseudodesign[,pseudosorder] <- b.fullpseudodesign
 
-
     ## D. Calculation of the design with the original treatment factors
        b.back <- matrix(0, nrow= Ntpf, ncol= Ntf)
-
 
     for(i in seq_len(Ntpf)){
         select <- (FACTtpf == FACTtpf[i]) & (seq_len(Ntpf) > i)
         b.back[i,FACTtpf[i]] <- prod( NIVtpf[select] )
     }
        b.finaldesign <- as.data.frame(b.fullpseudodesign %*% b.back)
-
 
     names(b.finaldesign) <- LIBtf ## columns names
     for(i in seq_len(Ntf)){
@@ -187,8 +181,10 @@ summary.designkey <- function(object,show="dtbw", save="k", ...){
     } else  return(invisible())
 } ## end summary.designkey
 
-##--------------------------------------------------------------------------
-
+##-------------------------------------------------------
+setMethod("summary", signature(object="designkey"),
+          definition=summary.designkey)
+##-----------------------------------------------------------
 # "show.designkey" 
 # Print the design key matrices of an object of class designkey
 #
@@ -315,4 +311,7 @@ alias.designkey <- function(object, model, ...){
   return(invisible())
 } ## end alias.designkey
 
-##--------------------------------------------------------------------------
+##--------------------------------------------------------------
+setMethod("alias", signature(object="designkey"),
+          definition=alias.designkey)
+##--------------------------------------------------

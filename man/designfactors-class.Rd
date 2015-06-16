@@ -8,10 +8,9 @@
 %\alias{bind,designfactors,designfactors-method}
 %\alias{bind.designfactors}
 
-\title{Class \code{designfactors} and methods of the class}
+\title{Class designfactors}
 
-\description{An S4 class to represent the design factors in the
-  \pkg{planor} package and to store their characteristics.}
+\description{An S4 class to represent the design factors and  store their characteristics.}
 
 \section{Objects from the Class}{
   Objects from this class can be created explicitly by calls to
@@ -20,13 +19,13 @@
 
 \section{Slots}{
   \describe{
-    \item{\code{fact.info}:}{a dataframe with one row per factor and
+    \item{fact.info}{a dataframe with one row per factor and
   with columns progressively storing information on the factors, in
   particular their numbers of levels (\code{nlev}).}
-    \item{\code{pseudo.info}:}{a dataframe with one row per pseudofactor
+    \item{pseudo.info}{a dataframe with one row per pseudofactor
   and with columns progressively storing information on the
   pseudofactors.}
-    \item{\code{levels}:}{a list of numeric or character vectors, with
+    \item{levels}{a list of numeric or character vectors, with
       each vector containing the levels of one factor.}
   }
 }
@@ -35,8 +34,8 @@
   \describe{
     \item{[}{ extract a subset of factors and update all the
   slots.}
-    \item{bind}{ bind two objects of the class and update all the
-  slots. See \code{\link{bind}}.}
+\item{bind}{ bind two objects.
+  See \code{\link[=bind]{bind}} method.}
     \item{length}{return the  number of factors. }
     \item{names}{return the names of the factors. }
 	 }
@@ -49,7 +48,7 @@
   columns that store the information on the hierarchy relationships
   between factors, if any.
 
-  In \pkg{planor}, factors are systematically decomposed into
+  In package \pkg{planor}, factors are systematically decomposed into
   pseudofactors which all have a prime number of levels and which play a
   key role in the design generation. The information on the
   pseudofactors is stored in the \code{pseudo.info} slot. In addition to
@@ -57,9 +56,7 @@
   \code{parent}) to give the factor that each pseudofactor
   decomposes.}
 
-\author{
-H. Monod, and A. Bouvier
-}
+\author{ Monod, H. and Bouvier, A. }
 \seealso{
  Creator function: 
   \code{\link{planor.factors}} 
@@ -68,8 +65,8 @@ H. Monod, and A. Bouvier
 \examples{
 F1 <- planor.factors(factors=c("block",LETTERS[1:4]), nlevels=c(6,6,4,2,6))
 F2 <- planor.factors(factors=c("block",LETTERS[11:12]), nlevels=c(4,6,6))
-## Method bind - see the warning because two factors in F1 and F2 have
-## the same name
+### Method bind - a warning will be issued because two factors
+### in F1 and F2 have the same name
 F3 <- bind(F1,F2) 
 names(F3)
 length(F3)

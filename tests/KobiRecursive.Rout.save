@@ -17,7 +17,7 @@ Type 'q()' to quit R.
 
 > library("planor")
 Loading required package: conf.design
-Loaded planor 0.2.3
+Loaded planor 0.2.4
 
 > #---------------------------------------------------------------------------
 > # EXAMPLE FROM "Automatic generation of asymmetrical regular designs"
@@ -144,4 +144,4 @@ Treatment pseudo-effects confounded with block effects: none
 > 
 > proc.time()
    user  system elapsed 
-  0.902   0.026   0.951 
+  0.902   0.032   0.952 

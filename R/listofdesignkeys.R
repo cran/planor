@@ -1,4 +1,3 @@
- 
 #---------------------------------------------------------------------------
 # CLASS "listofdesignkeys" and its METHODS
 #  S4 class, typically an output from planor.designkey when the research is recursive
@@ -175,7 +174,10 @@ summary.listofdesignkeys <- function(object, show= "tbw", save="kw", ...){
 } ## end summary.listofdesignkeys
 
 
-
+# --------------------------------------
+# "summary" method  for "listofdesignkeys"
+setMethod("summary", signature(object="listofdesignkeys"),
+          definition=summary.listofdesignkeys)
 
 ##--------------------------------------------------------------------------
 # "show.listofdesignkeys" 
@@ -240,3 +242,8 @@ alias.listofdesignkeys  <- function(object, model, ...){
   stop("NOT YET IMPLEMENTED\n")
   
 }
+# --------------------------------------
+# "alias" method for "listofdesignkeys"
+# --------------------------------------
+setMethod("alias", signature(object="listofdesignkeys"),
+          definition=alias.listofdesignkeys)

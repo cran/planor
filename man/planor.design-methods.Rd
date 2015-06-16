@@ -6,11 +6,10 @@
 \alias{planor.design,listofkeyrings-method}
 \alias{planor.design,numeric-method}
 
-\title{ Methods for function \code{planor.design} in package  \pkg{planor}: build a design from
-a design-key solution}
+\title{ Build a Design from a Design Key Solution}
 
-\description{Construction of a factorial design from an object
-  containing key matrices}
+\description{Methods to build a factorial design from an object
+  containing key matrices.}
 
 \usage{
 \S4method{planor.design}{designkey}(key, randomize=NULL, \dots)
@@ -48,7 +47,7 @@ a design-key solution}
 
 \value{An object of class \code{\linkS4class{planordesign}}, which
   contains the design built from the input. This function is restricted
-  to giving a single design.  When \code{key} is numeric, see Details}
+  to give a single design.  When \code{key} is numeric, see Details.}
 
 
 \details{ \itemize{
@@ -70,23 +69,23 @@ a design-key solution}
 }
 
 \examples{
-### Creation of a 'listofdesignkeys' object
+### Creation of a listofdesignkeys object
 K0 <- planor.designkey(factors=c("R","C","U","A","B1","B2"),
  nlevels=c(3,2,2,3,2,2), model=~R*C + (A+B1+B2)^2, estimate=~A:B1+A:B2,
  nunits=12, base=~R+C+U, max.sol=2)
-## Method planor.design applied on the 'listofdesignkeys' object
+### Method planor.design applied on the listofdesignkeys object
 P0 <- planor.design(key=K0, select=1)
-## Method planor.design applied on a designkey' object
+### Method planor.design applied on a designkey object
 P0 <- planor.design(K0[1])
 
 
-### Creation of a 'listofkeyrings' object
+### Creation of a listofkeyrings object
 K0 <- planor.designkey(factors=c(LETTERS[1:4], "block"), nlevels=rep(3,5),
 model=~block+(A+B+C+D)^2, estimate=~A+B+C+D,
 nunits=3^3, base=~A+B+C, max.sol=2, verbose=TRUE)
-## Method planor.design applied on a designkey' object
+### Method planor.design applied on a designkey object
 P0 <- planor.design(K0[1])
-P0.R <- planor.design(K0[1], randomize=~A+B+C+D) ## randomize the final design}
+P0.R <- planor.design(K0[1], randomize=~A+B+C+D) # randomize the final design}
 
 \keyword{methods}
 \keyword{design}

@@ -17,7 +17,7 @@ Type 'q()' to quit R.
 
 > library("planor")
 Loading required package: conf.design
-Loaded planor 0.2.3
+Loaded planor 0.2.4
 
 >  haies.fnames <- c("A1","A2","B1","B2","C1","C2","P1","P2","Q1","Q2")
 >  haies.key1 <- planor.designkey(factors=haies.fnames,
@@ -40,8 +40,8 @@ Main step for prime p = 2 : key-matrix search
   => search for columns 6 to 10 
       first visit to column 6 
 No solution for column  6  of the design key
-named list()
+NULL
 > 
 > proc.time()
    user  system elapsed 
-  1.199   0.041   1.263 
+  1.230   0.033   1.279 

@@ -37,7 +37,6 @@
 
 
 
-
   FREE <- TRUE
 
 ##---------------------------------------------------------------------------
@@ -91,9 +90,6 @@
 ##         designkey: a list which contains the designkey matrices used to create the object
 ##         nunits: the number of units in the design.
 ##         recursive: a "logical" equal to TRUE if the design has been constructed recursively
-## 3. matrices
-##  The names of the big.matrices are prefixed by "b."
-## (big.matrices: see the package big.memory)
 ##---------------------------------------------------------------------------
 ##  FUNCTIONS IN THIS FILE
 ##---------------------------------------------------------------------------
@@ -617,7 +613,7 @@ planor.designkey <- function(
   UPSEUDO.N <- sum(UQUASI.npseudo) # (= length(UNITS.decomp))
   ## some work needed on basic factors
   UQUASI.nbasic <- apply( outer(UNITS.primes, BASIC.info$nlev, "=="), 1, sum )
-
+  
   ## C. INELIGIBLE FACTORIAL AND PSEUDOFACTORIAL TERMS
   modelterm.matrices <- planor.modelterms(model)
   if(verbose){
@@ -632,8 +628,6 @@ planor.designkey <- function(
   }
 
   ## ineligible pseudofactorial terms associated with each prime
-  ##  b.PTERMS.q <- matrix(NA, nrow=UQUASI.N, ncol=ncol(b.P.ineligible) )
-
    b.PTERMS.q <- matrix(NA, nrow=UQUASI.N,
                            ncol=ncol( b.P.ineligible))
 
@@ -657,7 +651,6 @@ planor.designkey <- function(
   ## that is, if some ineligible term is associated with more than one prime
 
   indpdt.searches <- all(apply(b.PTERMS.q, 2, sum) == 1)
-
 
   ## E1. Preparation: a first loop to prepare needed objects
   ## indexed by the p_k. Essentially, construction
@@ -721,7 +714,6 @@ planor.designkey <- function(
                                max.sol=max.sol,
                                randomsearch=randomsearch,
                                verbose=verbose)
-
     } ## end k
   } ## end indpdt.searches
   ## E2b. Second case: recursive searches required
@@ -754,7 +746,6 @@ planor.designkey <- function(
           PHISTAR[[k]] <- lapply(PHISTAR[[k]], function(X,LIBtpf.k,LIBupf.k ){
               # when X has one single element, it should be transformed into a matrix
         X <- as.matrix(X)
-
             colnames(X) <- LIBtpf.k
             rownames(X) <- LIBupf.k
             X <- new("keymatrix", .Data=X, p=p.k)
@@ -785,13 +776,13 @@ planor.designkey <- function(
     if(indpdt.searches){
 
       
-        PHISTAR <- new("listofkeyrings",
+       PHISTAR <- new("listofkeyrings",
                        .Data=PHISTAR,
                        factors=factors,
                        nunits=nunits,
                        model=model)
       ##}
-    }
+     } # fin (indpdt.searches)
     ## SECOND CASE: recursive search
     else{
       for(ll in seq(length(PHISTAR))){
@@ -807,8 +798,14 @@ planor.designkey <- function(
                      nunits=nunits,
                      model=model)
     }
-  } ## end of  "if (length(PHISTAR) > 0)"
+  }  ## end of  "if (length(PHISTAR) > 0)"
+  
+  else {
+    return (NULL)
+  }
+  
 
+  
   return(PHISTAR)
 }  ## end planor.designkey
 ##---------------------------------------------------------------------------
@@ -846,8 +843,12 @@ regular.design <- function(
                            nunits=nunits, base=base,
                            max.sol=1,
                            randomsearch=randomsearch, verbose=verbose)
+
+   
   ## DESIGN GENERATION
-  if(any( unlist(lapply(temp, is.null)) )){
+  
+  
+  if (is.null(temp) || any( unlist(lapply(temp, is.null)) )){
     cat( paste("No solution\n") )
     return(NULL)
   }
@@ -861,7 +862,7 @@ regular.design <- function(
   }
 
   return(final)
-}
+} # end regular.design
 ##---------------------------------------------------------------------------
 ## 2. MAJOR CALCULUS FUNCTIONS
 ##---------------------------------------------------------------------------
@@ -1173,7 +1174,7 @@ planor.ineligibleterms <- function(modmat){
     ##  modmat: a list of model-estimate pairs of 0-1 matrices, typically an output
     ##         from planor.modelterms
     ## RETURN
-    ##  A 0-1 matrix with each row associated with a factor and each column with
+    ##  A 0-1  matrix with each row associated with a factor and each column with
     ##  an ineligible factorial term;
     ## EXAMPLE
     ##  M2 <- planor.model( model=~block+(A+B+C+D)^2, estimate=~A+B+C+D )
@@ -1221,21 +1222,17 @@ planor.ineligibleterms <- function(modmat){
         colnames(b.ineligible.i) <- NULL
         b.ineligibleF.i <-matrix(0, nrow= Ntf, ncol=ncol(b.ineligible.i),
                                       dimnames=list(LIBtf, colnames(b.ineligible.i)))
-
         b.ineligibleF.i[iLIBtf.i,] <- b.ineligible.i[iLIBtf.i,]
           b.ineligible <- cbind(b.ineligible, b.ineligibleF.i)
-
 
         ## elimination of redundant columns
         ## a rough way to avoid last rows to disappear
           b.ineligible <-  rbind(b.ineligible,1)
 
-
          # the second argument of convertinto.basep is 2 to get a 0-1 matrix
           ineligible.codes <- unique( convertfrom.basep(t(b.ineligible),2) )
           b.ineligible <- t(convertinto.basep(ineligible.codes,2))
         b.ineligible <- as.matrix(b.ineligible[-(Ntf+1),,drop=FALSE]) ## rough way again
-
     }
     rownames(b.ineligible) <- LIBtf
 
@@ -1250,11 +1247,9 @@ planor.ineligibleset <- function(factors, b.ineligible){
     ##  - factors: a 'designfactors' object
     ##  - ineligible: an output from planor.ineligibleterms, that is, a 0-1 matrix
     ##              with one row per factor and one column per ineligible term
-    ## a big.matrix
     ## OUTPUT
     ##  A 0-1 matrix with s rows associated with pseudofactors and each column
     ##  an ineligible pseudofactorial term
-    ## a big.matrix
     ## DETAILS
     ##  The ineligible effects derive from the ineligible terms through the
     ##  decomposition of factors into pseudofactors with a prime number of levels.
@@ -1394,7 +1389,6 @@ planor.ineligibleset <- function(factors, b.ineligible){
             mdiff <- diff(range(QTERMS.nprime))
             if( mdiff==0 ){
                     b.iqtR <- cbind(b.iqtR, iqtI)
-
                 iqtI <-  iqtI[,0]
             }
         }
@@ -1442,7 +1436,6 @@ planor.designkey.basep <- function(p, r, b.ineligible,
   ##  - p: a prime number
   ##  - r: integer (the power of p that gives the number of units)
   ##  ineligible: a 0-1 matrix of ineligible (pseudo-)factorial terms
-  ## a big.matrix
   ##  - hierarchy: NULL or a matrix 0-p
   ##  - predefined: if specified, a (r x f) matrix of prespecified defining
   ##              relationships (f smaller than s)
@@ -1500,12 +1493,10 @@ planor.designkey.basep <- function(p, r, b.ineligible,
   ## if no predefined matrix, the first column of PhiStar is forced
   ## to be equal to (1 0 ... 0)
   if(is.null(predefined)) {
-    ##PhiStar <- matrix(c(1,rep(0,r-1)), r, 1)
     b.PhiStar <- matrix(c(1,rep(0,r-1)), r, 1)
-
-  }
-  else
+  }  else {
      b.PhiStar <- as.matrix(predefined)
+   }
 
   f <- ncol(b.PhiStar)
 
@@ -1536,7 +1527,6 @@ planor.designkey.basep <- function(p, r, b.ineligible,
   ## Ustar = non-zero elements of U* = initial candidate columns for PhiStar
   U.nb <- (p^r)-1
   b.Ustar <- t(convertinto.basep(seq_len(U.nb),p))
-
 
   ## initially admissible elements for j [(r x n_j) p-matrices]
   b.iaA <- vector("list", length=s-f)
@@ -1587,7 +1577,6 @@ planor.designkey.basep <- function(p, r, b.ineligible,
         if(0 < Hmaxj[j]){
           ## b.aux = b.PhiStar[,Hset[[j]],drop=FALSE]
           b.aux = b.PhiStar[,Hset[[j]],drop=FALSE]
-
           b.candidates <- subgroup.basep(b.aux, p, all=TRUE)
         }
         ## ELSE -> no hierarchy constraint
@@ -1604,7 +1593,6 @@ planor.designkey.basep <- function(p, r, b.ineligible,
         else{
             b.inelig.kj <- as.matrix(b.ineligible[ seq_len(f+j-1),
                                                     select.kj, drop=FALSE ])
-
           iae.j <- planor.kernelcheck.basep(b.PhiStar, b.candidates,
                                             b.inelig.kj,p)
         }
@@ -1615,7 +1603,6 @@ planor.designkey.basep <- function(p, r, b.ineligible,
           return(PhiStar.solution)
         }
           b.iaA[[j]] <- b.candidates[, iae.j, drop=FALSE]
-
         ## 1.A.c: Information storage after the visit to j
         liaA[j] <- sum(iae.j)
         siaA[[j]] <- rep(s, liaA[j])
@@ -1647,7 +1634,6 @@ planor.designkey.basep <- function(p, r, b.ineligible,
                                              b.iaA[[j]][, tocheck,drop=FALSE],
                                              b.inelig.kj,
                                              p)
-
             admiss.j[ tocheck[!ae.j] ] <- k
           }
 
@@ -1762,7 +1748,6 @@ planor.designkey.recursive <- function(k,nb.sol,PVuqf,NPuqf,
   ## PRELIMINARIES: (b) predefined part of PhiStar:
     b.PhiStar <- PREDEF[[k]]
 
-
     f <- ncol(b.PhiStar)
   if(s < f)
     stop("Fewer factors than predefined factors")
@@ -1844,7 +1829,6 @@ planor.designkey.recursive <- function(k,nb.sol,PVuqf,NPuqf,
               representative.basep(as.matrix(b.INELIGtpf[NIVtpf==p,testcol[ip],drop=FALSE]),p)
             b.PhiKer.ip <- (b.PhiStar %*% b.ineligible.ip)%%p
             elimcol[ip] <- all( apply(b.PhiKer.ip, 2, sum) != 0 )
-
           }
           elimcol <- testcol[elimcol]
           ## SECOND CASE: (b) recursive call
@@ -1904,11 +1888,8 @@ planor.kernelcheck.basep <- function(b.PhiStar, b.admissible, b.IneligibleSet, p
   ## Internal function
     ## ARGUMENTS
     ##  - b.PhiStar: a (r x s) matrix of integers modulo p
-    ##     (short int big.matrix)
     ##  - b.admissible: a (r x n) matrix of integers modulo p
-    ##     (short int big.matrix)
     ##  - b.IneligibleSet: a (s x N) matrix of integers modulo p
-    ##     (short int big.matrix)
     ##  - p: a prime number
     ## RETURN
     ##  a logical vector of length n
@@ -1945,7 +1926,7 @@ weightorder.basep <- function(b.mat,p,factnum,blocklog){
   ## Reordering of matrix columns taking account of their weights and trt/block type
   ## Internal function
   ## ARGUMENTS
-  ##  - b.mat: matrix of pseudofactorial effects
+  ##  - b.mat:  matrix of pseudofactorial effects
   ##  - p: a prime
   ##  - factnum: a numeric factor to identify rows of mat associated
   ##           with the same factor
@@ -1964,7 +1945,6 @@ weightorder.basep <- function(b.mat,p,factnum,blocklog){
   nr <- nrow(b.mat)
   nc <- ncol(b.mat)
   labels <- rownames(b.mat)
-
 
   ## 1st PART = TRT WEIGHTS
   retour1 <- list( weight= as.double(rep(0, nc)),
@@ -1992,7 +1972,6 @@ retour1 <- .Call("PLANORweightorder",
                        as.integer(p),
                        as.integer(factnum1),
                        b.mat1, retour1)
-
     }
   }
 
@@ -2019,7 +1998,6 @@ retour1 <- .Call("PLANORweightorder",
                        as.integer(p),
                        as.integer(factnum2),
                        b.mat2, retour2)
-
     }
   }
   trt.only <- retour2$weight == 0
