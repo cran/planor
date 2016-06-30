@@ -52,7 +52,7 @@ show.keyring <- function(object){
 setMethod("show", signature(object="keyring"),
           definition=show.keyring)
 
-
+### AB: 4/5/2011: rajout de summary.keyring
 ##--------------------------------------------------------------------------
 # "summary.keyring" 
 # Summarizes the design properties from a keyring object, by

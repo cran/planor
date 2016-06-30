@@ -60,7 +60,14 @@ implements the core algorithms of the  \pkg{planor} package.}
   cases. Otherwise, i.e in recursive cases, an object of class
   \code{\linkS4class{listofdesignkeys}}.}
 
-\note{The \code{base} formula must be an additive formula involving a
+\note{The \code{nunits} argument is compulsory except if the \code{base}
+  argument is used. When both arguments are missing, the program stops and
+  it gives the size that would be required by a full factorial
+  design. When only \code{nunits} is missing, the number of units is
+  given by the product of the numbers of levels of the base
+  factors.
+
+  The \code{base} formula must be an additive formula involving a
   subset of factors, called the basic factors. Using the \code{base}
   argument ensures that the design solutions will include the full
   factorial design for the basic factors. This option can speed up

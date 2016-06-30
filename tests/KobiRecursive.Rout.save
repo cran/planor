@@ -1,6 +1,6 @@
 
-R version 3.1.1 (2014-07-10) -- "Sock it to Me"
-Copyright (C) 2014 The R Foundation for Statistical Computing
+R version 3.2.0 (2015-04-16) -- "Full of Ingredients"
+Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-unknown-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -16,8 +16,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library("planor")
-Loading required package: conf.design
-Loaded planor 0.2.4
+Loaded planor 1.0.1
 
 > #---------------------------------------------------------------------------
 > # EXAMPLE FROM "Automatic generation of asymmetrical regular designs"
@@ -64,8 +63,8 @@ Solution for p = 3
 The search is closed: max.sol =  2 solutions found 
 Warning message:
 In planor.modelterms(model) :
-  The estimate formula 2 contains at least one interaction without all its marginal terms.
- Such marginal terms may be unestimable in the final design.
+  The factorial term A:B1 is present in the estimate formula 1 but not all of its marginal terms. Consequently, this or these marginal terms will be considered of no interest and may be unestimable in the final design.
+The factorial term A:B2 is present in the estimate formula 1 but not all of its marginal terms. Consequently, this or these marginal terms will be considered of no interest and may be unestimable in the final design.
 
 > # cat("TEMPS planor.designkey", proc.time()-ptm,"\n")
 > cat("\n")
@@ -144,4 +143,4 @@ Treatment pseudo-effects confounded with block effects: none
 > 
 > proc.time()
    user  system elapsed 
-  0.902   0.032   0.952 
+  0.710   0.059   0.800 

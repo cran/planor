@@ -1,6 +1,6 @@
 
-R version 3.1.1 (2014-07-10) -- "Sock it to Me"
-Copyright (C) 2014 The R Foundation for Statistical Computing
+R version 3.2.0 (2015-04-16) -- "Full of Ingredients"
+Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-unknown-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -17,8 +17,7 @@ Type 'q()' to quit R.
 
 > # Fichier pour tester l'enchainement des fonctions sur des exemples simples
 > library("planor")
-Loading required package: conf.design
-Loaded planor 0.2.4
+Loaded planor 1.0.1
 
 > toto <- planor.factors(LETTERS[1:5],c(2,6,12,3,2))
 > tata <- planor.model(y~A+B+C+D+E)
@@ -96,4 +95,4 @@ $bloc
 > 
 > proc.time()
    user  system elapsed 
-  1.098   0.042   1.156 
+  1.033   0.069   1.133 

@@ -42,9 +42,9 @@ pick.listofdesignkeys <- function(keys,selection){
   if (selection > length(keys)) {
     stop( paste("The selection argument must be smaller than ", length(keys)))
   }
-
-
-
+###  pickdesign <- new("designkey", .Data=keys@.Data[[selection]],
+###                    factors=keys@factors,
+###                    model=keys@model)
   pickdesign <- keys[[selection]]
   return(pickdesign)
 }
@@ -87,10 +87,13 @@ setMethod("[", "listofdesignkeys",
 # P0 <- planor.design(key=K0, select=1)
 # -----------------------------------------------
 planor.design.listofdesignkeys <- function(key, randomize=NULL, selection=1, ...){
+
     selected <- pick.listofdesignkeys(key,selection)
     OUT <- planor.design.designkey(selected, randomize, ...)
     return(OUT)
 }
+
+
 # --------------------------------------
 # "planor.design" method for "listofdesignkeys"
 # --------------------------------------
@@ -240,7 +243,7 @@ setMethod("show", signature(object="listofdesignkeys"),
 # ---------------------------------------------
 alias.listofdesignkeys  <- function(object, model, ...){
   stop("NOT YET IMPLEMENTED\n")
-  
+  ### VOIR
 }
 # --------------------------------------
 # "alias" method for "listofdesignkeys"

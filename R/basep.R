@@ -99,8 +99,8 @@ cross.designs <- function(designs){
   b.crossdesign <- matrix(0, nrow= prod.nrows, ncol=sum.ncols)
 
 
-  
-  
+  ### NOTE AB: put NA between quotes because, without quotes, it is rejected
+  ### but anything is convenient: the colnames will be replaced
   colnames(b.crossdesign) <- as.character(rep("NA", sum.ncols))
   i.col <- 0
   for(i in seq_along(designs) ){
@@ -113,6 +113,12 @@ cross.designs <- function(designs){
       colnames(b.crossdesign)[colindices] <- colnames(designs[[i]])
     }
   }
+
+
+  storage.mode(b.crossdesign)  <- "integer"
+  
+
+  
   return(b.crossdesign)
 }  # end cross.designs
 #---------------------------------------------------------------------------
@@ -135,7 +141,8 @@ go1convertinto.basep <- function (x, p) {
     newval <- x%%p
     val <- c(val,newval)
   }
-    return(val)
+  storage.mode(val) <- "integer"
+  return(val)
 } # end go1convertinto.basep
 
 #---------------------------------------------------------------------------
@@ -144,18 +151,20 @@ goconvertinto.basep <- function (x, p) {
   # called by convertinto.basep: loop when its argument is vector
   # Call go1convertinto.basep on  max(x) to know
   # the maximal number of columns of the result
-
-  
-  
-  
-  
-  
+###  NOTE AB: a matrix with the maximum number of columns is allocated
+  ###  but all of them are filled in on the line which corresponds
+  ### to max(x), only.
+  ###  The result is used to determine the ineligible.
+  ###  The values 0, by which they are initialized, cannot be confused
+  ###  with the 0 of the decomposition in factors of p?
   # ----------------------------------------------------------------
     l <- matrix(0, length(x), length(go1convertinto.basep(max(x),p)))
     for(i in seq_along( x)){
       dec.i <- go1convertinto.basep(x[i],p)
       l[i, seq_along(dec.i) ] <- dec.i
     }
+    storage.mode(l) <- "integer"
+
     return(l)
   } # end goconvertinto.basep
 
@@ -187,7 +196,10 @@ convertinto.basep <- function (x, p) {
 goconvertfrom.basep <- function (x, p) {
   # Function called by convertfrom.basep when x is a vector
   # See convertfrom.basep
-  return( sum( x * p^(seq_along(x)-1) ))
+  ret <- sum( x * p^(seq_along(x)-1) )
+  storage.mode(ret)  <- "integer"
+
+  return(ret)
 }
 
 
@@ -206,21 +218,21 @@ convertfrom.basep <- function (x, p) {
   # EXAMPLE:
   #  vec3 <- convertinto.basep(1:10, 3)
   #  convertfrom.basep( vec3, 3 )
-  
-  
-  
-  
-  
-  
-  
-
-
-
-
+  ### NOTE AB: (27/04/2009):
+  ### - On ne programme pas en C car, bien que le C soit
+  ### plus rapide, il est trop volumineux et provoque des
+  ### pbes d'allocation memoire sur testsSTouzeau4
+  ###  - Pas la peine de faire les verif ci-dessous:
+  ### ce n'est pas une fonction a dispo de l'utilisateur
+  ### et, nous, on l'appelle avec des argu corrects:
+###  if (!is.numeric(x))
+###    stop("cannot recompose non-numeric arguments")
+###  if( (max(x)>p) || (min(x)<0) )
+###    stop("x must be reduced modulo p")
 # ------------------------------------------------------------
   if (is.matrix(x)) {
-    
-    
+    ### On n'utilise pas un apply car c'est plus long
+    ### que de faire une boucle
     l <- rep(NA, nrow(x))
     for(i in seq_along( l)){
       l[i] <- goconvertfrom.basep(x[i,],p)
@@ -266,7 +278,10 @@ representative.basep <- function(b.mat,p){
     }
     b.representative <- cbind(b.representative, mat.j)
   } # end j
-   return(b.representative %%p)
+  ret <- b.representative %%p
+  storage.mode(ret) <- "integer"
+
+   return(ret)
 } # end representative.basep
 #---------------------------------------------------------------------------
 kernelmatrix.basep <- function(mat,p){
@@ -294,13 +309,14 @@ kernelmatrix.basep <- function(mat,p){
   if( nr == nc ){
     if( all( mat[,seq_len(nr)]==diag(nr) ) ){
       b.mat.kernel <- matrix(0,nr,0)
+      storage.mode(b.mat.kernel) <- "integer"      
       # matrix with 0 column
       rownames(b.mat.kernel) <- pseudonames
       return(b.mat.kernel) }}
   if( nr < nc ){
     if( all( mat[,seq_len(nr)]==diag(nr) ) ){
   b.mat.kernel <- rbind( -mat[,seq(nr+1,nc),drop=FALSE], diag(nc-nr) )%%p
-
+      storage.mode(b.mat.kernel) <- "integer"
       rownames(b.mat.kernel) <- pseudonames
       return(b.mat.kernel) }}
   # general case: elimination algorithm
@@ -375,7 +391,7 @@ kernelmatrix.basep <- function(mat,p){
     b.mat.kernel <- matrix(0, nc, 0)
   }
   rownames(b.mat.kernel) <- pseudonames
-
+  storage.mode(b.mat.kernel) <- "integer"
   return(b.mat.kernel)
 } # end kernelmatrix.basep
 
@@ -397,13 +413,13 @@ subgroup.basep <- function(b.mat,p,all=FALSE){
   # DETAILS
   #  it is not checked whether the column vectors of b.mat are independent, so there
   #  may be several times
-  
-  
-  
-  
-  
-  
-  
+  ### NOTE AB:
+  ### Execution on this function with valgrind --memcheck may issue
+  ### warnings like this:
+  ### Warning: set address range perms: large range 1207959552 (undefined)
+  ### That happens when Valgrind sees a big allocation or deallocation
+  ### via malloc(), free, brk(), mmap(), munmap(), etc.
+  ### It's not necessarily a problem, but it is a bit suspicious for valgrind
   # EXAMPLES
   #  a <- subgroup.basep( as.matrix(cbind(c(1,2,0),c(2,0,1))), 3)
   # print(a)
@@ -430,7 +446,9 @@ subgroup.basep <- function(b.mat,p,all=FALSE){
 #  b.outmat has at most plus N-1 columns (N>=2)
   b.outmat <- matrix(0, nrow=nrow(b.mat), ncol=(N-1),
                         dimnames=list(rownames(b.mat), NULL))
-    .Call("PLANORsubgroup",
+  storage.mode(b.outmat) <- "integer"
+  
+  ret <- .Call("PLANORsubgroup",
                   as.integer(nrow(b.mat)),
                   as.integer(nbg),
                   as.integer(N),

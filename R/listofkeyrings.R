@@ -156,10 +156,10 @@ summary.listofkeyrings <- function(object, show="tbw", save="kw", ...){
   NIVtpf <- pseudo.info$nlev
   BLOCKtpf <- pseudo.info$block
   ## units factors
-
-  
+### HM, 30/06/2012 (no k factor case) : changed
+  ### PVuqf <- unique(pseudo.info$nlev)
   PVuqf <- unique(factorize(object@nunits))
-
+### HM, 30/06/2012 : END
   PVuqf <- PVuqf[order(PVuqf)]
   Nuqf <- length(PVuqf)
   ## Loop on the distinct prime numbers
@@ -224,10 +224,10 @@ show.listofkeyrings <- function(object){
   ## units factors
   cat("An object of class listofkeyrings\n")
   pseudo.info <- object@factors@pseudo.info
-
-  
+### HM, 30/06/2012 (no k factor case) : changed
+  ### PVuqf <- unique(pseudo.info$nlev)
   PVuqf <- unique(factorize(object@nunits))
-
+### HM, 30/06/2012 : END
   PVuqf <- PVuqf[order(PVuqf)]
   Nuqf <- length(PVuqf)
 

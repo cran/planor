@@ -23,7 +23,7 @@ setMethod("length", signature(x="designfactors"),
 # --------------------------------------
 # "[" method
 # --------------------------------------
-
+### AB: le nom ne peut pas commencer  par crochet ouvrant d'ou le nom "index" choisi mais c'est sans importance, c'est juste le nom du fichier
 # --------------------------------------
 setMethod("[",
 signature(x = "designfactors", i = "ANY", j = "ANY", drop = "ANY"),

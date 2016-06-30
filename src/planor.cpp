@@ -1,5 +1,5 @@
 /* TYPE OF THE matrices */
-#define  TYPEOFMAT double
+#define  TYPEOFMAT int
 
 /* +++  includes from R +++ */
 #include <R.h>
@@ -84,8 +84,8 @@ NOTE
  ++++++++++++++++++++++++++++++++++++++++++++++++ */
   int l, r;
   /* Access to the values of the matrices */
-  TYPEOFMAT *A = (TYPEOFMAT *) NUMERIC_POINTER(addressofa);
-  TYPEOFMAT *res = (TYPEOFMAT *) NUMERIC_POINTER(addressofres);
+  TYPEOFMAT *A = (TYPEOFMAT *) INTEGER_POINTER(addressofa);
+  TYPEOFMAT *res = (TYPEOFMAT *) INTEGER_POINTER(addressofres);
 
 
 R_CheckUserInterrupt(); // to allow user interrupt
@@ -272,7 +272,7 @@ CALLED BY
   // because this one is a progressive cumulation of values
   // whose final result is determined at the end of loops only
   //Access to the resulting  matrix
-TYPEOFMAT *res = (TYPEOFMAT *) NUMERIC_POINTER(addressofres);
+TYPEOFMAT *res = (TYPEOFMAT *) INTEGER_POINTER(addressofres);
 
 
   for (i=0; i< (*nrow); i++) {
@@ -283,7 +283,7 @@ TYPEOFMAT *res = (TYPEOFMAT *) NUMERIC_POINTER(addressofres);
 	// The null values should be ignored
 	//	res[i,j]= res[i,j]%p
 	aux= (int) res[(*nrow) *j +i]% (*p); 
-	res[(*nrow) *j +i]= (double)aux; 
+	res[(*nrow) *j +i]= (TYPEOFMAT)aux; 
       }
     } // end j
   } // end i
@@ -330,9 +330,9 @@ CALLED BY
   int br = imin2(*nrow, *maxprint);
   int bc = imin2(*ncol, *maxprint);
 
-R_CheckUserInterrupt(); // permettre a l'utilisateur d'interrompre
+R_CheckUserInterrupt(); // check User interrupt
 // Access to the  matrix H
-TYPEOFMAT *H = (TYPEOFMAT *) NUMERIC_POINTER(addressofH);
+TYPEOFMAT *H = (TYPEOFMAT *) INTEGER_POINTER(addressofH);
 
 
   for (j=0; j< bc; j++) {
@@ -343,18 +343,31 @@ TYPEOFMAT *H = (TYPEOFMAT *) NUMERIC_POINTER(addressofH);
       //      if (H[j * (*nrow) + i] ==0) continue;
       // are replaced, to avoid rounding errors.
       // (NB: H contains positive integers)
-if (ISZERO(H[  (*nrow)*j+i])) continue;
+if (ISZERO((double)H[  (*nrow)*j+i])) continue;
 
    Rprintf(" %s", CHAR(STRING_ELT(gLIBtpf,i)));
 
       //      if (H[i,j] !=1) 
-if (!ISUN(H[(*nrow)*j+i])) {
-Rprintf("^%d ", (int)H[(*nrow)*j+i]);
+if (!ISUN((double)H[(*nrow)*j+i])) {
+Rprintf("^%d ", H[(*nrow)*j+i]);
    }
 
     } //fin i
     Rprintf("\n");
   } // end j
+
+  /* AB, July 2015. Warn if all is not printed */
+  if ((br <*nrow) || (bc <*ncol)) {
+    Rprintf("\n");
+  }
+  if (br <*nrow) {
+    Rprintf("The first %d rows on a total of %d\n", br, *nrow);
+  }
+
+  if (bc <*ncol) {
+    Rprintf("The first %d columns on a total of %d\n", bc, *ncol);
+  }
+
   return(addressofH);
 
 } // end PLANORlibsk
@@ -411,7 +424,7 @@ CALLED BY
   kernelmatrix.basep, PLANORweightorder
  ++++++++++++++++++++++++++++++++++++++++++++++++ */
   //  if ( (*J==1) || (*J==(*p-1))) {
-  if ( EQUAL(*J, 1) || EQUAL(*J, (*p-1))) {
+  if ( EQUAL((double)(*J), 1) || EQUAL((double)(*J), (double)(*p-1))) {
     *inv = *J;
   } else {
     *inv =  prodk(*p, *J);
@@ -483,13 +496,13 @@ CALLED BY
   int *ncol = INTEGER_POINTER(gncol);
   int *p = INTEGER_POINTER(gp);
   int *factnum = INTEGER_POINTER(gfactnum);
-  double *weight = NUMERIC_POINTER(gweight);
-  double *pseudoweight = NUMERIC_POINTER(gpseudoweight);
-  double *binrank  = NUMERIC_POINTER(gbinrank);
-  double *modrank = NUMERIC_POINTER(gmodrank);
+  int *weight = INTEGER_POINTER(gweight);
+  int *pseudoweight = INTEGER_POINTER(gpseudoweight);
+  int *binrank  = INTEGER_POINTER(gbinrank);
+  int *modrank = INTEGER_POINTER(gmodrank);
   //Access to the  matrix mat
 
-TYPEOFMAT *mat =  NUMERIC_POINTER(addressofmat);
+TYPEOFMAT *mat =  INTEGER_POINTER(addressofmat);
 
 
 R_CheckUserInterrupt(); 
@@ -505,7 +518,7 @@ R_CheckUserInterrupt();
     fnz =-1;
     for (i= 0; i< (*nrow); i++) {
       //      if (mat[i, j] != 0) {
- if ( !ISZERO(mat[(*nrow)* j +i])) {
+ if ( !ISZERO((double)mat[(*nrow)* j +i])) {
 
 	  fnz=(i+1);
 	break; // sortir de la boucle i
@@ -538,14 +551,14 @@ d= div((inv * (int)mat[(*nrow)* j +i]), *p);
       mat[(*nrow)* j +i] = (short int) d.rem;
 
       //      if (mat[i,j] != 0) {
-      if (ISZERO(mat[(*nrow)* j +i]) == 0) {
+      if (ISZERO((double)mat[(*nrow)* j +i]) == 0) {
 
 	//	pseudoweight[j] += 1;
 	pseudoweight[j] += 1;
 	weight[j] += pasvu(factnum[i], &ifv, factvu);
-	binrank[j] += (double) R_pow_di( (double)(*p), i);
+	binrank[j] += (int) R_pow_di( (double)(*p), i);
 	//	modrank[j] += (mat[i,j] * pow(p, (nr-i-1)));
-modrank[(*ncol)-j-1] += ( (double)(mat[(*nrow)* j +i]) * 
+modrank[(*ncol)-j-1] += ( (int)(mat[(*nrow)* j +i]) * 
 		R_pow_di( (double)(*p), ((*nrow)-i-1)));
 
 
@@ -591,9 +604,9 @@ CALLED BY
   int *test = INTEGER_POINTER(gtest);
 
   // Access to the matrices
-  TYPEOFMAT *ImagesIS = (TYPEOFMAT *) NUMERIC_POINTER(addressofImagesIS);
+  TYPEOFMAT *ImagesIS = (TYPEOFMAT *) INTEGER_POINTER(addressofImagesIS);
 
-  TYPEOFMAT *admissible = (TYPEOFMAT *)  NUMERIC_POINTER(addressofadmissible);
+  TYPEOFMAT *admissible = (TYPEOFMAT *)  INTEGER_POINTER(addressofadmissible);
 
 
 
@@ -606,7 +619,7 @@ R_CheckUserInterrupt(); // allow user interrupt
       for (l=0; l< *r; l++) {
 	//	if (ImagesIS[l,j] !=admissible [l,k]) {
 //NOTE: values stored by column
-	if (!EQUAL(ImagesIS[(*r)*j +l], admissible[(*r)*k+l])) {
+	if (!EQUAL((double)ImagesIS[(*r)*j +l], (double)admissible[(*r)*k+l])) {
 
 	  trouve=0;
 	  break; // go out the loop on l

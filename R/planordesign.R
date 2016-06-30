@@ -25,7 +25,7 @@ getDesign.planordesign <- function(object){return(object@design)}
 setMethod("getDesign", signature(object="planordesign"),
           definition=getDesign.planordesign)
 ##--------------------------------------------------------------------------
-
+### 12/09/2012: "[" A VOIR. N'est pas a la disposition des utilisateurs
 setMethod("[",
           signature(x = "planordesign", i = "ANY", j = "ANY", drop = "ANY"),
           definition=function(x,i,j,...,drop){
@@ -65,7 +65,7 @@ as.data.frame.planordesign <- function(x, ...) {
 } # end as.data.frame.planordesign
 ##--------------------------------------------------------------------------
 # Method summary  for "planordesign"
-
+### AB 15/6/2015
 # Summarises the design properties of a planordesign  object, by
 # calling summary.keymatrix on each of its key matrices contained
 # in the slot designkey 
@@ -89,7 +89,7 @@ summary.planordesign <- function(object, fact, block,
 }
 ##--------------------------------------------------------------------------
 # Method alias  for "planordesign"
-
+### AB 15/6/2015
 # Summarises the design properties of a planordesign  object, by
 # calling alias on each of its key matrices
 # ---------------------------------------------

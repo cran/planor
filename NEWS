@@ -1,47 +1,81 @@
+2016-06-30
+	* DESCRIPTION:  planor version is 1.0-1
+	* Fix a bug in file planor.R, function regular.design:
+	there was a double-comma between two arguments in the call to
+	planor.design
+
+2016-04-15 
+	* add documentation: communication from Herve Monod (2016-01-08)
+
+2016-01-17 Herve Monod
+	* if nunits is missing, it is now calculated as the product
+	of the numbers of levels of the base factors; error now only
+	occurs if both arguments are missing or they are incompatible 
+	* bugs corrected to handle trivial cases (e.g. both model and
+	estimate formulae are empty)
+	* more informative error and warning messages when nunits is
+	missing and for some misspecifications of the model and
+	estimate formulae
+	* error message when factors and nlevels do not correspond
+	* error message when the order of the factor names is not 
+	compatible with a hierarchy relationship
+	* error message reformulated when the numbers of levels of 
+	factors involved in a hierarchy are not coherent
+	* error message when there is not a solution for all primes
+
+2015-07-08
+	* DESCRIPTION:  planor version is 0.2-5
+	* Warn when the planor.max.print option limits the number
+	of rows/columns of the matrix printed by C programs
+	* Set the storage mode of the structures which contain
+	integer numbers to "integer" rather then the default mode
+	(i.e "double" in R)
+	* Some changes to speed execution
+
 2015-06-16
 	* Fix a bug in function planor.designkey and regular.design:
 	when there is no solution, return NULL
 	* Add methods alias and summary to class planordesign
 	
 2015-03-03   Annie Bouvier
-	* DESCRIPTION:  planor version is 2.0-3
+	* DESCRIPTION:  planor version is 0.2-3
 	* Some changes for complying with CRAN policies
 
 2015-03-02   Herve Monod
 	* Function planor.designkey.basep: fix a bug
 	
 2014-08-29  Annie Bouvier
-	* DESCRIPTION:  planor version is 2.0-1
+	* DESCRIPTION:  planor version is 0.2-1
 	* inst/doc/index.html: remove extra html tags
 	
 2014-07-11  Annie Bouvier
-	* DESCRIPTION:  planor version is 2.0-0
+	* DESCRIPTION:  planor version is 0.2-0
 	* planor without use of bigmemory package becomes the usual
 	version. planor using bigmemory is renamed planorB.
 
 2014-04-23 Annie Bouvier
-	* DESCRIPTION:  planor version is 1.0-12
+	* DESCRIPTION:  planor version is à 0.1-12
 	* NAMESPACE: add "import" line for other packages importation 
 	
 2014-04-23 Annie Bouvier
-	* DESCRIPTION:  planor version is 1.0-11
+	* DESCRIPTION:  planor version is 0.1-11
 	Add BH among LinkingTo list.
 	
 2013-09-20  Annie Bouvier
-	* DESCRIPTION:  planor version is 1.0-10
+	* DESCRIPTION:  planor version is 0.1-10
 	* Move the source vignettes from the directory
 	inst/doc to  the directory vignettes for R.3 compatibility
 
 2013-06-10  Annie Bouvier
-	* DESCRIPTION:  planor version is 1.0-8
+	* DESCRIPTION:  planor version is 0.1-8
 	* Update the bigmemory package before saving tests results
 
 2013-06-09   Herve Monod
-	* DESCRIPTION:  planor version is 1.0-7
+	* DESCRIPTION:  planor version is 0.1-7
 	* Creation of the function 'makedesignkey' 
 	
 2013-04-30   Annie Bouvier
-	* DESCRIPTION:  planor version is 1.0-6
+	* DESCRIPTION:  planor version is 0.1-6
 	* Creation of a version of planor which does not
 	require bigmemory: planorR
 	* Fix a bug in alias.designkey
@@ -53,19 +87,19 @@
 	* Add function as.data.frame.planordesign
 
 2013-03-08   Annie Bouvier
-        * DESCRIPTION:  planor version is 1.0-5
+        * DESCRIPTION:  planor version is 0.1-5
 	* generic.R: remove the definition of the generic function "alias"
 	to avoid confusion with the function of same name in package "stats"
 	
 2013-02-22   Annie Bouvier
-	* DESCRIPTION:  planor version is 1.0-3
+	* DESCRIPTION:  planor version is 0.1-3
 	* R/zzz.R: .onAttach instead of .onLoad
 
 2012-10-05  Annie Bouvier
-	* DESCRIPTION: planor version 1.0-2
+	* DESCRIPTION: planor version 0.1-2
 	* CITATION: titles have changed
 	
 2012-09-27  Annie Bouvier, Hervé Monod 
-	* DESCRIPTION: planor version 1.0-1. First release submitted on the CRAN
+	* DESCRIPTION: planor version 0.1-1. First release submitted on the CRAN
 
 

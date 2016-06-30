@@ -12,7 +12,7 @@
 # -  recursive: logical, TRUE if the design has been constructed recursively
 # Methods of "designkey" : planor.design, summary, show, alias
 #---------------------------------------------------------------------------
-
+### HM, 30/06/2012 : add the units slot (in case there is no k factor)
 setClass("designkey",
          contains=c("list"),
          representation(factors="designfactors",
@@ -50,10 +50,10 @@ planor.design.designkey <- function(key, randomize=NULL, ...){
     Ntpf <- nrow(pseudo.info)
 
     ## A. Construction of each sub-design associated with each Sylow subgroup
-
-    
+### HM, 30/06/2012 (no k factor case) : changed
+    ### PVuqf <- unique(pseudo.info$nlev)
     PVuqf <- unique(factorize(key@nunits))
-
+### HM, 30/06/2012 : END
     PVuqf <- PVuqf[order(PVuqf)]
     Nuqf <- length(PVuqf)
     b.pseudodesign.k <- vector("list", length=Nuqf)
@@ -113,8 +113,8 @@ planor.design.designkey <- function(key, randomize=NULL, ...){
 setMethod("planor.design", signature(key="designkey"),
           definition=planor.design.designkey)
 ##--------------------------------------------------------------------------
-
-
+### HM, March 2011  ==> printed output changed
+### HM, March 2011  ==> distinction between treatment and block effects
 # "summary.designkey" 
 # Summarises the design properties of a designkey object, by
 # printing the summary of each of its key matrices (design key matrix, confounding
@@ -151,13 +151,13 @@ summary.designkey <- function(object,show="dtbw", save="k", ...){
   NIVtpf <- pseudo.info$nlev
   BLOCKtpf <- pseudo.info$block
   ## units factors
-
-  
+### HM, 30/06/2012 (no k factor case) : changed
+  ### PVuqf <- unique(pseudo.info$nlev)
   PVuqf <- unique(factorize(object@nunits))
-
+### HM, 30/06/2012 : END
   PVuqf <- PVuqf[order(PVuqf)]
   Nuqf <- length(PVuqf)
-
+### HM, March 2011  ==> b.Hgen devient une liste
   ## Storage preparation of the returned results
   Hgen <- vector(mode="list",length=Nuqf)
   ## Loop on the distinct prime numbers
@@ -211,7 +211,7 @@ show.designkey <- function(object){
   cat("An object of class designkey\n")
   keys <- unclass(object)
   primes <- as.integer( names(keys) )
-  
+  ### cat("DESIGN KEY MATRICES\n")
 
   ## A. Design key matrices
   for(k in seq(length(primes))) {
@@ -226,8 +226,8 @@ setMethod("show", signature(object="designkey"),
           definition=show.designkey)
 
 ##--------------------------------------------------------------------------
-
-
+### HM, March 2011  ==> printed output changed
+### HM, March 2011  ==> distinction between treatment and block effects
 # "alias.designkey" 
 # Summarise the design properties from a design key matrix.
 # Display the design keys matrices and the factorial effects confounded with the mean.
@@ -300,7 +300,7 @@ alias.designkey <- function(object, model, ...){
     modset <- matrix(b.modset[rows.k, ], ncol=ncol(b.modset))
     model.cols.k <-
       0 < apply(modset, 2, sum)
-
+### BUG fixed 30/4/2013    model.k <- modset[rows.k, model.cols.k, drop=FALSE]
     model.k <- modset[, model.cols.k, drop=FALSE]
     ## alias calculations for prime p
     alias.keymatrix(object=object[[k]], model=model.k,
