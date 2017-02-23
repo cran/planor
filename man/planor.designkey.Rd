@@ -12,9 +12,10 @@ implements the core algorithms of the  \pkg{planor} package.}
 
 \arguments{
   \item{factors}{an object of class \code{\linkS4class{designfactors}},
-    typically an output from \code{\link{planor.factors}}. Alternatively,
+    typically an output from
+  \code{\link{planor.factors}}. Alternatively, you can use
     the arguments \code{factors}, \code{nlevels}, \code{ordered},
-    \code{hierarchy} may follow the syntax of \code{\link{planor.factors}}.}
+    \code{hierarchy} as described in the syntax of \code{\link{planor.factors}}.}
   
   \item{nlevels}{see \code{\link{planor.factors}}. Ignored if
     \code{factors} is of class \code{\linkS4class{designfactors}}.}
@@ -29,9 +30,10 @@ implements the core algorithms of the  \pkg{planor} package.}
     \code{factors} is of class \code{\linkS4class{designfactors}}.}
   
   \item{model}{a list of model-estimate pairs of formulae, typically an
-    output from \code{\link{planor.model}}. Alternatively, the arguments
+    output from \code{\link{planor.model}}. Alternatively, you can use
+    the arguments
     \code{model}, \code{estimate}, \code{listofmodels} and
-    \code{resolution} may follow the syntax of
+    \code{resolution}, as described in the syntax of
     \code{\link{planor.model}}.}
   
   \item{estimate}{see \code{\link{planor.model}}. Ignored if
@@ -41,7 +43,8 @@ implements the core algorithms of the  \pkg{planor} package.}
     \code{model} is a list.}
 
   \item{resolution}{see \code{\link{planor.model}}. Ignored if
-    \code{model} is a list.}
+    \code{model} is a list. When  set and there is no hierarchy, a faster algorithm is used
+    which exploits the  symmetries. }
   
   \item{nunits}{a scalar giving the total number of units in the design}
   

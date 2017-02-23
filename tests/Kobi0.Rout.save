@@ -16,7 +16,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library("planor")
-Loaded planor 1.0.1
+Loaded planor 1.3.6
 
 > 
 > #---------------------------------------------------------------------------
@@ -59,9 +59,10 @@ Preliminary step 1 : processing the model specifications
 Preliminary step 2 : performing prime decompositions on the factors
 Main step for prime p = 2 : key-matrix search
   => search for columns 4 to 5 
-      first visit to column 4 
-      first visit to column 5 
-The search is closed: max.sol =  2 solution(s) found 
+      first visit to column 4
+      first visit to column 5
+    ---    col. 5 ( j = 2) 3 selected candidates
+The search is closed: max.sol = 2 solution(s) found 
 > # cat("TEMPS planor.designkey", proc.time()-ptm,"\n")
 > cat("\n")
 
@@ -110,12 +111,14 @@ Preliminary step 1 : processing the model specifications
 Preliminary step 2 : performing prime decompositions on the factors
 Main step for prime p = 3 : key-matrix search
   => search for columns 4 to 6 
-      first visit to column 4 
-      first visit to column 5 
-      first visit to column 6 
-The search is closed: max.sol =  2 solution(s) found 
+      first visit to column 4
+      first visit to column 5
+    ---    col. 5 ( j = 2) 8 selected candidates
+      first visit to column 6
+    ---    col. 6 ( j = 3) 18 selected candidates
+The search is closed: max.sol = 2 solution(s) found 
 > 
 > 
 > proc.time()
    user  system elapsed 
-  0.871   0.075   0.977 
+  1.394   0.082   1.487 

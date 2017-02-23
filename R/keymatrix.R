@@ -1,4 +1,27 @@
-### AB: classe creee le 4/5/2011
+###################################################################
+# planor R package
+# Copyright INRA 2017
+# INRA, UR1404, Research Unit MaIAGE
+# F78350 Jouy-en-Josas, France.
+#
+# URL: http://www3.jouy.inra.fr/miaj/public/logiciels/planor/
+#
+# This file is part of planor R package.
+# planor is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# See the GNU General Public License at:
+# http://www.gnu.org/licenses/
+#
+###################################################################
+
 #---------------------------------------------------------------------------
 # CLASS "keymatrix" and its METHODS
 # An S4 class to represent an elementary key matrix in the planor package
@@ -27,8 +50,8 @@ validitykeymatrix <- function(object) {
 setValidity("keymatrix",  validitykeymatrix)
 
 ##--------------------------------------------------------------------------
-### HM, March 2011  ==> new elementary function
-### HM, March 2011  ==> distinction between treatment and block effects
+
+
 # "summary.keymatrix"
 # Summarises the main properties of a single key matrix, by displaying the key matrix, the factorial effects confounded with the mean, and the weight profiles of the effects confounded with the mean
 #
@@ -52,7 +75,7 @@ setValidity("keymatrix",  validitykeymatrix)
 
 summary.keymatrix <- function(object, fact, block,
                               show="dtbw", save="k", ...){
-### HM, 5 may 2011
+
   ## missing arguments
   if(missing(fact)){ fact <- seq(ncol(object)) }
   if(missing(block)){ block <- rep(FALSE, ncol(object)) }
@@ -95,25 +118,30 @@ summary.keymatrix <- function(object, fact, block,
   ## b.Hgen is  a matrix with 0 column
   if (ncol(b.Hgen) == 0) {
     warning("Regular matrix: no confounding\n")
-    ### AB 15/06/2015
+    
     save <- sub('w', '', save) 
   } else {
     
-    b.H <- subgroup.basep(b.Hgen,p)
+ #    b.H <- subgroup.basep(b.Hgen,p)
+   b.H <- .Call("PLANORsubgroup", as.integer(b.Hgen),
+                as.integer(nrow(b.Hgen)),
+                as.integer(ncol(b.Hgen)),
+                           as.integer(p),
+                as.integer(FALSE))
     
     ## b.H is a matrix
     b.H <- weightorder.basep(b.H, p, fact, block)
     
     ## printing
     ## no printing of b.H for the moment
-    ### printgmat( b.H )
+    
     ## selection of the columns free from block effects
     
-###  AJOUT AB: 7/7/15
+
   if (all(block ==FALSE))
     selectCol <- rep(TRUE, ncol(b.H))
   else
-    ### FIN AJOUT AB
+    
     selectCol <- apply( b.H[block, , drop=FALSE], 2, sum ) == 0
     
     ## PLANORlibsk ne modifie rien, ne fait qu'écrire
@@ -121,11 +149,13 @@ summary.keymatrix <- function(object, fact, block,
       cat("TREATMENT EFFECTS CONFOUNDED WITH THE MEAN\n")
       if(sum(selectCol) > 0){
         H.show <- matrix(b.H[,selectCol], nrow=nrow(b.H))
-         .Call("PLANORlibsk", as.integer(nrow(H.show)),
-            as.integer(ncol(H.show)),
-            as.integer(H.show),
-            as.character(lib),
-            as.integer(maxprint))
+        .Call("PLANORprintLib",
+              as.integer(H.show),
+              as.integer(nrow(H.show)),
+              as.integer(ncol(H.show)),
+              as.character(lib),
+              as.integer(maxprint))
+              
         cat("\n")
       }
       else cat("nil\n\n")
@@ -135,11 +165,12 @@ summary.keymatrix <- function(object, fact, block,
     cat("BLOCK-and-TREATMENT EFFECTS CONFOUNDED WITH THE MEAN\n")
     if(sum(block) > 0){
       H.show <- matrix(b.H[,!selectCol], nrow=nrow(b.H))
-       .Call("PLANORlibsk", as.integer(nrow(H.show)),
-            as.integer(ncol(H.show)),
-            H.show,
-            as.character(lib),
-            as.integer(maxprint))
+        .Call("PLANORprintLib",
+              as.integer(H.show),
+              as.integer(nrow(H.show)),
+              as.integer(ncol(H.show)),
+              as.character(lib),
+              as.integer(maxprint))
       cat("\n")
     }
     else cat("nil\n\n")
@@ -147,8 +178,8 @@ summary.keymatrix <- function(object, fact, block,
     ## C. Design key kernels
     if (grepl('w', show, ignore.case=TRUE) ||
         grepl('w', save, ignore.case=TRUE)) {
-### HM, March 2011 ==> pour le moment, le calcul de $blc.weight et
-###    de $blc.pseudoweight ne servent a rien
+
+
     Wprint <- rbind(attributes(b.H)$trt.weight,
                     attributes(b.H)$trt.pseudoweight,
                     attributes(b.H)$blc.weight,
@@ -193,7 +224,7 @@ summary.keymatrix <- function(object, fact, block,
   } # end grepl on show and save
     cat("\n")
   } ## end  else Hgen with 0 column
-###  return(Wprint)
+
     if (grepl('k', save, ignore.case=TRUE)) {
       sortie$k <- b.Hgen
     }
@@ -219,8 +250,8 @@ summary.keymatrix <- function(object, fact, block,
 
 
 ##-----------------------------------------------------
-### HM, March 2011  ==> new elementary function
-### HM, March 2011  ==> distinction between treatment and block effects
+
+
 # "alias.keymatrix"
 # Summarises the aliasing properties of a single key matrix
 # ARGUMENTS
@@ -242,8 +273,8 @@ summary.keymatrix <- function(object, fact, block,
 # ---------------------------------------------
 
 alias.keymatrix <- function(object, model,  fact, block, ...){
-  ### AB: le 1ier argu doit s'appeler 'object' pour etre en conformite
-  ### avec la definition de la fonction generique
+  
+  
   ## missing arguments
   if(missing(fact)){ fact <- seq(ncol(object)) }
   if(missing(block)){ block <- rep(FALSE, ncol(object)) }
@@ -256,6 +287,10 @@ alias.keymatrix <- function(object, model,  fact, block, ...){
 
   p <- object@p
   lib <- colnames(object)
+
+  ## Raw calculation of the inverses modulo p
+  invp <- .Call("PLANORinversesbasep", as.integer(p))
+  
   ## expansion of the model and estimate matrices
   b.model.full <- representative.basep( model, p )
   Nfull <- ncol(b.model.full)
@@ -277,30 +312,28 @@ alias.keymatrix <- function(object, model,  fact, block, ...){
     blc.log[j] <- any( block[nonzero.model.j] )
     ## normalization of the first non-zero element of the image vectors, if needed
     nonzero.j <- b.images.mat[,j] != 0
-### HM, 29/5/11
+
     if( any(nonzero.j) & (p!=2) ){
-### first.ind[j] <- seq(nrow(model))[nonzero.j][1]
+
       first.ind[j] <- seq(nrow(b.images.mat))[nonzero.j][1]
       first.val[j] <- b.images.mat[first.ind[j], j]
       ## Raw calculation of the inverses modulo p
-###      if(p==2){
-###        first.inv[j] <- first.val[j]
-###      }
-###      else{
-      inv <- 0
-      inv <- .C("PLANORinv", as.integer(p),
-                as.integer(first.val[j]),
-                inv= as.integer(inv))$inv
+
+
+
+
+      inv = invp[first.val[j]]
       first.inv[j] <- inv
-###      }
+
         b.images.mat[, j] <- (first.inv[j] * b.images.mat[, j]) %%p
-### HM, 29/5/11 : line below added to get the correct aliasing coefficients
+
         b.model.full[, j] <- (first.inv[j] * b.model.full[, j]) %%p
     } ## end of the normalization
   } ## end of the loop on j
   ## alias.mat construction : matrix with one row per set of confounded effects
   codes <- convertfrom.basep(t(b.images.mat[,]), p)
   codes.u <- unique(codes)
+  
   alias.mat <- matrix(0, length(codes.u), Nfull)
   for(i in seq(length(codes.u))){
     alias.mat[i, codes==codes.u[i]] <- first.inv[codes==codes.u[i]]

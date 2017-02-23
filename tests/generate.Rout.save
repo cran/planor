@@ -16,7 +16,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library("planor")
-Loaded planor 1.0.1
+Loaded planor 1.3.6
 
 > #---------------------------------------------------------------------------
 > # EXAMPLES OF AUTOMATIC MODEL GENERATION FROM RESOLUTION
@@ -30,10 +30,16 @@ Preliminary step 1 : processing the model specifications
 Preliminary step 2 : performing prime decompositions on the factors
 Main step for prime p = 2 : key-matrix search
   => search for columns 2 to 4 
-      first visit to column 2 
-      first visit to column 3 
-      first visit to column 4 
-The search is closed: max.sol =  2 solution(s) found 
+      first visit to column 2
+    ---    col. 2 ( j = 1) 6 initial candidates
+      first visit to column 3
+    ---    col. 3 ( j = 2) 6 initial candidates
+    ---    col. 3 ( j = 2) 4 selected candidates
+      first visit to column 4
+    ---    col. 4 ( j = 3) 4 initial candidates
+    ---    col. 4 ( j = 3) 1 selected candidates
+    ---    col. 4 ( j = 3) 1 selected candidates
+The search is closed: max.sol = 2 solution(s) found 
 > P <- planor.design(key=K, select=1)
 > print(P)
 An object of class "planordesign"
@@ -83,11 +89,11 @@ Slot "model":
 [[1]]
 [[1]]$Model
 ~(A + B + C + D)^2
-<environment: 0x3184d28>
+<environment: 0x2eaf6f8>
 
 [[1]]$Estimate
 ~(A + B + C + D)
-<environment: 0x3184d28>
+<environment: 0x2eaf6f8>
 
 
 
@@ -139,11 +145,18 @@ Preliminary step 1 : processing the model specifications
 Preliminary step 2 : performing prime decompositions on the factors
 Main step for prime p = 2 : key-matrix search
   => search for columns 2 to 5 
-      first visit to column 2 
-      first visit to column 3 
-      first visit to column 4 
-      first visit to column 5 
-The search is closed: max.sol =  1 solution(s) found 
+      first visit to column 2
+    ---    col. 2 ( j = 1) 14 initial candidates
+      first visit to column 3
+    ---    col. 3 ( j = 2) 14 initial candidates
+    ---    col. 3 ( j = 2) 13 selected candidates
+      first visit to column 4
+    ---    col. 4 ( j = 3) 13 initial candidates
+    ---    col. 4 ( j = 3) 12 selected candidates
+      first visit to column 5
+    ---    col. 5 ( j = 4) 12 initial candidates
+    ---    col. 5 ( j = 4) 11 selected candidates
+The search is closed: max.sol = 1 solution(s) found 
 > 
 > # ----------------------------------------------------------
 > # 6 factors, resolution 5
@@ -152,12 +165,21 @@ Preliminary step 1 : processing the model specifications
 Preliminary step 2 : performing prime decompositions on the factors
 Main step for prime p = 2 : key-matrix search
   => search for columns 2 to 6 
-      first visit to column 2 
-      first visit to column 3 
-      first visit to column 4 
-      first visit to column 5 
-      first visit to column 6 
-The search is closed: max.sol =  2 solution(s) found 
+      first visit to column 2
+    ---    col. 2 ( j = 1) 30 initial candidates
+      first visit to column 3
+    ---    col. 3 ( j = 2) 30 initial candidates
+    ---    col. 3 ( j = 2) 28 selected candidates
+      first visit to column 4
+    ---    col. 4 ( j = 3) 28 initial candidates
+    ---    col. 4 ( j = 3) 24 selected candidates
+      first visit to column 5
+    ---    col. 5 ( j = 4) 24 initial candidates
+    ---    col. 5 ( j = 4) 17 selected candidates
+      first visit to column 6
+    ---    col. 6 ( j = 5) 17 initial candidates
+    ---    col. 6 ( j = 5) 16 selected candidates
+The search is closed: max.sol = 2 solution(s) found 
 > P <- planor.design(key=K, select=1)
 > print(P)
 An object of class "planordesign"
@@ -241,11 +263,11 @@ Slot "model":
 [[1]]
 [[1]]$Model
 ~(A + B + C + D + E + F)^2
-<environment: 0x33efe50>
+<environment: 0x3ec1b08>
 
 [[1]]$Estimate
 ~(A + B + C + D + E + F)^2
-<environment: 0x33efe50>
+<environment: 0x3ec1b08>
 
 
 
@@ -342,4 +364,4 @@ Treatment effects confounded with block effects
 > 
 > proc.time()
    user  system elapsed 
-  1.049   0.094   1.171 
+  1.787   0.117   1.911 

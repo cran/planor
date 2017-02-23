@@ -1,0 +1,74 @@
+
+R version 3.2.0 (2015-04-16) -- "Full of Ingredients"
+Copyright (C) 2015 The R Foundation for Statistical Computing
+Platform: x86_64-unknown-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library("planor")
+Loaded planor 1.3.6
+
+> robotFacB <- planor.factors(factors=list(
++                         nsoil=c("curd","Saint-Paulin"),
++                         qsoil=c("10mg","100mg"),
++                         rough=c(0.25,0.73),
++                         conc=c("1%","3%"),
++                         Tact=c("15mn","30mn"),
++                         plate=5:6,
++                         col=1:4,
++                         u=1:2),
++                      block=~plate+col,
++                      hierarchy=list(~nsoil/(plate*col),
++                                     ~qsoil/(plate*col),
++                                     ~conc/plate,
++                                     ~Tact/plate))
+> robotModB <- planor.model( model=~nsoil * qsoil * rough * conc,
++                     listofmodels=list(c(~plate*col+rough,~rough),
++                                       c(~Tact,~Tact)) )
+> robotKeyB <- planor.designkey(factors=robotFacB, model=robotModB, 
++                     nunits=16, base=~plate+col+u )
+Preliminary step 1 : processing the model specifications
+Preliminary step 2 : performing prime decompositions on the factors
+Main step for prime p = 2 : key-matrix search
+  => search for columns 5 to 9 
+      first visit to column 5
+      first visit to column 6
+    ---    col. 6 ( j = 2) 6 selected candidates
+      first visit to column 7
+    ---    col. 7 ( j = 3) 8 selected candidates
+      first visit to column 8
+    ---    col. 8 ( j = 4) 0 selected candidates
+    ---    col. 8 ( j = 4) 0 selected candidates
+    ---    col. 7 ( j = 3) 8 selected candidates
+    ---    col. 6 ( j = 2) 6 selected candidates
+      first visit to column 9
+    ---    col. 9 ( j = 5) 1 selected candidates
+The search is closed: max.sol = 1 solution(s) found 
+> print(robotKeyB)
+An object of class listofkeyrings
+
+********** Prime  2  design **********
+
+--- Solution  1  for prime  2  ---
+
+      plate col_1 col_2 u nsoil qsoil rough conc Tact
+plate     1     0     0 0     0     0     0    1    1
+col_1     0     1     0 0     1     0     0    0    0
+col_2     0     0     1 0     0     1     0    0    0
+u         0     0     0 1     0     0     1    0    0
+
+> 
+> 
+> proc.time()
+   user  system elapsed 
+  1.301   0.101   1.403 

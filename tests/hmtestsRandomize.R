@@ -17,6 +17,7 @@ randK <- planor.designkey(factors=c("bloc","treatment"),
                           model=~bloc+treatment, nunits=28,
                        base=~bloc, verbose=T)
 randP <- planor.design(key=randK)@design
+set.seed(114)
  planor.randomize(~bloc, randP) 
  planor.randomize(~bloc/UNITS, randP) 
 #---------------------------------------------------------------------------

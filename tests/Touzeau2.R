@@ -16,10 +16,15 @@ cat("\n")
 cat("resolution 2\n")
 cat("\n")
 #  ptm <- proc.time()
-ST.K <- planor.designkey(factors=LETTERS[1:18], nlevels=2,
-                         model=~(A+B+C+D+E+F+G+H+I+J+K+L+M+N+O+P+Q+R)^2 ,
+# trop long
+# ST.K <- planor.designkey(factors=LETTERS[1:18], nlevels=2,
+#                          model=~(A+B+C+D+E+F+G+H+I+J+K+L+M+N+O+P+Q+R)^2 ,
+#                          nunits=2^12,
+#                        base=~A+B+C+D+E+F+G+H+I+J+K+L, max.sol=2)
+ST.K <- planor.designkey(factors=LETTERS[1:10], nlevels=2,
+                         model=~(A+B+C+D+E+F+G+H+I+J)^2 ,
                          nunits=2^12,
-                       base=~A+B+C+D+E+F+G+H+I+J+K+L, max.sol=2)
+                       base=~A+B+C+D+E, max.sol=2)
 # cat("*** TEMPS planor.designkey", proc.time()-ptm,"\n")
 cat("\n")
 ST.P <- planor.design(key=ST.K, select=2)

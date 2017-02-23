@@ -1,3 +1,26 @@
+###################################################################
+# planor R package
+# Copyright INRA 2017
+# INRA, UR1404, Research Unit MaIAGE
+# F78350 Jouy-en-Josas, France.
+#
+# URL: http://www3.jouy.inra.fr/miaj/public/logiciels/planor/
+#
+# This file is part of planor R package.
+# planor is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# See the GNU General Public License at:
+# http://www.gnu.org/licenses/
+#
+###################################################################
 #---------------------------------------------------------------------------
 #   UTILITIES FOR PLANOR, in particular matrix algebra modulo p,
 #   for p a prime
@@ -11,7 +34,6 @@
 # convertfrom.basep <- function (x, p)
 # representative.basep <- function(mat,p)
 # kernelmatrix.basep <- function(mat,p)
-# subgroup.basep <- function(mat,p,all=FALSE)
 #---------------------------------------------------------------------------
 #  1. MISCELLANEOUS
 #---------------------------------------------------------------------------
@@ -30,6 +52,11 @@ crossing <- function(n,start=1){
   # ----------------------------------------------------------
   N <- prod(n)
   s <- length(n)
+  
+  if (N > .Machine$integer.max) {
+    stop(paste("crossing. Overflow.", N, "greater than the maximum integer", .Machine$integer.max))
+  }
+
   n <- c(n,1)
   crosses <- matrix(NA, N, s)
   for(i in seq_len(s))
@@ -75,7 +102,8 @@ symmdiff <- function(x,y){
   b.z <- t(convertinto.basep(z.codes,2))
   rownames(b.z) <- rownames(x)
   return(b.z)
-}
+} # fin symmdiff
+
 #---------------------------------------------------------------------------
 cross.designs <- function(designs){
   # generates a design by crossing one, two or more subdesigns
@@ -99,8 +127,8 @@ cross.designs <- function(designs){
   b.crossdesign <- matrix(0, nrow= prod.nrows, ncol=sum.ncols)
 
 
-  ### NOTE AB: put NA between quotes because, without quotes, it is rejected
-  ### but anything is convenient: the colnames will be replaced
+  
+  
   colnames(b.crossdesign) <- as.character(rep("NA", sum.ncols))
   i.col <- 0
   for(i in seq_along(designs) ){
@@ -113,7 +141,6 @@ cross.designs <- function(designs){
       colnames(b.crossdesign)[colindices] <- colnames(designs[[i]])
     }
   }
-
 
   storage.mode(b.crossdesign)  <- "integer"
   
@@ -134,42 +161,48 @@ go1convertinto.basep <- function (x, p) {
  # c(n1, n2, .. nx) such as x=n1+n2*p+n3*p**2+n4*p**3
   # -------------------------------------------------
 
-  if (x != round(x) || x < 0)
+if (x != round(x) || x < 0)
     return(x)
   val <- x%%p
   while ( (x <- x%/%p) > 0 ) {
     newval <- x%%p
     val <- c(val,newval)
   }
-  storage.mode(val) <- "integer"
+  
   return(val)
 } # end go1convertinto.basep
 
-#---------------------------------------------------------------------------
 
+
+#---------------------------------------------------------------------------
 goconvertinto.basep <- function (x, p) {
   # called by convertinto.basep: loop when its argument is vector
   # Call go1convertinto.basep on  max(x) to know
   # the maximal number of columns of the result
-###  NOTE AB: a matrix with the maximum number of columns is allocated
-  ###  but all of them are filled in on the line which corresponds
-  ### to max(x), only.
-  ###  The result is used to determine the ineligible.
-  ###  The values 0, by which they are initialized, cannot be confused
-  ###  with the 0 of the decomposition in factors of p?
+
+  
+  
+  
+  
+  
   # ----------------------------------------------------------------
+
     l <- matrix(0, length(x), length(go1convertinto.basep(max(x),p)))
     for(i in seq_along( x)){
       dec.i <- go1convertinto.basep(x[i],p)
-      l[i, seq_along(dec.i) ] <- dec.i
+      ## dec.i is an integer64. Conversion into integer
+      ## to make 0 and 1 exactly 0 and 1
+      u <- as.integer(dec.i)
+      l[i, seq_along(dec.i) ] <- u
     }
-    storage.mode(l) <- "integer"
+
 
     return(l)
   } # end goconvertinto.basep
 
 
 #---------------------------------------------------------------------------
+
 convertinto.basep <- function (x, p) {
   # Conversion of an integer or integer vector x into base p
   # The coefficients are ordered by increasing powers of p
@@ -193,14 +226,24 @@ convertinto.basep <- function (x, p) {
 #---------------------------------------------------------------------------
 
 #---------------------------------------------------------------------------
+
 goconvertfrom.basep <- function (x, p) {
   # Function called by convertfrom.basep when x is a vector
   # See convertfrom.basep
-  ret <- sum( x * p^(seq_along(x)-1) )
-  storage.mode(ret)  <- "integer"
+  
+  ret <- sum( as.integer64(x * p^(seq_along(x)-1) ))
+
+  if (is.na(ret)) {
+    stop(paste("convertfrom.basep. Overflow. ", ret,
+               " is greater than the maximum integer ",
+               ". Generation of a number from a sequence including ", p,
+               "^", length(x)-1, " not possible.", sep=""))
+  }
 
   return(ret)
-}
+}# end goconvertfrom.basep
+
+
 
 
 
@@ -218,33 +261,42 @@ convertfrom.basep <- function (x, p) {
   # EXAMPLE:
   #  vec3 <- convertinto.basep(1:10, 3)
   #  convertfrom.basep( vec3, 3 )
-  ### NOTE AB: (27/04/2009):
-  ### - On ne programme pas en C car, bien que le C soit
-  ### plus rapide, il est trop volumineux et provoque des
-  ### pbes d'allocation memoire sur testsSTouzeau4
-  ###  - Pas la peine de faire les verif ci-dessous:
-  ### ce n'est pas une fonction a dispo de l'utilisateur
-  ### et, nous, on l'appelle avec des argu corrects:
-###  if (!is.numeric(x))
-###    stop("cannot recompose non-numeric arguments")
-###  if( (max(x)>p) || (min(x)<0) )
-###    stop("x must be reduced modulo p")
+  
+  
+  
+  
+  
+  
+  
+
+
+
+
 # ------------------------------------------------------------
   if (is.matrix(x)) {
-    ### On n'utilise pas un apply car c'est plus long
-    ### que de faire une boucle
-    l <- rep(NA, nrow(x))
+    
+    
+    l <- integer64( nrow(x))
+    
     for(i in seq_along( l)){
       l[i] <- goconvertfrom.basep(x[i,],p)
     }
-    return(l)
   }
-  else
-    return(goconvertfrom.basep(x,p))
-}
+  else {
+    l <- goconvertfrom.basep(x,p)
+  }
+ 
+    return(l)
+
+} # fin convertfrom.basep
 
 
-#---------------------------------------------------------------------------
+#---------------------------------------------------------------------
+
+#---------------------------------------------------------------------
+
+
+
 representative.basep <- function(b.mat,p){
   # generates the minimal set of representatives in base p
   # of the columns x of matrix mat
@@ -273,12 +325,18 @@ representative.basep <- function(b.mat,p){
     else{
       select <- select[seq_len(nbtocross)]
       N <- (p-1)^nbtocross
+      
+      if (N > .Machine$integer.max) {
+        stop(paste("representative.basep. Overflow.", N, "greater than the maximum integer", .Machine$integer.max))
+      }
+
       mat.j <- matrix(x, nrow(b.mat), N)
       mat.j[select,] <- t( crossing(rep(p-1,nbtocross),start=1) )
     }
     b.representative <- cbind(b.representative, mat.j)
   } # end j
   ret <- b.representative %%p
+
   storage.mode(ret) <- "integer"
 
    return(ret)
@@ -321,6 +379,11 @@ kernelmatrix.basep <- function(mat,p){
       return(b.mat.kernel) }}
   # general case: elimination algorithm
   # - initialisation
+  
+  # Raw calculation of the inverses modulo p
+  invp <- .Call("PLANORinversesbasep", as.integer(p))
+  
+  
   firstgoodrow <- function(column, rowindex){
     # specific function to indicate the position of the first non-0 element
     # above position "rowindex" in a vector "column"
@@ -353,10 +416,7 @@ kernelmatrix.basep <- function(mat,p){
       if(i != zz)  mat[c(i,zz),] <- mat[c(zz,i),]
       # normalisation
 # Raw calculation of the inverses modulo p
-      inv <- 0
-      inv <- .C("PLANORinv", as.integer(p),
-                   as.integer(mat[i,colindices[i]]),
-                   inv= as.integer(inv))$inv
+      inv <- invp[mat[i,colindices[i]]]
       mat[i,] <- (inv * mat[i,]) %% p
       # orthogonalisation
       for(ii in rowindices[rowindices != i]){
@@ -396,76 +456,3 @@ kernelmatrix.basep <- function(mat,p){
 } # end kernelmatrix.basep
 
 
-#---------------------------------------------------------------------------
-subgroup.basep <- function(b.mat,p,all=FALSE){
-  # FUNCTION
-  # calculates the non null elements of the subgroup H generated by the columns
-  # of b.mat, considered as vectors in (Zp)^s
-  # ARGUMENTS
-  #  - b.mat: a  matrix of integers modulo p whose columns are assumed to
-  #       be independent vectors in (Zp)^s;
-  # Cannot be a matrix with 0 column
-  #   - p: a prime
-  #   - all: if TRUE all elements in H are given, if FALSE only elements up
-  #       to multiplication by an integer modulo p are given
-  # RETURN
-  #  a  matrix of integers modulo p whose columns are the subgroup elements;
-  # DETAILS
-  #  it is not checked whether the column vectors of b.mat are independent, so there
-  #  may be several times
-  ### NOTE AB:
-  ### Execution on this function with valgrind --memcheck may issue
-  ### warnings like this:
-  ### Warning: set address range perms: large range 1207959552 (undefined)
-  ### That happens when Valgrind sees a big allocation or deallocation
-  ### via malloc(), free, brk(), mmap(), munmap(), etc.
-  ### It's not necessarily a problem, but it is a bit suspicious for valgrind
-  # EXAMPLES
-  #  a <- subgroup.basep( as.matrix(cbind(c(1,2,0),c(2,0,1))), 3)
-  # print(a)
-  # a <- subgroup.basep( as.matrix(cbind(c(1,2,0),c(2,0,1))), 3, all=TRUE)
-  # print(a)
-  # -----------------------------------------------
-
-  nbg <- ncol(b.mat)
-  # coeffs = matrix to contain the coefficients of the linear combinations of generators
-  N <- p^nbg
-
-  if (!is.finite(N))
-    stop(paste("Matrix too big in subgroup.basep\n",
-               "Need", p, "^", nbg,"\n"))
-  # ---------------------------------------------
-  # We check that the result matrix can be indexed,
-  # i.e that the maximum index is less than the maximum integer:
-  if ((nrow(b.mat) * (N-1)) > (2**31-1))
-    stop(paste("Matrix too big in subgroup.basep\n",
-               "Need", (nrow(b.mat) * (N-1)),
-               "(nbg=", nbg, "p=", p, "nrow(b.mat)=", nrow(b.mat), ")",
-               "max", (2**31-1),"\n"))
-  # ---------------------------------------------
-#  b.outmat has at most plus N-1 columns (N>=2)
-  b.outmat <- matrix(0, nrow=nrow(b.mat), ncol=(N-1),
-                        dimnames=list(rownames(b.mat), NULL))
-  storage.mode(b.outmat) <- "integer"
-  
-  ret <- .Call("PLANORsubgroup",
-                  as.integer(nrow(b.mat)),
-                  as.integer(nbg),
-                  as.integer(N),
-                  b.mat,
-                  as.integer(p),
-                  as.integer(all),
-                  b.outmat)
-
-  # Computation of b.outmat, column by column.
-  # In output of de PLANORsubgroup, b.outmat is modified.
-  # Remove all the values -1 while keeping the dimensions
-  # If all values are -1, the first non-null value,
-  # on each line of coeffs, is always !=1
-  if (all(b.outmat[1,]<0))
-    stop("Internal error: subgroup.basep\n")
-
-  b.outmat <- b.outmat[,b.outmat[1,]>=0, drop=FALSE]
-  return(b.outmat)
-} # end subgroup.basep
-#---------------------------------------------------------------------------

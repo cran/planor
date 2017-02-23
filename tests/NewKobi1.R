@@ -25,6 +25,10 @@ K1 <- planor.designkey(factors=F1, model=M1, nunits=3^3,
 
 summary(K1[1])
 alias(K1[1])
+a <- K1[[1]];
+print(class(a@.Data[[1]]))
+print(alias(a@.Data[[1]]))
+print(summary(a@.Data[[1]]))
 
 summary(K1[34])
 alias(K1[34])

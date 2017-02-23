@@ -1,3 +1,26 @@
+###################################################################
+# planor R package
+# Copyright INRA 2017
+# INRA, UR1404, Research Unit MaIAGE
+# F78350 Jouy-en-Josas, France.
+#
+# URL: http://www3.jouy.inra.fr/miaj/public/logiciels/planor/
+#
+# This file is part of planor R package.
+# planor is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# See the GNU General Public License at:
+# http://www.gnu.org/licenses/
+#
+###################################################################
 #---------------------------------------------------------------------------
 # CLASS "planordesign"
 #  S4 class, typically an output from planor.design.designkey
@@ -25,7 +48,7 @@ getDesign.planordesign <- function(object){return(object@design)}
 setMethod("getDesign", signature(object="planordesign"),
           definition=getDesign.planordesign)
 ##--------------------------------------------------------------------------
-### 12/09/2012: "[" A VOIR. N'est pas a la disposition des utilisateurs
+
 setMethod("[",
           signature(x = "planordesign", i = "ANY", j = "ANY", drop = "ANY"),
           definition=function(x,i,j,...,drop){
@@ -65,7 +88,7 @@ as.data.frame.planordesign <- function(x, ...) {
 } # end as.data.frame.planordesign
 ##--------------------------------------------------------------------------
 # Method summary  for "planordesign"
-### AB 15/6/2015
+
 # Summarises the design properties of a planordesign  object, by
 # calling summary.keymatrix on each of its key matrices contained
 # in the slot designkey 
@@ -89,7 +112,7 @@ summary.planordesign <- function(object, fact, block,
 }
 ##--------------------------------------------------------------------------
 # Method alias  for "planordesign"
-### AB 15/6/2015
+
 # Summarises the design properties of a planordesign  object, by
 # calling alias on each of its key matrices
 # ---------------------------------------------

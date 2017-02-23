@@ -40,7 +40,8 @@ regular.design(factors = NULL, nlevels = NULL, block = NULL,
     \code{model} is a list.}
 
   \item{resolution}{see \code{\link{planor.model}}. Ignored if
-    \code{model} is a list.}
+    \code{model} is a list. When  set and there is no hierarchy, a faster algorithm is used
+    which exploits the  symmetries.}
   
   \item{nunits}{see \code{\link{planor.designkey}}.}
   

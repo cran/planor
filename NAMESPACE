@@ -1,10 +1,5 @@
-# Les points d'entree C ou Fortran appelés par les fonctions R;
-# Le 1ier nom est le nom de la librairie qui doit être le même
-# que le nom du  package
-useDynLib(planor, PLANORsubgroup, 
-          PLANORloopkernelcheck,
-          PLANORweightorder, PLANORlibsk,
-          PLANORinv)
+useDynLib(planor, .registration = TRUE)
+
 # Les fonctions R a disposition de l'utilisateur
 export(
   planor.designkey,
@@ -24,10 +19,10 @@ exportClasses(keyring)
 exportClasses(listofkeyrings)
 exportClasses(listofdesignkeys)
 exportMethods(bind, pick, planor.design,  getDesign)
-import(methods)
+importFrom(Rcpp, evalCpp)
+import(methods, bit64)
 importFrom(conf.design, factorize)
 importFrom(stats, as.formula, terms)
-importFrom("utils", "object.size")
 S3method(as.data.frame, planordesign)
 S3method(summary,designkey)
 S3method(summary,keymatrix)
