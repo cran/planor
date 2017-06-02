@@ -764,7 +764,7 @@ planor.designkey <- function(
     
   ## Loop on the primes
     for(k in zzz){
-      if(verbose){ cat( paste("Main step for prime p =", UNITS.primes[k],
+      if(verbose){ cat( paste("*** Main step for prime p =", UNITS.primes[k],
                               ": key-matrix search\n") ) }
       p.k <- UNITS.primes[k]
       r.k <- UQUASI.npseudo[k]
@@ -838,9 +838,23 @@ planor.designkey <- function(
       ## FIRST CASE: independent searches
       if(indpdt.searches){
         ## test on existence of solutions (PHISTAR[[k]] is null when none)
-          ## 17/01/2016 BEGIN PATCH 
-          if (length(PHISTAR) < length(zzz)) { stop("No solution for all primes.\n") }
-          ## 17/01/2016 END PATCH 
+        ## 17/01/2016 BEGIN PATCH, MAJ AB, 02/06/2017
+	if ( length(PHISTAR) < length(zzz) ) {
+          messerr <- "\n NO RESULT : No solution found for prime(s)"
+	  for (kphi in 1:length(PHISTAR)) {
+	  if (is.null( PHISTAR[[kphi]])) {      	    
+	       messerr <- paste(messerr, UNITS.primes[kphi])
+ 	       	 }
+	  }
+         for (kphi in (length(PHISTAR)+1):length(zzz) ) {
+	   messerr <- paste(messerr, UNITS.primes[kphi])
+ 	       	 }
+       	messerr <- paste(messerr, "\n")
+        stop(messerr) 
+        }
+
+	 
+         
           if(!is.null(PHISTAR[[k]])){
               PHISTAR[[k]] <- lapply(PHISTAR[[k]],
                                      function(X,LIBtpf.k,LIBupf.k ){
@@ -904,6 +918,23 @@ planor.designkey <- function(
     return (NULL)
   }
   
+     
+     
+     
+
+
+  if (is.list(PHISTAR) && (any(sapply(PHISTAR, is.null)))) {
+   messerr <- "\n NO RESULT : No solution found for prime(s)"
+     for (kphi in 1:length(PHISTAR)) {
+       if (is.null( PHISTAR[[kphi]])) {      	    
+         messerr <- paste(messerr, UNITS.primes[kphi])
+	 }
+	 }
+   messerr <- paste(messerr, "\n")
+   stop(messerr) 
+   }	   
+          ## 01/06/2017 END AB
+
 
   
   return(PHISTAR)
@@ -1690,8 +1721,9 @@ planor.designkey.basep <- function(p, r, b.ineligible,
      }
 
 
-  
+
 if (length(PhiStar.solution) ==0) {
+   cat("No solution found for prime ", p, "\n")
   return(NULL)
 } else {
   return(PhiStar.solution)
@@ -1821,7 +1853,7 @@ planor.designkey.recursive <- function(k,nb.sol,PVuqf,NPuqf,
           if(nb.sol == max.sol){
             ## print success message
             cat("The search is closed: max.sol = ",
-                length(PhiStar.solutions), "solutions found \n")
+                length(PhiStar.solutions), "solution(s) found \n")
             ## and return
             return(PhiStar.solutions) }
         }
@@ -1888,7 +1920,7 @@ planor.designkey.recursive <- function(k,nb.sol,PVuqf,NPuqf,
     if(is.null(PhiStar.solutions)) cat("No solution found\n")
     else if( nb.sol < max.sol) cat( paste("The search is closed: ",
                                           length(PhiStar.solutions),
-                                          " solutions have been found\n") )
+                                          " solution(s) found\n") )
   }
   return(PhiStar.solutions)
 } ## end planor.designkey.recursive

@@ -1,7 +1,7 @@
 
-R version 3.2.0 (2015-04-16) -- "Full of Ingredients"
-Copyright (C) 2015 The R Foundation for Statistical Computing
-Platform: x86_64-unknown-linux-gnu (64-bit)
+R version 3.3.2 (2016-10-31) -- "Sincere Pumpkin Patch"
+Copyright (C) 2016 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -16,7 +16,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library("planor")
-Loaded planor 1.3.6
+Loaded planor 1.3.7
 
 > 
 > #---------------------------------------------------------------------------
@@ -84,7 +84,7 @@ N=32 units
 +                        base=~plate+row+col, max.sol=1)
 Preliminary step 1 : processing the model specifications
 Preliminary step 2 : performing prime decompositions on the factors
-Main step for prime p = 2 : key-matrix search
+*** Main step for prime p = 2 : key-matrix search
   => search for columns 6 to 10 
       first visit to column 6
       first visit to column 7
@@ -255,7 +255,7 @@ N=16 units
 +                        base=~plate+row+col, max.sol=1)
 Preliminary step 1 : processing the model specifications
 Preliminary step 2 : performing prime decompositions on the factors
-Main step for prime p = 2 : key-matrix search
+*** Main step for prime p = 2 : key-matrix search
   => search for columns 6 to 10 
       first visit to column 6
       first visit to column 7
@@ -333,4 +333,4 @@ Treatment pseudo-effects confounded with block effects: 1^5 2^10 3^10 4^5 5^1
 > 
 > proc.time()
    user  system elapsed 
-  2.374   0.095   2.470 
+  0.565   0.037   0.612 

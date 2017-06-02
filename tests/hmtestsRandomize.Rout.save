@@ -1,7 +1,7 @@
 
-R version 3.2.0 (2015-04-16) -- "Full of Ingredients"
-Copyright (C) 2015 The R Foundation for Statistical Computing
-Platform: x86_64-unknown-linux-gnu (64-bit)
+R version 3.3.2 (2016-10-31) -- "Sincere Pumpkin Patch"
+Copyright (C) 2016 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -16,7 +16,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library("planor")
-Loaded planor 1.3.6
+Loaded planor 1.3.7
 
 > #---------------------------------------------------------------------------
 > # EXAMPLES TO CHECK THE RANDOMIZATION FUNCTION
@@ -43,9 +43,9 @@ N=28
 +                        base=~bloc, verbose=T)
 Preliminary step 1 : processing the model specifications
 Preliminary step 2 : performing prime decompositions on the factors
-Main step for prime p = 2 : key-matrix search
+*** Main step for prime p = 2 : key-matrix search
   no need (all columns are predefined)
-Main step for prime p = 7 : key-matrix search
+*** Main step for prime p = 7 : key-matrix search
   no need (all columns are predefined)
 > randP <- planor.design(key=randK)@design
 > set.seed(114)
@@ -132,7 +132,7 @@ N=9
 +                        base=~row+col, verbose=T)
 Preliminary step 1 : processing the model specifications
 Preliminary step 2 : performing prime decompositions on the factors
-Main step for prime p = 3 : key-matrix search
+*** Main step for prime p = 3 : key-matrix search
   => search for column 3 .
       first visit to column 3
 The search is closed: max.sol = 1 solution(s) found 
@@ -152,4 +152,4 @@ The search is closed: max.sol = 1 solution(s) found
 > 
 > proc.time()
    user  system elapsed 
-  1.411   0.177   1.601 
+  0.392   0.041   0.435 

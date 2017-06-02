@@ -1,7 +1,7 @@
 
-R version 3.2.0 (2015-04-16) -- "Full of Ingredients"
-Copyright (C) 2015 The R Foundation for Statistical Computing
-Platform: x86_64-unknown-linux-gnu (64-bit)
+R version 3.3.2 (2016-10-31) -- "Sincere Pumpkin Patch"
+Copyright (C) 2016 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -16,14 +16,14 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library("planor")
-Loaded planor 1.3.6
+Loaded planor 1.3.7
 
 > set.seed(114)
 > # Rprof(filename = "Rprof.out",line.profiling = TRUE)
 > test.designkey <- planor.designkey(factors=10, nlev=3, resolution=5, nunits=3^7, randomsearch=TRUE, base=~A+B+C+D+E+F+G)
 Preliminary step 1 : processing the model specifications
 Preliminary step 2 : performing prime decompositions on the factors
-Main step for prime p = 3 : key-matrix search
+*** Main step for prime p = 3 : key-matrix search
   => search for columns 8 to 10 
       first visit to column 8
     ---    col. 8 ( j = 1) 1808 initial candidates
@@ -55,4 +55,4 @@ G 0 0 0 0 0 0 1 0 0 0
 > 
 > proc.time()
    user  system elapsed 
-  4.496   0.086   4.575 
+  1.170   0.054   1.226 

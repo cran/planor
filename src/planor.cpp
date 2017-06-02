@@ -677,7 +677,7 @@ STEP 1.B: UPDATING of the STATUS of the initially admissible elements
   }
  } // end while(j > 0)
 
- Rprintf("The search is closed: %d solutions found \n",
+ Rprintf("The search is closed: %d solution(s) found \n",
 	 nsolution);
 
  if (nsolution == zero) {
@@ -1037,7 +1037,7 @@ STEP 1.B: UPDATING of the STATUS of the initially admissible elements
   }
  } // end while(j > 0)
 
- Rprintf("The search is closed: %d solutions found \n",
+ Rprintf("The search is closed: %d solution(s) found \n",
 	 nsolution);
 
  if (nsolution == zero) {
