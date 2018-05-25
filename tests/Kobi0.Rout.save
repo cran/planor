@@ -16,7 +16,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library("planor")
-Loaded planor 1.3.7
+Loaded planor 1.3.8
 
 > 
 > #---------------------------------------------------------------------------
@@ -121,4 +121,4 @@ The search is closed: max.sol = 2 solution(s) found
 > 
 > proc.time()
    user  system elapsed 
-  0.429   0.044   0.476 
+  0.416   0.042   0.460 

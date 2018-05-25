@@ -16,7 +16,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library("planor")
-Loaded planor 1.3.7
+Loaded planor 1.3.8
 
 > #---------------------------------------------------------------------------
 > # EXAMPLE FROM "Automatic generation of asymmetrical regular designs"
@@ -143,4 +143,4 @@ Treatment pseudo-effects confounded with block effects: none
 > 
 > proc.time()
    user  system elapsed 
-  0.399   0.038   0.441 
+  0.346   0.044   0.402 

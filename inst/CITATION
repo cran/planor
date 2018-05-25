@@ -17,8 +17,6 @@ citEntry(entry="Misc",
          designs. ",
 	  sep=""))
 
-
-
 citEntry(entry="Manual",
          title = "PLANOR: an R package for the automatic generation of regular fractional factorial designs",
          author = personList(as.person("André Kobilinsky"), as.person("Annie Bouvier"), as.person("Hervé Monod")),

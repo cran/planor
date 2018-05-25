@@ -16,7 +16,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library("planor")
-Loaded planor 1.3.7
+Loaded planor 1.3.8
 
 > robotFacB <- planor.factors(factors=list(
 +                         nsoil=c("curd","Saint-Paulin"),
@@ -71,4 +71,4 @@ u         0     0     0 1     0     0     1    0    0
 > 
 > proc.time()
    user  system elapsed 
-  0.477   0.042   0.520 
+  0.357   0.029   0.400 

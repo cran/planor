@@ -16,7 +16,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library("planor")
-Loaded planor 1.3.7
+Loaded planor 1.3.8
 
 > #---------------------------------------------------------------------------
 > # EXAMPLES FROM THE PLANOR MANUAL
@@ -109,4 +109,4 @@ Treatment pseudo-effects confounded with block effects: 2^2 4^1
 > 
 > proc.time()
    user  system elapsed 
-  0.360   0.040   0.405 
+  0.326   0.042   0.378 

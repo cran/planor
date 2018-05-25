@@ -18,7 +18,7 @@ Type 'q()' to quit R.
 > # exemple HM, 24/02/2015
 > 
 > library(planor)
-Loaded planor 1.3.7
+Loaded planor 1.3.8
 
 > toto <- planor.designkey(factors = c("A","B","C","D","E","F","G","H","J"), nlevels = c(2,2,2,2,2,4,4,4,2), nunits=16, model = ~A+B+C+D+E+F+G+H+J, estimate=~A+B+C+D+E+F+G+H+J)
 Preliminary step 1 : processing the model specifications
@@ -108,4 +108,4 @@ Treatment pseudo-effects confounded with block effects: none
 > 
 > proc.time()
    user  system elapsed 
-  0.581   0.037   0.622 
+  0.552   0.047   0.610 
