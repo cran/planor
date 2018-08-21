@@ -1,10 +1,10 @@
-5f43d8ca56c945956e1bee91cc8059ba *DESCRIPTION
+ba368fdbb5f4725ae3b0e80a6df315d3 *DESCRIPTION
 9eb04872a1567fdb41837af3c7fc5ef3 *NAMESPACE
-f76b7abc0070e4bb7b555a716c8fa1f1 *NEWS
+2a163ef269d81ba08d2aada11e759bc6 *NEWS
 b5be9f5104423dc0d3ee5ee69ef77807 *R/basep.R
 ecf4a120433366fd075134fc05ef973b *R/designfactors.R
 833c9268cb04439d6b4b745a389841fd *R/designkey.R
-aa7ecda94df1e4e2362e2bef86b586e7 *R/generic.R
+1ad1fb3fd205d702190bc7c3cc0764ce *R/generic.R
 0216d67dcc3146cd90ac87f08bd8999c *R/keymatrix.R
 745e213d352cfc74c621051b77049cd1 *R/keyring.R
 d1827607adb863c509349aec4c8c0816 *R/listofdesignkeys.R

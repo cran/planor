@@ -73,7 +73,8 @@ setGeneric("getDesign",
                value <- standardGeneric("getDesign")
            })
 
-setGeneric("alias",
-           function(object, model, ...){
-             value <- standardGeneric("alias")
-             })
+## set out in version 1.4-0 (2018-08-20)
+#! setGeneric("alias",
+#!           function(object, model, ...){
+#!             value <- standardGeneric("alias")
+#!             })
