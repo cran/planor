@@ -30,4 +30,11 @@ year,
          " fractional factorial designs. ",
 vers, ".",  sep=""))
 
-
+citEntry(entry="Article",
+         author = personList(as.person("A. Kobilinsky"), as.person("H. Monod"), as.person("R.A. Bailey")),
+         title = "Automatic generation of generalised regular designs. ",
+         year =   2017,
+         journal = "Computational Statistics and Data Analysis",
+         number = 113,
+         pages = "311-329",
+         textVersion = "Kobilinsky A., Monod H., Bailey R.A. (2017). Automatic generation of generalised regular designs. Computational Statistics and Data Analysis 113, 311-329  <doi:10.1016/j.csda.2016.09.003>.")

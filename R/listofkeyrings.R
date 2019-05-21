@@ -1,6 +1,6 @@
 ###################################################################
 # planor R package
-# Copyright INRA 2018
+# Copyright INRA 2019
 # INRA, UR1404, Research Unit MaIAGE
 # F78350 Jouy-en-Josas, France.
 #

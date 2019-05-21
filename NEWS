@@ -1,3 +1,9 @@
+2019-05-14
+	* mise à jour pour R 3.6.0
+	* File DESCRIPTION:
+	*      Version: 1.5-1
+	*      Date: 2019-05-14
+
 2018-08-20
 	* Deletion of setGeneric("alias",...) in generic.R, due to errors with Debian
 	* File DESCRIPTION:
