@@ -138,7 +138,9 @@ CALLED BY
   The R function:  summary.keymatrix
 +++++++++++++++++++++++++++++++++++++++++ */
 
- RcppExport void PLANORprintLib(SEXP SH,
+ /* 2020-03-11 SEXP instead of void output
+   Thanks to Tomas Kalibera for mentioning the need to do so (9/12/2020) */
+RcppExport SEXP PLANORprintLib(SEXP SH,
 		   SEXP gnrow, SEXP gncol,
 		   SEXP gLIBtpf,
 		 SEXP gMAXPRINT)
@@ -197,7 +199,9 @@ R_CheckUserInterrupt(); // check User interrupt
     Rprintf("The first %d columns on a total of %d\n", bc, *ncol);
   }
 
-
+/* 2020-03-11 added so that PLANORprintLib has a SEXP output
+   Thanks to Tomas Kalibera for mentioning the need to do so (9/12/2020) */
+return(gnrow);
 } // end PLANORprintLib
 
 
@@ -1109,9 +1113,13 @@ static const R_CallMethodDef callMethods[] = {
    {NULL, NULL, 0}
 };
 
+/* 2020-03-11 This definition is desactivated because already defined in init.r 
+   as signaled by Tomas Kalibera on 9/12/2019 */
+/*
 void   R_init_planor(DllInfo *info)
 {
   R_registerRoutines(info, NULL, callMethods, NULL, NULL);
   R_useDynamicSymbols(info, FALSE);
 
 }
+*/

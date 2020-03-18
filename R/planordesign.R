@@ -1,10 +1,10 @@
 ###################################################################
 # planor R package
-# Copyright INRA 2019
-# INRA, UR1404, Research Unit MaIAGE
+# Copyright INRAE 2020
+# INRAE, UR1404, Research Unit MaIAGE
 # F78350 Jouy-en-Josas, France.
 #
-# URL: http://www3.jouy.inra.fr/miaj/public/logiciels/planor/
+# URL: http://genome.jouy.inra.fr/logiciels/planor/
 #
 # This file is part of planor R package.
 # planor is free software: you can redistribute it and/or modify

@@ -1,8 +1,23 @@
-2019-05-14
-	* mise à jour pour R 3.6.0
+2020-03-16
+	* Update to prepare for R 4.0.0 and manage the new default of stringsAsFactors
+	* Turn INRA into INRAE following the merge of the INRA and Irstea institutes
+	* File DESCRIPTION:
+	*      Version: 1.5-3
+	*      Date: 2020-03-18
+	* Main issues: change an example making use of read.table; change INRA by INRAE when relevant
+	* File DESCRIPTION: update
+	* planor-manual updated
+	* planor.cpp updated
+
+2019-05-19
+	* Update for R 3.6.0
 	* File DESCRIPTION:
 	*      Version: 1.5-1
-	*      Date: 2019-05-14
+	*      Date: 2019-05-19
+	* Main issue: renew the *.save files (used to check examples) since the output from sample() has been changed
+	* File DESCRIPTION: minor modifications on the authors to avoid a NOTE when compiling
+	* File CITATION: paper by Kobilinsky, Monod and Bailey in CSDA (2017) added
+	* planor-manual updated
 
 2018-08-20
 	* Deletion of setGeneric("alias",...) in generic.R, due to errors with Debian

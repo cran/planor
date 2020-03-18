@@ -17,7 +17,7 @@ Type 'q()' to quit R.
 
 > # Fichier pour tester l'enchainement des fonctions sur des exemples simples
 > library("planor")
-Loaded planor 1.5.1
+Loaded planor 1.5.3
 
 > toto <- planor.factors(LETTERS[1:5],c(2,6,12,3,2))
 > tata <- planor.model(y~A+B+C+D+E)

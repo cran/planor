@@ -18,7 +18,7 @@ Type 'q()' to quit R.
 > ## Asymmetrical (mixed) factorial design
 > ## cf Planor Manual, Example 2 page 12
 > library("planor")
-Loaded planor 1.5.1
+Loaded planor 1.5.3
 
 > # Four treatment factors at 6, 6, 4, 2 levels and one 6-level block factor
 > # Model: block+(A+B+C+D)^2 ; Estimate: A+B+C+D\n")

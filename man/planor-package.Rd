@@ -32,7 +32,7 @@
   You can change its value by using the function
   \code{options()} (see \code{?options}).}
   
-\author{ Monod, H. and Bouvier, A. and Kobilinsky, A.}
+\author{Monod, H. \email{herve.monod@inrae.fr} and Bouvier, A. and Kobilinsky, A.}
 
 \references{See \code{citation("planor")}.}
 

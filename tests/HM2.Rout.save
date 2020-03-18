@@ -1,6 +1,6 @@
 
-R version 3.6.0 (2019-04-26) -- "Planting of a Tree"
-Copyright (C) 2019 The R Foundation for Statistical Computing
+R Under development (unstable) (2020-03-06 r77913) -- "Unsuffered Consequences"
+Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -18,7 +18,7 @@ Type 'q()' to quit R.
 > # exemple HM, 24/02/2015
 > 
 > library(planor)
-Loaded planor 1.5.1
+Loaded planor 1.5.3
 
 > toto <- planor.designkey(factors = c("A","B","C","D","E","F","G","H","J"), nlevels = c(2,2,2,2,2,4,4,4,2), nunits=16, model = ~A+B+C+D+E+F+G+H+J, estimate=~A+B+C+D+E+F+G+H+J)
 Preliminary step 1 : processing the model specifications

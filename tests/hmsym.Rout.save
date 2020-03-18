@@ -16,7 +16,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library("planor")
-Loaded planor 1.5.1
+Loaded planor 1.5.3
 
 > set.seed(114)
 > # Rprof(filename = "Rprof.out",line.profiling = TRUE)
